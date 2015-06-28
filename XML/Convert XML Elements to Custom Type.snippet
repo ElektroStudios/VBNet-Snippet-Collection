@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<CodeSnippet Format="1.0.0">
+
+<Header>
+  <Title>Convert XML Elements to Custom Type</Title>
+  <Description>Example to convert XML elements to a Custom Type.</Description>
+  <Author>Elektro</Author>
+</Header>
+
+<Snippet>
+
+<Declarations>
+  <Literal Editable="false">
+    <ID>CDATAEnd</ID>
+    <ToolTip>CDATA end tag to scape XML illegal characters if needed.</ToolTip>
+    <Default>&gt;</Default>
+  </Literal>
+</Declarations>
+
+<Code Language="vb"><![CDATA[
+
+    ''' *****************************************************************
+    ''' Title : Convert XML Elements to Custom Type
+    ''' Author: Elektro
+    ''' Date  : 16-February-2015
+    ''' *****************************************************************
+
+    Public NotInheritable Class MyType
+
+        Public ReadOnly Property MyProperty As String
+            Get
+                Return Me.myProperty1
+            End Get
+        End Property
+        Private ReadOnly myProperty1 As String
+
+        Sub New(ByVal myParameter As String)
+            MyClass.myProperty1 = myParameter
+        End Sub
+
+        Private Sub New()
+        End Sub
+
+    End Class
+
+    Private Sub Test() Handles MyBase.Shown
+
+        ' Dim xml As XDocument = XDocument.Load(xmlfile) ' Fast way to load an XML document.
+
+        Dim xml As XDocument =
+        <?xml version="1.0" encoding="Windows-1252"?>
+        <!--XML Songs Database-->
+        <Songs>
+            <Song><Name>My Song 1.mp3</Name></Song>
+            <Song><Name>My Song 2.ogg</Name></Song>
+            <Song><Name>My Song 3.wav</Name></Song>
+        </Songs>
+
+        Dim songList As IEnumerable(Of MyType) =
+            From element As XElement In xml.<Songs>.<Song>
+            Select New MyType(element.<Name>.Value)
+
+        For Each song As MyType In songList
+
+            Dim sb As New System.Text.StringBuilder
+            With sb
+                .AppendLine(String.Format("Name: {0}", song.MyProperty))
+            End With
+            MessageBox.Show(sb.ToString)
+
+        Next song
+
+    End Sub
+
+]]></Code>
+  </Snippet>
+ </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<CodeSnippet Format="1.0.0">
+
+<Header>
+  <Title>String Extensions</Title>
+  <Description>Contains custom extension methods to use with a String.</Description>
+  <Author>Elektro</Author>
+</Header>
+
+<Snippet>
+
+<Declarations>
+  <Literal Editable="false">
+    <ID>CDATAEnd</ID>
+    <ToolTip>CDATA end tag to scape XML illegal characters if needed.</ToolTip>
+    <Default>&gt;</Default>
+  </Literal>
+</Declarations>
+
+<Code Language="vb"><![CDATA[
+
+' ***********************************************************************
+' Author   : Elektro
+' Modified : 16-June-2015
+' ***********************************************************************
+' <copyright file="StringExtensions.vb" company="Elektro Studios">
+'     Copyright (c) Elektro Studios. All rights reserved.
+' </copyright>
+' ***********************************************************************
+
+#Region " Public Members Summary "
+
+#Region " Functions "
+
+' String.Measure(Font) As Size
+
+#End Region
+
+#End Region
+
+#Region " Option Statements "
+
+Option Strict On
+Option Explicit On
+Option Infer Off
+
+#End Region
+
+#Region " Imports "
+
+Imports System
+Imports System.Linq
+Imports System.Diagnostics
+Imports System.Drawing
+Imports System.Runtime.CompilerServices
+
+#End Region
+
+''' <summary>
+''' Contains custom extension methods to use with a <see cref="String"/>.
+''' </summary>
+Public Module StringExtensions
+
+#Region " Public Extension Methods "
+
+#Region " Miscellaneous "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <remarks>
+    ''' Title : Measure String
+    ''' Author: Elektro
+    ''' Date  : 16-June-2015
+    ''' </remarks>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example>
+    ''' Dim pxSize As Size = "Hello World!".Measure(New Font("Lucida Console", 12))
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Provides the <see cref="Size"/>, in pixels, of the specified text when drawn with the specified font.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="String"/>.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The <see cref="Size"/>, in pixels, of the specified text when drawn with the specified font.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function Measure(ByVal sender As String,
+                            ByVal fnt As Font) As Size
+
+        Return TextRenderer.MeasureText(sender, fnt)
+
+    End Function
+
+#End Region
+
+#End Region
+
+End Module
+
+]]></Code>
+  </Snippet>
+ </CodeSnippet>
+</CodeSnippets>

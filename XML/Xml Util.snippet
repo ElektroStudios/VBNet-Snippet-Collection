@@ -1,0 +1,539 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<CodeSnippet Format="1.0.0">
+
+<Header>
+  <Title>Xml Util</Title>
+  <Description>Contains related XML utilities.</Description>
+  <Author>Elektro</Author>
+</Header>
+
+<Snippet>
+
+<Declarations>
+  <Literal Editable="false">
+    <ID>CDATAEnd</ID>
+    <ToolTip>CDATA end tag to scape XML illegal characters if needed.</ToolTip>
+    <Default>&gt;</Default>
+  </Literal>
+</Declarations>
+
+<Code Language="vb"><![CDATA[
+
+' ***********************************************************************
+' Author   : Elektro
+' Modified : 16-June-2015
+' ***********************************************************************
+' <copyright file="XmlUtil.vb" company="Elektro Studios">
+'     Copyright (c) Elektro Studios. All rights reserved.
+' </copyright>
+' ***********************************************************************
+
+#Region " Public Members Summary "
+
+#Region " Functions "
+
+' XmlUtil.XmlBeautifier(String) As String
+
+#End Region
+
+#Region " Methods "
+
+' XmlUtil.XmlWriterHelper.WriteBeginningElement(XmlTextWriter, String, Formatting)
+' XmlUtil.XmlWriterHelper.WriteCommentLine(XmlTextWriter, String, Formatting)
+' XmlUtil.XmlWriterHelper.WriteElement(XmlTextWriter, String, String, Formatting)
+' XmlUtil.XmlWriterHelper.WriteElements(XmlTextWriter, String(,), Formatting)
+' XmlUtil.XmlWriterHelper.WriteEndElement(XmlTextWriter, Formatting)
+' XmlUtil.XmlWriterHelper.WriteEof(XmlTextWriter, Boolean)
+' XmlUtil.XmlWriterHelper.WriteHeader(XmlTextWriter)
+
+#End Region
+
+#End Region
+
+#Region " Option Statements "
+
+Option Strict On
+Option Explicit On
+Option Infer Off
+
+#End Region
+
+#Region " Imports "
+
+Imports Microsoft.VisualBasic
+Imports System
+Imports System.Text
+Imports System.Xml
+
+#End Region
+
+#Region " XML Util "
+
+''' <summary>
+''' Contains related XML utilities.
+''' </summary>
+Public NotInheritable Class XmlUtil
+
+#Region " Constructors "
+
+    ''' <summary>
+    ''' Prevents a default instance of the <see cref="XmlUtil"/> class from being created.
+    ''' </summary>
+    Private Sub New()
+    End Sub
+
+#End Region
+
+#Region " Sub-Classes "
+
+#Region " XmlWriterHelper "
+
+    ''' <summary>
+    ''' Manages a <see cref="XmlTextWriter"/> in a easier way to write an Xml document.
+    ''' </summary>
+    Partial Public NotInheritable Class XmlWriterHelper
+
+#Region " Usage Examples "
+
+        'Private Sub Test()
+        '
+        '    ' Set an XML filepath.
+        '    Dim xmlfile As String = "C:\My XML File.xml"
+        '
+        '    ' Instance the XmlTextWriter class.
+        '    Dim XmlWriter As New XmlTextWriter(xmlfile, Encoding.Default) With {
+        '            .Formatting = Formatting.Indented
+        '        }
+        '
+        '    ' Write the Xml header.
+        '    XmlUtil.XmlWriterHelper.WriteHeader(XmlWriter)
+        '    ' Output at this point:
+        '    ' <?xml version="1.0" encoding="Windows-1252"?>
+        '
+        '    ' Write a comment line.
+        '    XmlUtil.XmlWriterHelper.WriteCommentLine(XmlWriter, "XML Songs Database", Formatting.Indented)
+        '    ' Output at this point:
+        '    ' <!--XML Songs Database-->
+        '
+        '    ' Write the "Songs" root element.
+        '    XmlUtil.XmlWriterHelper.WriteBeginningElement(XmlWriter, "Songs", Formatting.Indented)
+        '    ' Output at this point:
+        '    ' <Songs>
+        '
+        '    ' Write the start of a "song" element.
+        '    XmlUtil.XmlWriterHelper.WriteBeginningElement(XmlWriter, "Song", Formatting.Indented)
+        '    ' Output at this point:
+        '    ' <Song>
+        '
+        '    ' Write a "song" element.
+        '    XmlUtil.XmlWriterHelper.WriteElements(XmlWriter, {
+        '                                         {"Name", "My Song file.mp3"},
+        '                                         {"Year", "2013"},
+        '                                         {"Genre", "Rock"}
+        '                                        }, Formatting.None)
+        '    ' Output at this point:
+        '    ' <Name>My Song file.mp3</Name><Year>2007</Year><Genre>Dance</Genre>
+        '
+        '    ' Write the end of a "song" element.
+        '    XmlUtil.XmlWriterHelper.WriteEndElement(XmlWriter, Formatting.None)
+        '    ' Output at this point:
+        '    ' </Song>
+        '
+        '    ' Write the end of the "Songs" root element.
+        '    XmlUtil.XmlWriterHelper.WriteEndElement(XmlWriter, Formatting.Indented)
+        '    ' Output at this point:
+        '    ' </Songs>
+        '
+        '    ' Write the Xml end of file.
+        '    XmlUtil.XmlWriterHelper.WriteEof(XmlWriter, closeXmlWriter:=True)
+        '
+        '    ' Show the file.
+        '    Process.Start(xmlfile)
+        '
+        '    ' Final output:
+        '    '
+        '    '<?xml version="1.0" encoding="Windows-1252"?>
+        '    '<!--XML Songs Database-->
+        '    '<Songs>
+        '    '  <Song><Name>My Song file.mp3</Name><Year>2007</Year><Genre>Dance</Genre></Song>
+        '    '</Songs>
+        '
+        'End Sub
+
+#End Region
+
+#Region " Constructors "
+
+        ''' <summary>
+        ''' Prevents a default instance of the <see cref="XmlWriterHelper"/> class from being created.
+        ''' </summary>
+        Private Sub New()
+        End Sub
+
+#End Region
+
+#Region " Public Methods "
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Writes the starting Xml header.
+        ''' This method should be called to start writting the Xml.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="xmlWriter">
+        ''' The <see cref="XmlTextWriter"/> instance.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Shared Sub WriteHeader(ByVal xmlWriter As XmlTextWriter)
+
+            Try
+                xmlWriter.WriteStartDocument()
+
+            Catch ex As Exception
+                Throw
+
+            End Try
+
+        End Sub
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Writes the ending Xml end of file.
+        ''' This method should be called to terminate writting the Xml.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="xmlWriter">
+        ''' The <see cref="XmlTextWriter"/> instance.
+        ''' </param>
+        ''' 
+        ''' <param name="closeXmlWriter">
+        ''' if set to <c>true</c>, closes the <see cref="XmlTextWriter"/> instance.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Shared Sub WriteEof(ByVal xmlWriter As XmlTextWriter,
+                                   Optional ByVal closeXmlWriter As Boolean = False)
+
+            Try
+                With xmlWriter
+
+                    .WriteEndDocument()
+
+                    If closeXmlWriter Then
+                        .Close()
+                    End If
+
+                End With
+
+            Catch ex As Exception
+                Throw
+
+            End Try
+
+        End Sub
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Writes an Xml comment line.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="xmlWriter">
+        ''' The <see cref="XmlTextWriter"/> instance.
+        ''' </param>
+        ''' 
+        ''' <param name="comment">
+        ''' The commentary to write.
+        ''' </param>
+        ''' 
+        ''' <param name="indentation">
+        ''' The Xml indentation formatting.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Shared Sub WriteCommentLine(ByVal xmlWriter As XmlTextWriter,
+                                           ByVal comment As String,
+                                           Optional ByVal indentation As Formatting = Formatting.Indented)
+
+            Try
+                With xmlWriter
+                    .Formatting = indentation
+                    .WriteComment(comment)
+                    .Formatting = Not indentation
+                End With
+
+            Catch ex As Exception
+                Throw
+
+            End Try
+
+        End Sub
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Writes the beginning of an Xml element.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="xmlWriter">
+        ''' The <see cref="XmlTextWriter"/> instance.
+        ''' </param>
+        ''' 
+        ''' <param name="element">
+        ''' The element.
+        ''' </param>
+        ''' 
+        ''' <param name="indentation">
+        ''' The Xml indentation formatting.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Shared Sub WriteBeginningElement(ByVal xmlWriter As XmlTextWriter,
+                                                ByVal element As String,
+                                                Optional ByVal indentation As Formatting = Formatting.Indented)
+
+            Try
+                With xmlWriter
+                    .Formatting = indentation
+                    .WriteStartElement(element)
+                    .Formatting = Not indentation
+                End With
+
+            Catch ex As Exception
+                Throw
+
+            End Try
+
+        End Sub
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Writes the end of an Xml element.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="xmlWriter">
+        ''' The <see cref="XmlTextWriter"/> instance.
+        ''' </param>
+        ''' 
+        ''' <param name="indentation">
+        ''' The Xml indentation formatting.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Shared Sub WriteEndElement(ByVal xmlWriter As XmlTextWriter,
+                                          Optional ByVal indentation As Formatting = Formatting.Indented)
+
+            Try
+                With xmlWriter
+                    .Formatting = indentation
+                    .WriteEndElement()
+                    .Formatting = Not indentation
+                End With
+
+            Catch ex As Exception
+                Throw
+
+            End Try
+
+        End Sub
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Writes an Xml element.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="xmlWriter">
+        ''' The <see cref="XmlTextWriter"/> instance.
+        ''' </param>
+        ''' 
+        ''' <param name="startElement">
+        ''' The starting element.
+        ''' </param>
+        ''' 
+        ''' <param name="element">
+        ''' The element.
+        ''' </param>
+        ''' 
+        ''' <param name="indentation">
+        ''' The Xml indentation formatting.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Shared Sub WriteElement(ByVal xmlWriter As XmlTextWriter,
+                                       ByVal startElement As String,
+                                       ByVal element As String,
+                                       Optional ByVal indentation As Formatting = Formatting.Indented)
+
+            Try
+                With xmlWriter
+                    .Formatting = indentation
+                    .WriteStartElement(startElement)
+                    .WriteString(element)
+                    .WriteEndElement()
+                    .Formatting = Not indentation
+                End With
+
+            Catch ex As Exception
+                Throw
+
+            End Try
+
+        End Sub
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Writes multiple Xml elements.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="xmlWriter">
+        ''' The <see cref="XmlTextWriter"/> instance.
+        ''' </param>
+        ''' 
+        ''' <param name="elements">
+        ''' The elements.
+        ''' </param>
+        ''' 
+        ''' <param name="indentation">
+        ''' The Xml indentation formatting.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Shared Sub WriteElements(ByVal xmlWriter As XmlTextWriter,
+                                        ByVal elements As String(,),
+                                        Optional ByVal indentation As Formatting = Formatting.Indented)
+
+            Try
+                With xmlWriter
+
+                    .Formatting = indentation
+
+                    For x As Integer = 0 To elements.GetUpperBound(0)
+
+                        .WriteStartElement(elements(x, 0))
+                        .WriteString(elements(x, 1))
+                        .WriteEndElement()
+
+                    Next x
+
+                End With
+
+                xmlWriter.Formatting = Not indentation
+
+            Catch ex As Exception
+                Throw
+
+            End Try
+
+        End Sub
+
+#End Region
+
+    End Class
+
+#End Region
+
+#End Region
+
+#Region " Public Methods "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <remarks>
+    ''' Title : XML Beautifier
+    ''' Author: Elektro
+    ''' Date  : 16-June-2015
+    ''' </remarks> 
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example>
+    ''' Dim textEncoding As Encoding = Encoding.Default
+    '''
+    ''' Dim unformattedXmlDocument As String =
+    '''     File.ReadAllText("C:\Unformatted Document.xml", textEncoding)
+    '''
+    ''' Dim formattedXmlDocument As String =
+    '''     XmlUtil.XmlBeautifier(xmlText:=unformattedXmlDocument,
+    '''                           indentChars:=New String(" "c, 2),
+    '''                           indentOnAttributes:=True,
+    '''                           textEncoding:=textEncoding)
+    '''
+    ''' File.WriteAllText("C:\Formatted Document.xml", formattedXmlDocument, textEncoding)
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Beautifies the contents of an XML document.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="XMLText">
+    ''' The XML text content. 
+    ''' It can be an entire document or a fragment.
+    ''' </param>
+    ''' 
+    ''' <param name="IndentChars">
+    ''' The string that is used to indent the XML. 
+    ''' Default value is: <see cref="ControlChars.Tab"/>
+    ''' </param>
+    ''' 
+    ''' <param name="IndentOnAttributes">
+    ''' If set to <c>true</c>, attributes will be separated by newlines.
+    ''' Default value is: <c>false</c>
+    ''' </param>
+    ''' 
+    ''' <param name="TextEncoding">
+    ''' The XML text encoding to use. 
+    ''' Default value is: <see cref="Encoding.Default"/>.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The beautified XML text.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <exception cref="ArgumentNullException"></exception>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Shared Function XmlBeautifier(ByVal xmlText As String,
+                                         Optional ByVal indentChars As String = Nothing,
+                                         Optional ByVal indentOnAttributes As Boolean = False,
+                                         Optional ByVal textEncoding As Encoding = Nothing) As String
+
+        If String.IsNullOrEmpty(xmlText) OrElse String.IsNullOrWhiteSpace(xmlText) Then
+            Throw New ArgumentNullException(xmlText)
+
+        Else
+            Dim sb As New StringBuilder(capacity:=128)
+            Dim xmlDoc As New XmlDocument
+            Dim settings As New XmlWriterSettings With
+                {
+                    .Indent = True,
+                    .CheckCharacters = True,
+                    .OmitXmlDeclaration = False,
+                    .ConformanceLevel = ConformanceLevel.Auto,
+                    .NamespaceHandling = NamespaceHandling.Default,
+                    .NewLineHandling = NewLineHandling.Replace,
+                    .NewLineChars = ControlChars.NewLine,
+                    .NewLineOnAttributes = indentOnAttributes,
+                    .IndentChars = If(indentChars IsNot Nothing, indentChars, ControlChars.Tab),
+                    .Encoding = If(textEncoding IsNot Nothing, textEncoding, Encoding.Default),
+                    .CloseOutput = True
+                }
+
+            Using writer As XmlWriter = XmlWriter.Create(sb, settings)
+                xmlDoc.LoadXml(xmlText)
+                xmlDoc.WriteContentTo(writer)
+                writer.Flush()
+            End Using
+
+            Return sb.ToString
+
+        End If
+
+    End Function
+
+#End Region
+
+End Class
+
+#End Region
+
+]]></Code>
+  </Snippet>
+ </CodeSnippet>
+</CodeSnippets>

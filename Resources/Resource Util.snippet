@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<CodeSnippet Format="1.0.0">
+
+<Header>
+  <Title>Resource Util</Title>
+  <Description>Contains related Application's Resource utilities.</Description>
+  <Author>Elektro</Author>
+</Header>
+
+<Snippet>
+
+<Declarations>
+  <Literal Editable="false">
+    <ID>CDATAEnd</ID>
+    <ToolTip>CDATA end tag to scape XML illegal characters if needed.</ToolTip>
+    <Default>&gt;</Default>
+  </Literal>
+</Declarations>
+
+<Code Language="vb"><![CDATA[
+
+' ***********************************************************************
+' Author   : Elektro
+' Modified : 16-June-2015
+' ***********************************************************************
+' <copyright file="ResourceUtil.vb" company="Elektro Studios">
+'     Copyright (c) Elektro Studios. All rights reserved.
+' </copyright>
+' ***********************************************************************
+
+#Region " Public Members Summary "
+
+#Region " Functions "
+
+' ResourceUtil.GetResources(OF T)
+
+#End Region
+
+#End Region
+
+#Region " Option Statements "
+
+Option Strict On
+Option Explicit On
+Option Infer Off
+
+#End Region
+
+#Region " Imports "
+
+Imports System
+Imports System.Globalization
+
+#End Region
+
+''' <summary>
+''' Contains related Application's Resource utilities.
+''' </summary>
+Public NotInheritable Class ResourceUtil
+
+#Region " Constructors "
+
+    ''' <summary>
+    ''' Prevents a default instance of the <see cref="ResourceUtil"/> class from being created.
+    ''' </summary>
+    Private Sub New()
+    End Sub
+
+#End Region
+
+#Region " Public Methods "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <remarks>
+    ''' Title : Get Application Resources Of Type...
+    ''' Author: Elektro
+    ''' Date  : 16-June-2015
+    ''' </remarks> 
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example>
+    ''' Dim resources As IEnumerable(Of DictionaryEntry) = GetResources(Of String)()
+    '''
+    ''' For Each resource As DictionaryEntry In resources
+    '''
+    '''     MsgBox(resource.Key)            '''  Resource Name
+    '''     MsgBox(resource.Value.ToString) '''  Resource Data
+    '''
+    ''' Next resource
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Gets the application resources of the specified type.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <typeparam name="T">
+    ''' The type of the resource to find.
+    ''' </typeparam>
+    ''' 
+    ''' <param name="culture">
+    ''' The resource culture
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see cref="IEnumerable(Of DictionaryEntry)"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    Public Shared Function GetResources(Of T)(Optional ByVal culture As CultureInfo = Nothing) As IEnumerable(Of DictionaryEntry)
+
+        Return From resource As DictionaryEntry
+               In My.Resources.ResourceManager.
+                               GetResourceSet(If(culture Is Nothing,
+                                                 CultureInfo.CurrentCulture,
+                                                 culture), createIfNotExists:=True, tryParents:=True).Cast(Of DictionaryEntry)()
+               Where TypeOf resource.Value Is T
+
+    End Function
+
+#End Region
+
+End Class
+
+]]></Code>
+  </Snippet>
+ </CodeSnippet>
+</CodeSnippets>

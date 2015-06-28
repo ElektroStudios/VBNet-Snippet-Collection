@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<CodeSnippet Format="1.0.0">
+
+<Header>
+  <Title>TextFieldParser Example</Title>
+  <Description>Example to read a CSV file using TextFieldParser Class.</Description>
+  <Author>Elektro</Author>
+</Header>
+
+<Snippet>
+
+<Declarations>
+  <Literal Editable="false">
+    <ID>CDATAEnd</ID>
+    <ToolTip>CDATA end tag to scape XML illegal characters if needed.</ToolTip>
+    <Default>&gt;</Default>
+  </Literal>
+</Declarations>
+
+<Imports>
+  <Import>
+    <Namespace>Microsoft.VisualBasic.FileIO</Namespace>
+  </Import>  
+  <Import>
+    <Namespace>System.IO</Namespace>
+  </Import>
+</Imports>
+
+<Code Language="vb"><![CDATA[
+
+' The CSV string content to read.
+Dim csvReader As New StringReader("@Username, Password, Privileges" &
+                                  Environment.NewLine &
+                                  "Elektro; ""My Password""; Administrator" &
+                                  Environment.NewLine &
+                                  "Guest; none; Administrator")
+
+' The CSV parser instance.
+Dim csvParser As New TextFieldParser(reader:=csvReader) With
+    {
+        .Delimiters = {";"},
+        .CommentTokens = {"@"},
+        .HasFieldsEnclosedInQuotes = True,
+        .TextFieldType = FieldType.Delimited,
+        .TrimWhiteSpace = True
+    }
+
+' Iterate the CSV lines
+Do Until csvParser.EndOfData
+
+    ' Current line.
+    Dim csvLine As String = csvReader.ReadLine
+
+    ' Current fields.
+    Dim csvFields As IEnumerable(Of String) = csvParser.ReadFields()
+
+    For Each field As String In csvFields
+        Console.WriteLine(field)
+    Next field
+
+Loop
+
+]]></Code>
+  </Snippet>
+ </CodeSnippet>
+</CodeSnippets>
