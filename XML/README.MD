@@ -11,11 +11,11 @@ Feel free to use and/or modify any file of this repository.
 If you like the job I've done, then please contribute with improvements to these snippets or by adding new ones.
 
 # Convert XML Elements to Custom Type
-Example to convert XML elements to custom Type.
+A simple example for beginners, to convert XML elements to custom Type.
 
 # Xml Extensions
 Contains custom extension methods to use with some of the "System.Xml" namespace members.
-This adds additional functionalities to XDocument, XmlDocument and IEnumerable(Of XElement).
+This adds additional functionalities to XDocument, XmlDocument and IEnumerable(Of XElement), for converting between types, sorting elements, getting x-paths, and more.
 
 Public Members Summary
  - IEnumerable(Of XElement).DistinctByElement(string)
@@ -30,4 +30,16 @@ Public Members Summary
  - XmlDocument.ToXDocument()
 
 # Xml Util
-Contains related XML utilities.
+Contains related XML utilities, such a Xml beautifier.
+It also wraps an a "XmlTextWriter" to write an Xml document in a easier way for beginners.
+
+Public Members Summary
+ - XmlUtil.XmlBeautifier(String) As String
+ - XmlUtil.EasyXmlTextWriter.New(String, Encoding)
+ - XmlUtil.EasyXmlTextWriter.WriteBeginningElement(String, Formatting)
+ - XmlUtil.EasyXmlTextWriter.WriteCommentLine(String, Formatting)
+ - XmlUtil.EasyXmlTextWriter.WriteElement(String, String, Formatting)
+ - XmlUtil.EasyXmlTextWriter.WriteElements(String(,), Formatting)
+ - XmlUtil.EasyXmlTextWriter.WriteEndElement(Formatting)
+ - XmlUtil.EasyXmlTextWriter.WriteEof(Boolean)
+ - XmlUtil.EasyXmlTextWriter.WriteHeader()
