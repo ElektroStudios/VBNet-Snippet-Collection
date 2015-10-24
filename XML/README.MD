@@ -1,5 +1,5 @@
-# Textfile snippets category
-These snippets are intended to help managing plain text files.
+# Xml snippets category
+These snippets are intended to help managing Xml files or Xml operations.
 
 # General Information about this repository
  - .snippet files contains the formatted code that can be loaded through Visual Studio's code editorcontext menu.
