@@ -18,16 +18,16 @@ Contains custom extension methods to use with some of the "System.Xml" namespace
 This adds additional functionalities to XDocument, XmlDocument and IEnumerable(Of XElement), for converting between types, sorting elements, getting x-paths, and more.
 
 Public Members Summary
- - IEnumerable(Of XElement).DistinctByElement(string)
- - IEnumerable(Of XElement).SortByElement(string)
- - XDocument.DistinctByElement(string, string)
- - XDocument.GetXPaths()
- - XDocument.SortByElement(string, string)
- - XDocument.ToXmlDocument()
- - XmlDocument.DistinctByElement(string, string)
- - XmlDocument.GetXPaths()
- - XmlDocument.SortByElement(string, string)
- - XmlDocument.ToXDocument()
+ - IEnumerable(Of XElement).DistinctByElement(String) As IEnumerable(Of XElement)
+ - IEnumerable(Of XElement).SortByElement(String) As IEnumerable(Of XElement)
+ - XDocument.DistinctByElement(String, String) As XDocument
+ - XDocument.GetXPaths() As IEnumerable(Of String)
+ - XDocument.SortByElement(String, String) As XDocument
+ - XDocument.ToXmlDocument() As XmlDocument
+ - XmlDocument.DistinctByElement(String, String) As XmlDocument
+ - XmlDocument.GetXPaths() As IEnumerable(Of String)
+ - XmlDocument.SortByElement(String, String) As XmlDocument
+ - XmlDocument.ToXDocument() As XDocument
 
 # Xml Util
 Will contains related Xml utilities, such a Xml beautifier.
