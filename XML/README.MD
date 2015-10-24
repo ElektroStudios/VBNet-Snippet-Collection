@@ -15,6 +15,19 @@ Example to convert XML elements to custom Type.
 
 # Xml Extensions
 Contains custom extension methods to use with some of the "System.Xml" namespace members.
+This adds additional functionalities to XDocument, XmlDocument and IEnumerable(Of XElement).
+
+Public Members Summary
+ - IEnumerable(Of XElement).DistinctByElement(string)
+ - IEnumerable(Of XElement).SortByElement(string)
+ - XDocument.DistinctByElement(string, string)
+ - XDocument.GetXPaths()
+ - XDocument.SortByElement(string, string)
+ - XDocument.ToXmlDocument()
+ - XmlDocument.DistinctByElement(string, string)
+ - XmlDocument.GetXPaths()
+ - XmlDocument.SortByElement(string, string)
+ - XmlDocument.ToXDocument()
 
 # Xml Util
 Contains related XML utilities.
