@@ -15,6 +15,7 @@ A simple example for beginners, to convert Xml elements to custom Type.
 
 # Xml Extensions
 Contains custom extension methods to use with some of the "System.Xml" namespace members.
+
 This adds additional functionalities to XDocument, XmlDocument and IEnumerable(Of XElement), for converting between types, sorting elements, getting x-paths, and more.
 
 Public Members Summary
@@ -32,6 +33,7 @@ Public Members Summary
 
 # Xml Util
 Will contains related Xml utilities, such a Xml beautifier.
+
 It also wraps an a "XmlTextWriter" to write an Xml document in a easier way for beginners.
 
 Public Members Summary
