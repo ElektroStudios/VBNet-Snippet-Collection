@@ -11,7 +11,7 @@ Feel free to use and/or modify any file of this repository.
 If you like the job I've done, then please contribute with improvements to these snippets or by adding new ones.
 
 # Convert XML Elements to Custom Type
-Convert XML Elements to Custom Type.
+Example to convert XML elements to custom Type.
 
 # Xml Extensions
 Contains custom extension methods to use with some of the "System.Xml" namespace members.
