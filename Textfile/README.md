@@ -28,7 +28,6 @@ Public Members Summary
    - TextfileStream.Lines As TexfileLines
    - TextfileStream.Fs As FileStream
    - TextfileStream.FileHandle As Win32.SafeHandles.SafeFileHandle
-   - 
    - TextfileStream.TexfileLines.CountBlank() As Integer
    - TextfileStream.TexfileLines.CountNonBlank() As Integer
 
@@ -42,7 +41,6 @@ Public Members Summary
    - TextfileStream.Dispose()
    - TextfileStream.Save(Opt: Encoding)
    - TextfileStream.Save(String, Encoding)
-   - 
    - TextfileStream.TexfileLines.Randomize() As IEnumerable(Of String)
    - TextfileStream.TexfileLines.RemoveAt(IEnumerable(Of Integer)) As IEnumerable(Of String)
    - TextfileStream.TexfileLines.Trim(Opt: Char()) As IEnumerable(Of String)
