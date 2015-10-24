@@ -18,28 +18,35 @@ Contains custom extension methods to use with some of the "System.Xml" namespace
 This adds additional functionalities to XDocument, XmlDocument and IEnumerable(Of XElement), for converting between types, sorting elements, getting x-paths, and more.
 
 Public Members Summary
- - IEnumerable(Of XElement).DistinctByElement(String) As IEnumerable(Of XElement)
- - IEnumerable(Of XElement).SortByElement(String) As IEnumerable(Of XElement)
- - XDocument.DistinctByElement(String, String) As XDocument
- - XDocument.GetXPaths() As IEnumerable(Of String)
- - XDocument.SortByElement(String, String) As XDocument
- - XDocument.ToXmlDocument() As XmlDocument
- - XmlDocument.DistinctByElement(String, String) As XmlDocument
- - XmlDocument.GetXPaths() As IEnumerable(Of String)
- - XmlDocument.SortByElement(String, String) As XmlDocument
- - XmlDocument.ToXDocument() As XDocument
+ - Functions
+   - IEnumerable(Of XElement).DistinctByElement(String) As IEnumerable(Of XElement)
+   - IEnumerable(Of XElement).SortByElement(String) As IEnumerable(Of XElement)
+   - XDocument.DistinctByElement(String, String) As XDocument
+   - XDocument.GetXPaths() As IEnumerable(Of String)
+   - XDocument.SortByElement(String, String) As XDocument
+   - XDocument.ToXmlDocument() As XmlDocument
+   - XmlDocument.DistinctByElement(String, String) As XmlDocument
+   - XmlDocument.GetXPaths() As IEnumerable(Of String)
+   - XmlDocument.SortByElement(String, String) As XmlDocument
+   - XmlDocument.ToXDocument() As XDocument
 
 # Xml Util
 Will contains related Xml utilities, such a Xml beautifier.
 It also wraps an a "XmlTextWriter" to write an Xml document in a easier way for beginners.
 
 Public Members Summary
- - XmlUtil.XmlBeautifier(String) As String
- - XmlUtil.EasyXmlTextWriter.New(String, Encoding)
- - XmlUtil.EasyXmlTextWriter.WriteBeginningElement(String, Formatting)
- - XmlUtil.EasyXmlTextWriter.WriteCommentLine(String, Formatting)
- - XmlUtil.EasyXmlTextWriter.WriteElement(String, String, Formatting)
- - XmlUtil.EasyXmlTextWriter.WriteElements(String(,), Formatting)
- - XmlUtil.EasyXmlTextWriter.WriteEndElement(Formatting)
- - XmlUtil.EasyXmlTextWriter.WriteEof(Boolean)
- - XmlUtil.EasyXmlTextWriter.WriteHeader()
+ - Child Classes
+   - XmlUtil.EasyXmlTextWriter
+
+ - Functions
+   - XmlUtil.XmlBeautifier(String) As String
+
+ - Methods
+   - XmlUtil.EasyXmlTextWriter.New(String, Encoding)
+   - XmlUtil.EasyXmlTextWriter.WriteBeginningElement(String, Formatting)
+   - XmlUtil.EasyXmlTextWriter.WriteCommentLine(String, Formatting)
+   - XmlUtil.EasyXmlTextWriter.WriteElement(String, String, Formatting)
+   - XmlUtil.EasyXmlTextWriter.WriteElements(String(,), Formatting)
+   - XmlUtil.EasyXmlTextWriter.WriteEndElement(Formatting)
+   - XmlUtil.EasyXmlTextWriter.WriteEof(Boolean)
+   - XmlUtil.EasyXmlTextWriter.WriteHeader()
