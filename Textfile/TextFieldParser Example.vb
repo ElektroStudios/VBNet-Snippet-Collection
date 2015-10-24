@@ -29,4 +29,3 @@ Do Until csvParser.EndOfData
     Next field
 
 Loop
-
