@@ -18,7 +18,7 @@ Contains custom extension methods to use with some of the "System.Xml" namespace
 This adds additional functionalities to XDocument, XmlDocument and IEnumerable(Of XElement), for converting between types, sorting elements, getting x-paths, and more.
 
 Public Members Summary
- - Functions
+ - Extension Functions
    - IEnumerable(Of XElement).DistinctByElement(String) As IEnumerable(Of XElement)
    - IEnumerable(Of XElement).SortByElement(String) As IEnumerable(Of XElement)
    - XDocument.DistinctByElement(String, String) As XDocument
