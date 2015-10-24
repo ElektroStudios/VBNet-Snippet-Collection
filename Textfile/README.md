@@ -15,4 +15,4 @@ Example to read a CSV file using TextFieldParser Class
 
 # Textfile Stream
 Reads and manages the contents of a textfile.
-It encapsulates an underliying <see cref="FileStream"/> to access the file.
+It encapsulates an underliying "FileStream" to access the file.
