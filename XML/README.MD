@@ -10,8 +10,8 @@ Feel free to use and/or modify any file of this repository.
 
 If you like the job I've done, then please contribute with improvements to these snippets or by adding new ones.
 
-# Convert XML Elements to Custom Type
-A simple example for beginners, to convert XML elements to custom Type.
+# Convert Xml Elements to Custom Type
+A simple example for beginners, to convert Xml elements to custom Type.
 
 # Xml Extensions
 Contains custom extension methods to use with some of the "System.Xml" namespace members.
@@ -30,7 +30,7 @@ Public Members Summary
  - XmlDocument.ToXDocument()
 
 # Xml Util
-Contains related XML utilities, such a Xml beautifier.
+Will contains related Xml utilities, such a Xml beautifier.
 It also wraps an a "XmlTextWriter" to write an Xml document in a easier way for beginners.
 
 Public Members Summary
