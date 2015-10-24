@@ -11,7 +11,7 @@ Feel free to use and/or modify any file of this repository.
 If you like the job I've done, then please contribute with improvements to these snippets or by adding new ones.
 
 # TextFieldParser Example
-Example to read a CSV file using TextFieldParser Class
+Example for beginners, to read a CSV file using "TextFieldParser" Class
 
 # Textfile Stream
 Reads and manages the contents of a textfile.
