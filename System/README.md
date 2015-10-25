@@ -11,9 +11,6 @@ Feel free to use and/or modify any file of this repository.
 
 If you like the job I've done, then please contribute with improvements to these snippets or by adding new ones.
 
-# TextFieldParser Example
-Example for beginners, to read a CSV file using "TextFieldParser" Class
-
 #Environment Util
 Huge class that contains related Windows environment utilities.
 
