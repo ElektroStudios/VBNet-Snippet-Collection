@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
 <CodeSnippet Format="1.0.0">
 
@@ -22,19 +22,50 @@
 
 ' ***********************************************************************
 ' Author   : Elektro
-' Modified : 28-June-2015
+' Modified : 24-October-2015
 ' ***********************************************************************
-' <copyright file="SystemRestarter.vb" company="Elektro Studios">
+' <copyright file="System Restarter.vb" company="Elektro Studios">
 '     Copyright (c) Elektro Studios. All rights reserved.
 ' </copyright>
 ' ***********************************************************************
 
+#Region " Public Members Summary "
+
+#Region " Constants "
+
+' SystemRestarter.MaxShutdownTimeout As UInteger
+
+#End Region
+
+#Region " Enumerations "
+
+' SystemRestarter.LogOffMode As UInteger
+' SystemRestarter.ShutdownMode As UInteger
+' SystemRestarter.ShutdownReason As UInteger <Flags>
+' SystemRestarter.ShutdownPlanning As UInteger
+
+#End Region
+
+#Region " Functions "
+
+' SystemRestarter.Abort(Opt: String, Opt: Boolean) As Boolean
+' SystemRestarter.LogOff(Opt: LogOffMode, Opt: ShutdownReason, Opt: Boolean) As Boolean
+' SystemRestarter.PowerOff(Opt: String, Opt: Integer, Opt: String, Opt: ShutdownMode, Opt: ShutdownReason, Opt: ShutdownPlanning, Opt: Boolean) As Boolean
+' SystemRestarter.Restart(Opt: String, Opt: Integer, Opt: String, Opt: ShutdownMode, Opt: ShutdownReason, Opt: ShutdownPlanning, Opt: Boolean) As Boolean
+' SystemRestarter.RestartApps(Opt: String, Opt: Integer, Opt: String, Opt: ShutdownMode, Opt: ShutdownReason, Opt: ShutdownPlanning, Opt: Boolean) As Boolean
+' SystemRestarter.Shutdown(Opt: String, Opt: Integer, Opt: String, Opt: ShutdownMode, Opt: ShutdownReason, Opt: ShutdownPlanning, Opt: Boolean) As Boolean
+' SystemRestarter.HybridShutdown(Opt: String = Nothing, Opt: Integer, Opt: String, Opt: ShutdownMode, Opt: ShutdownReason, Opt: ShutdownPlanning, Opt: Boolean) As Boolean
+
+#End Region
+
+#End Region
+
 #Region " Usage Examples "
 
-'' Restart the current computer in 30 seconds and wait for applications to close.
+'' Restart the current computer in 60 seconds and wait for applications to close.
 '' Specify that the restart operation is planned because a consecuence of an installation.
 'Dim success As Boolean =
-'    SystemRestarter.Restart(Nothing, 30, "System is gonna be restarted quickly, go save all your data now...!",
+'    SystemRestarter.Restart(Nothing, 60, "System is gonna be restarted quickly, go save all your data now...!",
 '                            SystemRestarter.ShutdownMode.Wait,
 '                            SystemRestarter.ShutdownReason.MajorOperatingSystem Or
 '                            SystemRestarter.ShutdownReason.MinorInstallation,
@@ -44,19 +75,23 @@
 '
 '' Abort the current operation.
 'If success Then
-'    Dim isAborted As Boolean = SystemRestarter.Abort()
+'    Dim isAborted As Boolean = SystemRestarter.Abort(computer:=Nothing, ignoreErrors:=False)
 '    Console.WriteLine(String.Format("Restart operation aborted   successfully?: {0}", CStr(isAborted)))
 'Else
 '    Console.WriteLine("There is any restart operation to abort.")
 'End If
-'MsgBox("Close this dialog to continue the test. A shutdown will proceed...")
 '
-'' Shutdown the current computer instantlly and force applications to close.
-'' ( When timeout is '0' the operation can't be aborted )
-'SystemRestarter.Shutdown(Nothing, 0, Nothing, SystemRestarter.ShutdownMode.ForceSelf)
+'If MessageBox.Show("Want to proceed inmediately with a shutdown that cannot be aborted ?", "",
+'                   MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
 '
-'' LogOffs the current user.
-'SystemRestarter.LogOff(SystemRestarter.LogOffMode.Wait)
+'    ' Shutdown the current computer instantlly and force applications to close.
+'    ' ( When timeout is '0' the operation can't be aborted )
+'    SystemRestarter.Shutdown(Nothing, 0, Nothing, SystemRestarter.ShutdownMode.ForceSelf)
+'
+'    ' LogOffs the current user.
+'    SystemRestarter.LogOff(SystemRestarter.LogOffMode.Wait)
+'
+'End If
 
 #End Region
 
@@ -84,7 +119,42 @@ Imports System.ComponentModel
 ''' Shutdown, restart or logoff the local or a remote computer.
 ''' </summary>
 ''' ----------------------------------------------------------------------------------------------------
-Public NotInheritable Class SystemRestarter
+''' <example> This is a code example.
+''' <code>
+''' ' Restart the current computer in 60 seconds and wait for applications to close.
+''' ' Specify that the restart operation is planned because a consecuence of an installation.
+''' Dim success As Boolean =
+'''     SystemRestarter.Restart(Nothing, 60, "System is gonna be restarted quickly, go save all your data now...!",
+'''                             SystemRestarter.ShutdownMode.Wait,
+'''                             SystemRestarter.ShutdownReason.MajorOperatingSystem Or
+'''                             SystemRestarter.ShutdownReason.MinorInstallation,
+'''                             SystemRestarter.ShutdownPlanning.Planned)
+''' 
+''' Console.WriteLine(String.Format("Restart operation initiated successfully?: {0}", CStr(success)))
+''' 
+''' ' Abort the current operation.
+''' If success Then
+'''     Dim isAborted As Boolean = SystemRestarter.Abort(computer:=Nothing, ignoreErrors:=False)
+'''     Console.WriteLine(String.Format("Restart operation aborted   successfully?: {0}", CStr(isAborted)))
+''' Else
+'''     Console.WriteLine("There is any restart operation to abort.")
+''' End If
+''' 
+''' If MessageBox.Show("Want to proceed inmediately with a shutdown that cannot be aborted ?", "",
+'''                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
+''' 
+'''     ' Shutdown the current computer instantlly and force applications to close.
+'''     ' ( When timeout is '0' the operation can't be aborted )
+'''     SystemRestarter.Shutdown(Nothing, 0, Nothing, SystemRestarter.ShutdownMode.ForceSelf)
+''' 
+'''     ' LogOffs the current user.
+'''     SystemRestarter.LogOff(SystemRestarter.LogOffMode.Wait)
+''' 
+''' End If
+''' </code>
+''' </example>
+''' ----------------------------------------------------------------------------------------------------
+Public Module SystemRestarter
 
 #Region " P/Invoking "
 
@@ -96,7 +166,9 @@ Public NotInheritable Class SystemRestarter
     ''' This class is for methods that can be used anywhere because a stack walk will be performed.
     ''' </summary>
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>http://msdn.microsoft.com/en-us/library/ms182161.aspx</remarks>
+    ''' <remarks>
+    ''' <see href="http://msdn.microsoft.com/en-us/library/ms182161.aspx"/>
+    ''' </remarks>
     ''' ----------------------------------------------------------------------------------------------------
     Private NotInheritable Class NativeMethods
 
@@ -117,14 +189,16 @@ Public NotInheritable Class SystemRestarter
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <returns>
-        ''' If the function succeeds, the return value is <c>True</c>. 
-        ''' The function executes asynchronously so a <c>True</c> return value indicates that the shutdown has been initiated. 
+        ''' If the function succeeds, the return value is <see langword="True"/>. 
+        ''' The function executes asynchronously so a <see langword="True"/> return value indicates that the shutdown has been initiated. 
         ''' It does not indicate whether the shutdown will succeed. 
         ''' It is possible that the system, the user, or another application will abort the shutdown.
-        ''' If the function fails, the return value is <c>False</c>. 
+        ''' If the function fails, the return value is <see langword="False"/>. 
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/aa376868%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa376868%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", SetLastError:=True)>
         Friend Shared Function ExitWindowsEx(
@@ -172,7 +246,9 @@ Public NotInheritable Class SystemRestarter
         ''' If the function succeeds, it returns ERROR_SUCCESS.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/aa376872%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa376872%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("advapi32.dll", SetLastError:=True, CharSet:=CharSet.Auto, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function InitiateShutdown(
@@ -195,10 +271,12 @@ Public NotInheritable Class SystemRestarter
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <returns>
-        ''' <c>True</c> if the function succeeds, <c>False</c> otherwise.
+        ''' <see langword="True"/> if the function succeeds, <see langword="False"/> otherwise.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/es-es/library/windows/desktop/aa376630%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/es-es/library/windows/desktop/aa376630%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("advapi32.dll", SetLastError:=True, CharSet:=CharSet.Auto, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function AbortSystemShutdown(
@@ -231,7 +309,9 @@ Public NotInheritable Class SystemRestarter
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"></see>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/aa379295%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa379295%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("advapi32.dll", SetLastError:=True)>
         Friend Shared Function OpenProcessToken(
@@ -255,14 +335,14 @@ Public NotInheritable Class SystemRestarter
         ''' 
         ''' <param name="disableAllPrivileges">
         ''' Specifies whether the function disables all of the token's privileges. 
-        ''' If this value is <c>True</c>, the function disables all privileges and ignores the <paramref name="newState"></paramref> parameter. 
-        ''' If it is <c>False</c>, the function modifies privileges based on the information pointed to by the <paramref name="newState"></paramref> parameter.
+        ''' If this value is <see langword="True"/>, the function disables all privileges and ignores the <paramref name="newState"></paramref> parameter. 
+        ''' If it is <see langword="False"/>, the function modifies privileges based on the information pointed to by the <paramref name="newState"></paramref> parameter.
         ''' </param>
         ''' 
         ''' <param name="newState">
         ''' A <see cref="IntPtr"></see> pointer to a <see cref="SystemRestarter.NativeMethods.TokenPrivileges"></see> structure that specifies an
         ''' array of privileges and their attributes. 
-        ''' If the <paramref name="disableAllPrivileges"></paramref> parameter is <c>False</c>, 
+        ''' If the <paramref name="disableAllPrivileges"></paramref> parameter is <see langword="False"/>, 
         ''' the <paramref name="adjustTokenPrivileges"></paramref> function enables, disables, or removes these privileges for the token. 
         ''' </param>
         ''' 
@@ -289,11 +369,13 @@ Public NotInheritable Class SystemRestarter
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <returns>
-        ''' If the function succeeds, the return value is <c>True</c>, otherwise, <c>False</c>.
+        ''' If the function succeeds, the return value is <see langword="True"/>, otherwise, <see langword="False"/>.
         ''' To determine whether the function adjusted all of the specified privileges, call <see cref="Marshal.GetLastWin32Error"></see>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/es-es/library/windows/desktop/aa375202%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/es-es/library/windows/desktop/aa375202%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("advapi32.dll", SetLastError:=True)>
         Friend Shared Function AdjustTokenPrivileges(
@@ -336,7 +418,9 @@ Public NotInheritable Class SystemRestarter
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"></see>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/aa379180%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa379180%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("advapi32.dll", SetLastError:=True, CharSet:=CharSet.Auto, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function LookupPrivilegeValue(
@@ -355,7 +439,9 @@ Public NotInheritable Class SystemRestarter
         ''' Flags for <paramref name="uFlags"/> parameter of <see cref="SystemRestarter.NativeMethods.ExitWindowsEx"/> function.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/aa376868%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa376868%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <Flags>
         Friend Enum ExitwindowsExFlags As UInteger
@@ -401,7 +487,7 @@ Public NotInheritable Class SystemRestarter
             ' ''' Shuts down the system and then restarts it, 
             ' ''' as well as any applications that have been registered for restart using the RegisterApplicationRestart function. 
             ' ''' These application receive the WM_QUERYENDSESSION message with lParam set to the ENDSESSION_CLOSEAPP value. 
-            ' ''' For more information, see Guidelines for Applications: https://msdn.microsoft.com/en-us/library/windows/desktop/aa373651%28v=vs.85%29.aspx
+            ' ''' For more information, see Guidelines for Applications: http://msdn.microsoft.com/en-us/library/windows/desktop/aa373651%28v=vs.85%29.aspx
             ' ''' </summary>
             ' RestartApps = &H40UI
 
@@ -425,7 +511,9 @@ Public NotInheritable Class SystemRestarter
         ''' Flags for <paramref name="dwShutdownFlags"/> parameter of <see cref="SystemRestarter.NativeMethods.InitiateShutdown"/> function.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/aa376872%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa376872%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <Flags>
         Friend Enum InitiateShutdownFlags As UInteger
@@ -500,7 +588,9 @@ Public NotInheritable Class SystemRestarter
         ''' Flags for <paramref name="dwReason"/> parameter of <see cref="SystemRestarter.NativeMethods.ExitWindowsEx"/> function.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa376885%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa376885%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <Flags>
         Friend Enum ShutdownReason As UInteger
@@ -688,7 +778,9 @@ Public NotInheritable Class SystemRestarter
         ''' and <see cref="SystemRestarter.NativeMethods.InitiateShutdown"/> functions.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa376885%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa376885%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         Friend Enum ShutdownPlanning As UInteger
 
@@ -720,41 +812,46 @@ Public NotInheritable Class SystemRestarter
         ''' Flags combination for <paramref name="privileges"/> parameter of <see cref="SystemRestarter.NativeMethods.TokenPrivileges"/> structure.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa376885%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa376885%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <Flags>
         Friend Enum TokenPrivilegesFlags As UInteger
 
-            '''' <summary>
-            '''' The privilege is enabled by default.
-            '''' </summary>
-            PrivilegeEnabledBYDefault = &H1UI
+            ' '''' <summary>
+            ' '''' The privilege is enabled by default.
+            ' '''' </summary>
+            'PrivilegeEnabledBYDefault = &H1UI
 
             ''' <summary>
             ''' The privilege is enabled.
             ''' </summary>
             PrivilegeEnabled = &H2UI
 
-            ''' <summary>
-            ''' Used to remove a privilege.
-            ''' </summary>
-            PrivilegeRemoved = &H4UI
+            ' ''' <summary>
+            ' ''' Used to remove a privilege.
+            ' ''' </summary>
+            'PrivilegeRemoved = &H4UI
 
-            ''' <summary>
-            ''' The privilege was used to gain access to an object or service. 
-            ''' This flag is used to identify the relevant privileges 
-            ''' in a set passed by a client application that may contain unnecessary privileges
-            ''' </summary>
-            PrivilegeUsedForAccess = &H80000000UI
+            ' ''' <summary>
+            ' ''' The privilege was used to gain access to an object or service. 
+            ' ''' This flag is used to identify the relevant privileges 
+            ' ''' in a set passed by a client application that may contain unnecessary privileges
+            ' ''' </summary>
+            'PrivilegeUsedForAccess = &H80000000UI
 
         End Enum
 
         ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
-        ''' Flags combination for <paramref name="desiredAccess"/> parameter of <see cref="SystemRestarter.NativeMethods.OpenProcessToken"/> function.
+        ''' Flags combination for <paramref name="desiredAccess"/> parameter of 
+        ''' <see cref="SystemRestarter.NativeMethods.OpenProcessToken"/> function.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/aa374905%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa374905%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <Flags>
         Friend Enum AccessRights As UInteger
@@ -781,59 +878,88 @@ Public NotInheritable Class SystemRestarter
 
 #Region " Structures "
 
+        ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
         ''' An 'LUID' is a 64-bit value guaranteed to be unique only on the system on which it was generated. 
         ''' The uniqueness of a locally unique identifier (LUID) is guaranteed only until the system is restarted.
         ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa379261%28v=vs.85%29.aspx"/>
+        ''' </remarks>
+        ''' ----------------------------------------------------------------------------------------------------
+        <StructLayout(LayoutKind.Sequential)>
         Friend Structure Luid
 
+            ''' ----------------------------------------------------------------------------------------------------
             ''' <summary>
             ''' The Low-order bits.
             ''' </summary>
-            Public LowPart As Integer
+            ''' ----------------------------------------------------------------------------------------------------
+            Public LowPart As UInteger
 
+            ''' ----------------------------------------------------------------------------------------------------
             ''' <summary>
             ''' The High-order bits.
             ''' </summary>
+            ''' ----------------------------------------------------------------------------------------------------
             Public HighPart As Integer
 
         End Structure
 
+        ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
         ''' Represents a locally unique identifier (LUID) and its attributes.
         ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa379263%28v=vs.85%29.aspx"/>
+        ''' </remarks>
+        ''' ----------------------------------------------------------------------------------------------------
+        <StructLayout(LayoutKind.Sequential)>
         Friend Structure LuIdAndAttributes
 
+            ''' ----------------------------------------------------------------------------------------------------
             ''' <summary>
-            ''' Specifies a 'LUID' value.
+            ''' Specifies a <see cref="SystemRestarter.NativeMethods.Luid"/> (locally unique identifier) value.
             ''' </summary>
-            Public pLuid As SystemRestarter.NativeMethods.Luid
+            ''' ----------------------------------------------------------------------------------------------------
+            Public PLuid As SystemRestarter.NativeMethods.Luid
 
+            ''' ----------------------------------------------------------------------------------------------------
             ''' <summary>
             ''' Specifies attributes of the 'LUID'. 
             ''' This value contains up to 32 one-bit flags.
             ''' Its meaning is dependent on the definition and use of the 'LUID'.
             ''' </summary>
+            ''' ----------------------------------------------------------------------------------------------------
             Public Attributes As SystemRestarter.NativeMethods.TokenPrivilegesFlags
 
         End Structure
 
+        ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
         ''' Contains information about a set of privileges for an access token.
         ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        <StructLayout(LayoutKind.Sequential)>
         Friend Structure TokenPrivileges
 
+            ''' ----------------------------------------------------------------------------------------------------
             ''' <summary>
             ''' This must be set to the number of entries in the Privileges array
             ''' </summary>
+            ''' ----------------------------------------------------------------------------------------------------
             Public PrivilegeCount As Integer
 
+            ''' ----------------------------------------------------------------------------------------------------
             ''' <summary>
-            ''' Specifies an array of 'LUID_AND_ATTRIBUTES' structures. 
+            ''' Specifies an array of <see cref="SystemRestarter.NativeMethods.LuIdAndAttributes"/> structures. 
             ''' Each structure contains the 'LUID' and attributes of a privilege. 
             ''' To get the name of the privilege associated with a 'LUID', call the 'LookupPrivilegeName' function, 
             ''' passing the address of the 'LUID' as the value of the 'lpLuid' parameter.
             ''' </summary>
+            ''' ----------------------------------------------------------------------------------------------------
             Public Privileges As SystemRestarter.NativeMethods.LuIdAndAttributes
 
         End Structure
@@ -844,7 +970,18 @@ Public NotInheritable Class SystemRestarter
 
 #End Region
 
-#Region " Read-Only Variable Members "
+#Region " Constants "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' The maximum number of seconds to wait before shutting down the computer. 
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <remarks>
+    ''' <see href="http://msdn.microsoft.com/es-es/library/windows/desktop/aa376872%28v=vs.85%29.aspx"/>
+    ''' </remarks>
+    ''' ----------------------------------------------------------------------------------------------------
+    Public Const MaxShutdownTimeout As Integer = 315360000I
 
     ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
@@ -854,9 +991,11 @@ Public NotInheritable Class SystemRestarter
     ''' User Right: Shut down the system.
     ''' </summary>
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/bb530716%28v=vs.85%29.aspx</remarks>
+    ''' <remarks>
+    ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb530716%28v=vs.85%29.aspx"/>
+    ''' </remarks>
     ''' ----------------------------------------------------------------------------------------------------
-    Private Shared ReadOnly privilegeNameOfShutdown As String = "SeShutdownPrivilege"
+    Private Const PrivilegeNameOfShutdown As String = "SeShutdownPrivilege"
 
     ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
@@ -866,18 +1005,21 @@ Public NotInheritable Class SystemRestarter
     ''' User Right: Shut down the system.
     ''' </summary>
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/bb530716%28v=vs.85%29.aspx</remarks>
+    ''' <remarks>
+    ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb530716%28v=vs.85%29.aspx"/>
+    ''' </remarks>
     ''' ----------------------------------------------------------------------------------------------------
-    Private Shared ReadOnly privilegeNameOfRemoteShutdown As String = "SeRemoteShutdownPrivilege"
-
+    Private Const PrivilegeNameOfRemoteShutdown As String = "SeRemoteShutdownPrivilege"
 
 #End Region
 
 #Region " Enumerations "
 
+    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Specifies the mode to logoff an user session.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
     Public Enum LogOffMode As UInteger
 
         ''' <summary>
@@ -900,9 +1042,11 @@ Public NotInheritable Class SystemRestarter
 
     End Enum
 
+    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Specifies the mode to shutdown/restart the system.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
     Public Enum ShutdownMode As UInteger
 
         ''' <summary>
@@ -924,9 +1068,11 @@ Public NotInheritable Class SystemRestarter
 
     End Enum
 
+    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Specifies a shutdown/restart reason.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
     <Flags>
     Public Enum ShutdownReason As UInteger
 
@@ -1102,9 +1248,11 @@ Public NotInheritable Class SystemRestarter
 
     End Enum
 
+    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Specifies a shutdown planning.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
     Public Enum ShutdownPlanning As UInteger
 
         ''' <summary>
@@ -1130,18 +1278,6 @@ Public NotInheritable Class SystemRestarter
 
 #End Region
 
-#Region " Constructors "
-
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <summary>
-    ''' Prevents a default instance of the <see cref="SystemRestarter"/> class from being created.
-    ''' </summary>
-    ''' ----------------------------------------------------------------------------------------------------
-    Private Sub New()
-    End Sub
-
-#End Region
-
 #Region " Public Methods "
 
     ''' ----------------------------------------------------------------------------------------------------
@@ -1155,25 +1291,25 @@ Public NotInheritable Class SystemRestarter
     ''' </param>
     ''' 
     ''' <param name="ignoreErrors">
-    ''' If <c>True</c>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
+    ''' If <see langword="True"/>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <exception cref="Win32Exception">
     ''' </exception>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <returns>
-    ''' <c>True</c> if the function succeeds, <c>False</c> otherwise.
+    ''' <see langword="True"/> if the function succeeds, <see langword="False"/> otherwise.
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function Abort(Optional ByVal computer As String = Nothing,
-                                 Optional ByVal ignoreErrors As Boolean = True) As Boolean
+    Public Function Abort(Optional ByVal computer As String = Nothing,
+                          Optional ByVal ignoreErrors As Boolean = True) As Boolean
 
-        SystemRestarter.GetShutdownPrivileges(Nothing, SystemRestarter.privilegeNameOfShutdown)
-        SystemRestarter.GetShutdownPrivileges(Nothing, SystemRestarter.privilegeNameOfRemoteShutdown)
+        SystemRestarter.GetShutdownPrivileges(Nothing, SystemRestarter.PrivilegeNameOfShutdown)
+        SystemRestarter.GetShutdownPrivileges(Nothing, SystemRestarter.PrivilegeNameOfRemoteShutdown)
 
-        If Not ignoreErrors AndAlso Not SystemRestarter.NativeMethods.AbortSystemShutdown(computer) Then
-            Throw New Win32Exception(Marshal.GetLastWin32Error)
+        If (Not SystemRestarter.NativeMethods.AbortSystemShutdown(computer)) AndAlso (Not ignoreErrors) Then
+            Throw New Win32Exception([error]:=Marshal.GetLastWin32Error)
 
         Else
             Return True
@@ -1196,29 +1332,29 @@ Public NotInheritable Class SystemRestarter
     ''' </param>
     ''' 
     ''' <param name="ignoreErrors">
-    ''' If <c>True</c>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
+    ''' If <see langword="True"/>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <exception cref="Win32Exception">
     ''' </exception>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <returns>
-    ''' If the function succeeds, the return value is <c>True</c>. 
-    ''' The function executes asynchronously so a <c>True</c> return value indicates that the shutdown has been initiated. 
+    ''' If the function succeeds, the return value is <see langword="True"/>. 
+    ''' The function executes asynchronously so a <see langword="True"/> return value indicates that the shutdown has been initiated. 
     ''' It does not indicate whether the shutdown will succeed. 
     ''' It is possible that the system, the user, or another application will abort the shutdown.
-    ''' If the function fails, the return value is <c>False</c>. 
+    ''' If the function fails, the return value is <see langword="False"/>. 
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function LogOff(Optional ByVal mode As SystemRestarter.LogOffMode = SystemRestarter.LogOffMode.ForceIfHung,
-                                  Optional ByVal reason As SystemRestarter.ShutdownReason = SystemRestarter.ShutdownReason.MajorOther,
-                                  Optional ByVal ignoreErrors As Boolean = True) As Boolean
+    Public Function LogOff(Optional ByVal mode As SystemRestarter.LogOffMode = SystemRestarter.LogOffMode.ForceIfHung,
+                           Optional ByVal reason As SystemRestarter.ShutdownReason = SystemRestarter.ShutdownReason.MajorOther,
+                           Optional ByVal ignoreErrors As Boolean = True) As Boolean
 
-        SystemRestarter.GetShutdownPrivileges(Nothing, SystemRestarter.privilegeNameOfShutdown)
-        SystemRestarter.GetShutdownPrivileges(Nothing, SystemRestarter.privilegeNameOfRemoteShutdown)
+        SystemRestarter.GetShutdownPrivileges(Nothing, SystemRestarter.PrivilegeNameOfShutdown)
+        SystemRestarter.GetShutdownPrivileges(Nothing, SystemRestarter.PrivilegeNameOfRemoteShutdown)
 
-        If Not ignoreErrors AndAlso Not NativeMethods.ExitWindowsEx(SystemRestarter.NativeMethods.ExitwindowsExFlags.LogOff Or mode, reason) Then
+        If (Not NativeMethods.ExitWindowsEx(SystemRestarter.NativeMethods.ExitwindowsExFlags.LogOff Or mode, reason)) AndAlso (Not ignoreErrors) Then
             Throw New Win32Exception(Marshal.GetLastWin32Error)
 
         Else
@@ -1265,7 +1401,7 @@ Public NotInheritable Class SystemRestarter
     ''' </param>
     ''' 
     ''' <param name="ignoreErrors">
-    ''' If <c>True</c>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
+    ''' If <see langword="True"/>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <exception cref="ArgumentException">
@@ -1276,20 +1412,20 @@ Public NotInheritable Class SystemRestarter
     ''' </exception>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <returns>
-    ''' <c>true</c> if the PowerOff operation is initiated correctlly, <c>false</c> otherwise.
+    ''' <see langword="True"/> if the PowerOff operation is initiated correctlly, <see langword="False"/> otherwise.
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function PowerOff(Optional ByVal computer As String = Nothing,
-                                    Optional ByVal timeout As Integer = 0,
-                                    Optional ByVal message As String = Nothing,
-                                    Optional ByVal mode As SystemRestarter.ShutdownMode = SystemRestarter.ShutdownMode.Wait,
-                                    Optional ByVal reason As SystemRestarter.ShutdownReason = SystemRestarter.ShutdownReason.MajorOther,
-                                    Optional ByVal planning As SystemRestarter.ShutdownPlanning = SystemRestarter.ShutdownPlanning.Unplanned,
-                                    Optional ByVal ignoreErrors As Boolean = True) As Boolean
+    Public Function PowerOff(Optional ByVal computer As String = Nothing,
+                             Optional ByVal timeout As Integer = 0,
+                             Optional ByVal message As String = Nothing,
+                             Optional ByVal mode As SystemRestarter.ShutdownMode = SystemRestarter.ShutdownMode.Wait,
+                             Optional ByVal reason As SystemRestarter.ShutdownReason = SystemRestarter.ShutdownReason.MajorOther,
+                             Optional ByVal planning As SystemRestarter.ShutdownPlanning = SystemRestarter.ShutdownPlanning.Unplanned,
+                             Optional ByVal ignoreErrors As Boolean = True) As Boolean
 
-        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.privilegeNameOfShutdown)
-        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.privilegeNameOfRemoteShutdown)
+        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.PrivilegeNameOfShutdown)
+        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.PrivilegeNameOfRemoteShutdown)
 
         Dim exitCode As UInteger
 
@@ -1311,7 +1447,7 @@ Public NotInheritable Class SystemRestarter
 
         End Select
 
-        If (exitCode <> 0) AndAlso Not ignoreErrors Then
+        If (exitCode <> 0) AndAlso (Not ignoreErrors) Then
             Throw New Win32Exception([error]:=Convert.ToInt32(exitCode))
 
         Else
@@ -1358,7 +1494,7 @@ Public NotInheritable Class SystemRestarter
     ''' </param>
     ''' 
     ''' <param name="ignoreErrors">
-    ''' If <c>True</c>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
+    ''' If <see langword="True"/>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <exception cref="ArgumentException">
@@ -1369,20 +1505,20 @@ Public NotInheritable Class SystemRestarter
     ''' </exception>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <returns>
-    ''' <c>true</c> if the restart operation is initiated correctlly, <c>false</c> otherwise.
+    ''' <see langword="True"/> if the restart operation is initiated correctlly, <see langword="False"/> otherwise.
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function Restart(Optional ByVal computer As String = Nothing,
-                                   Optional ByVal timeout As Integer = 0,
-                                   Optional ByVal message As String = Nothing,
-                                   Optional ByVal mode As SystemRestarter.ShutdownMode = SystemRestarter.ShutdownMode.Wait,
-                                   Optional ByVal reason As SystemRestarter.ShutdownReason = SystemRestarter.ShutdownReason.MajorOther,
-                                   Optional ByVal planning As SystemRestarter.ShutdownPlanning = SystemRestarter.ShutdownPlanning.Unplanned,
-                                   Optional ByVal ignoreErrors As Boolean = True) As Boolean
+    Public Function Restart(Optional ByVal computer As String = Nothing,
+                            Optional ByVal timeout As Integer = 0,
+                            Optional ByVal message As String = Nothing,
+                            Optional ByVal mode As SystemRestarter.ShutdownMode = SystemRestarter.ShutdownMode.Wait,
+                            Optional ByVal reason As SystemRestarter.ShutdownReason = SystemRestarter.ShutdownReason.MajorOther,
+                            Optional ByVal planning As SystemRestarter.ShutdownPlanning = SystemRestarter.ShutdownPlanning.Unplanned,
+                            Optional ByVal ignoreErrors As Boolean = True) As Boolean
 
-        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.privilegeNameOfShutdown)
-        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.privilegeNameOfRemoteShutdown)
+        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.PrivilegeNameOfShutdown)
+        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.PrivilegeNameOfRemoteShutdown)
 
         Dim exitCode As UInteger
 
@@ -1405,7 +1541,7 @@ Public NotInheritable Class SystemRestarter
 
         End Select
 
-        If (exitCode <> 0) AndAlso Not ignoreErrors Then
+        If (exitCode <> 0) AndAlso (Not ignoreErrors) Then
             Throw New Win32Exception([error]:=Convert.ToInt32(exitCode))
 
         Else
@@ -1453,7 +1589,7 @@ Public NotInheritable Class SystemRestarter
     ''' </param>
     ''' 
     ''' <param name="ignoreErrors">
-    ''' If <c>True</c>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
+    ''' If <see langword="True"/>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <exception cref="ArgumentException">
@@ -1464,20 +1600,20 @@ Public NotInheritable Class SystemRestarter
     ''' </exception>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <returns>
-    ''' <c>true</c> if the restart operation is initiated correctlly, <c>false</c> otherwise.
+    ''' <see langword="True"/> if the restart operation is initiated correctlly, <see langword="False"/> otherwise.
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function RestartApps(Optional ByVal computer As String = Nothing,
-                                       Optional ByVal timeout As Integer = 0,
-                                       Optional ByVal message As String = Nothing,
-                                       Optional ByVal mode As SystemRestarter.ShutdownMode = SystemRestarter.ShutdownMode.Wait,
-                                       Optional ByVal reason As SystemRestarter.ShutdownReason = SystemRestarter.ShutdownReason.MajorOther,
-                                       Optional ByVal planning As SystemRestarter.ShutdownPlanning = SystemRestarter.ShutdownPlanning.Unplanned,
-                                       Optional ByVal ignoreErrors As Boolean = True) As Boolean
+    Public Function RestartApps(Optional ByVal computer As String = Nothing,
+                                Optional ByVal timeout As Integer = 0,
+                                Optional ByVal message As String = Nothing,
+                                Optional ByVal mode As SystemRestarter.ShutdownMode = SystemRestarter.ShutdownMode.Wait,
+                                Optional ByVal reason As SystemRestarter.ShutdownReason = SystemRestarter.ShutdownReason.MajorOther,
+                                Optional ByVal planning As SystemRestarter.ShutdownPlanning = SystemRestarter.ShutdownPlanning.Unplanned,
+                                Optional ByVal ignoreErrors As Boolean = True) As Boolean
 
-        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.privilegeNameOfShutdown)
-        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.privilegeNameOfRemoteShutdown)
+        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.PrivilegeNameOfShutdown)
+        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.PrivilegeNameOfRemoteShutdown)
 
         Dim exitCode As UInteger
 
@@ -1499,7 +1635,7 @@ Public NotInheritable Class SystemRestarter
 
         End Select
 
-        If (exitCode <> 0) AndAlso Not ignoreErrors Then
+        If (exitCode <> 0) AndAlso (Not ignoreErrors) Then
             Throw New Win32Exception([error]:=Convert.ToInt32(exitCode))
 
         Else
@@ -1546,7 +1682,7 @@ Public NotInheritable Class SystemRestarter
     ''' </param>
     ''' 
     ''' <param name="ignoreErrors">
-    ''' If <c>True</c>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
+    ''' If <see langword="True"/>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <exception cref="ArgumentException">
@@ -1557,20 +1693,20 @@ Public NotInheritable Class SystemRestarter
     ''' </exception>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <returns>
-    ''' <c>true</c> if the shutdown operation is initiated correctlly, <c>false</c> otherwise.
+    ''' <see langword="True"/> if the shutdown operation is initiated correctlly, <see langword="False"/> otherwise.
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function Shutdown(Optional ByVal computer As String = Nothing,
-                                    Optional ByVal timeout As Integer = 0,
-                                    Optional ByVal message As String = Nothing,
-                                    Optional ByVal mode As SystemRestarter.ShutdownMode = SystemRestarter.ShutdownMode.Wait,
-                                    Optional ByVal reason As SystemRestarter.ShutdownReason = SystemRestarter.ShutdownReason.MajorOther,
-                                    Optional ByVal planning As SystemRestarter.ShutdownPlanning = SystemRestarter.ShutdownPlanning.Unplanned,
-                                    Optional ByVal ignoreErrors As Boolean = True) As Boolean
+    Public Function Shutdown(Optional ByVal computer As String = Nothing,
+                             Optional ByVal timeout As Integer = 0,
+                             Optional ByVal message As String = Nothing,
+                             Optional ByVal mode As SystemRestarter.ShutdownMode = SystemRestarter.ShutdownMode.Wait,
+                             Optional ByVal reason As SystemRestarter.ShutdownReason = SystemRestarter.ShutdownReason.MajorOther,
+                             Optional ByVal planning As SystemRestarter.ShutdownPlanning = SystemRestarter.ShutdownPlanning.Unplanned,
+                             Optional ByVal ignoreErrors As Boolean = True) As Boolean
 
-        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.privilegeNameOfShutdown)
-        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.privilegeNameOfRemoteShutdown)
+        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.PrivilegeNameOfShutdown)
+        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.PrivilegeNameOfRemoteShutdown)
 
         Dim exitCode As UInteger
 
@@ -1592,7 +1728,7 @@ Public NotInheritable Class SystemRestarter
 
         End Select
 
-        If (exitCode <> 0) AndAlso Not ignoreErrors Then
+        If (exitCode <> 0) AndAlso (Not ignoreErrors) Then
             Throw New Win32Exception([error]:=Convert.ToInt32(exitCode))
 
         Else
@@ -1640,7 +1776,7 @@ Public NotInheritable Class SystemRestarter
     ''' </param>
     ''' 
     ''' <param name="ignoreErrors">
-    ''' If <c>True</c>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
+    ''' If <see langword="True"/>, a <see cref="Win32Exception"></see> exception will be thrown if error found.
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <exception cref="ArgumentException">
@@ -1651,20 +1787,20 @@ Public NotInheritable Class SystemRestarter
     ''' </exception>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <returns>
-    ''' <c>true</c> if the hydrid shutdown operation is initiated correctlly, <c>false</c> otherwise.
+    ''' <see langword="True"/> if the hydrid shutdown operation is initiated correctlly, <see langword="False"/> otherwise.
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function HybridShutdown(Optional ByVal computer As String = Nothing,
-                                          Optional ByVal timeout As Integer = 0,
-                                          Optional ByVal message As String = Nothing,
-                                          Optional ByVal mode As SystemRestarter.ShutdownMode = SystemRestarter.ShutdownMode.Wait,
-                                          Optional ByVal reason As SystemRestarter.ShutdownReason = SystemRestarter.ShutdownReason.MajorOther,
-                                          Optional ByVal planning As SystemRestarter.ShutdownPlanning = SystemRestarter.ShutdownPlanning.Unplanned,
-                                          Optional ByVal ignoreErrors As Boolean = True) As Boolean
+    Public Function HybridShutdown(Optional ByVal computer As String = Nothing,
+                                   Optional ByVal timeout As Integer = 0,
+                                   Optional ByVal message As String = Nothing,
+                                   Optional ByVal mode As SystemRestarter.ShutdownMode = SystemRestarter.ShutdownMode.Wait,
+                                   Optional ByVal reason As SystemRestarter.ShutdownReason = SystemRestarter.ShutdownReason.MajorOther,
+                                   Optional ByVal planning As SystemRestarter.ShutdownPlanning = SystemRestarter.ShutdownPlanning.Unplanned,
+                                   Optional ByVal ignoreErrors As Boolean = True) As Boolean
 
-        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.privilegeNameOfShutdown)
-        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.privilegeNameOfRemoteShutdown)
+        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.PrivilegeNameOfShutdown)
+        SystemRestarter.GetShutdownPrivileges(computer, SystemRestarter.PrivilegeNameOfRemoteShutdown)
 
         Dim exitCode As UInteger
 
@@ -1688,7 +1824,7 @@ Public NotInheritable Class SystemRestarter
 
         End Select
 
-        If (exitCode <> 0) AndAlso Not ignoreErrors Then
+        If (exitCode <> 0) AndAlso (Not ignoreErrors) Then
             Throw New Win32Exception([error]:=Convert.ToInt32(exitCode))
 
         Else
@@ -1717,8 +1853,8 @@ Public NotInheritable Class SystemRestarter
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Private Shared Sub GetShutdownPrivileges(ByVal computer As String,
-                                             ByVal privilegeName As String)
+    Private Sub GetShutdownPrivileges(ByVal computer As String,
+                                      ByVal privilegeName As String)
 
         Dim hToken As IntPtr
         Dim tkp As New SystemRestarter.NativeMethods.TokenPrivileges
@@ -1733,14 +1869,14 @@ Public NotInheritable Class SystemRestarter
             .Privileges.Attributes = SystemRestarter.NativeMethods.TokenPrivilegesFlags.PrivilegeEnabled
         End With
 
-        SystemRestarter.NativeMethods.LookupPrivilegeValue(computer, privilegeName, tkp.Privileges.pLuid)
+        SystemRestarter.NativeMethods.LookupPrivilegeValue(computer, privilegeName, tkp.Privileges.PLuid)
         SystemRestarter.NativeMethods.AdjustTokenPrivileges(hToken, False, tkp, 0UI, IntPtr.Zero, IntPtr.Zero)
 
     End Sub
 
 #End Region
 
-End Class
+End Module
 
 #End Region
 
