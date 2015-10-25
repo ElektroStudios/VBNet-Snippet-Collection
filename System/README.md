@@ -2,11 +2,13 @@
 #Environment Util
 Huge class that contains related Windows environment utilities.
 
-The .'nvironmentVariables' class manages the environment variables, it can register and unregister vars.
+The 'EnvironmentVariables' class manages the environment variables, it can find, register and unregister vars.
 
-The 'OS' class is very useful to tweak some Operating System values, it also notifies the system about changes to perform an update.
+The 'OS' class is very useful to tweak some Windows values, it also notifies the system about changes to perform a friendly update.
 
-The 'Shell' class pins and unpins items in taskbar and startmenu, it also can show/hide taskbar and startmenu.
+The 'FileSystem' class has some validation methods for filenames, and also can invoke item verbs.
+
+The 'Shell' class pins and unpins items in taskbar and startmenu, it also can show/hide taskbar and startmenu, can get all the Explorer windows instances, can refresh Explorer windows, or add a file to recent docs, and much more.
 
 The 'Theming' class manages the current theme and wallpaper, it can set other theme or wall.
 
