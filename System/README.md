@@ -1,4 +1,19 @@
 
+# System snippets category
+These snippets are intended to help managing the (operating)system in some aspects.
+
+# General Information about this repository
+ - .snippet files contains the formatted code that can be loaded through Visual Studio's code editorcontext menu.
+ - .vb files contains the raw code that can be copied then pasted in any project.
+ - Each .snippet and .vb file contains a #Region section and/or Xml documentation with code examples.
+ 
+Feel free to use and/or modify any file of this repository.
+
+If you like the job I've done, then please contribute with improvements to these snippets or by adding new ones.
+
+# TextFieldParser Example
+Example for beginners, to read a CSV file using "TextFieldParser" Class
+
 #Environment Util
 Huge class that contains related Windows environment utilities.
 
