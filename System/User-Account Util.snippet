@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
 <CodeSnippet Format="1.0.0">
 
@@ -11,9 +11,11 @@
 <Snippet>
 
 <References>
+
   <Reference>
     <Assembly>System.DirectoryServices.AccountManagement.dll</Assembly>
   </Reference>
+
 </References>
 
 <Declarations>
@@ -28,12 +30,18 @@
 
 ' ***********************************************************************
 ' Author   : Elektro
-' Modified : 20-June-2015
+' Modified : 24-October-2015
 ' ***********************************************************************
-' <copyright file="UserAccountUtil.vb" company="Elektro Studios">
+' <copyright file="User-Account Util.vb" company="Elektro Studios">
 '     Copyright (c) Elektro Studios. All rights reserved.
 ' </copyright>
 ' ***********************************************************************
+
+#Region " Required References "
+
+' System.DirectoryServices.AccountManagement.dll
+
+#End Region
 
 #Region " Public Members Summary "
 
@@ -90,10 +98,12 @@ Imports System.Security.Principal
 
 #Region " User-Accoun tUtil "
 
+''' ----------------------------------------------------------------------------------------------------
 ''' <summary>
 ''' Contains related Windows user-account utilities.
 ''' </summary>
-Public NotInheritable Class UserAccountUtil
+''' ----------------------------------------------------------------------------------------------------
+Public Module UserAccountUtil
 
 #Region " Properties "
 
@@ -106,7 +116,7 @@ Public NotInheritable Class UserAccountUtil
     ''' An <see cref="UserPrincipal"/> object that represents the current user.
     ''' </value>
     ''' ----------------------------------------------------------------------------------------------------
-    Public Shared ReadOnly Property CurrentUser As UserPrincipal
+    Public ReadOnly Property CurrentUser As UserPrincipal
         <DebuggerStepThrough>
         Get
             If UserAccountUtil.currentUserB Is Nothing Then
@@ -116,10 +126,10 @@ Public NotInheritable Class UserAccountUtil
         End Get
     End Property
     ''' <summary>
-    ''' (Backing Field)
+    ''' ( Backing field )
     ''' Gets an <see cref="UserPrincipal"/> object that represents the current user.
     ''' </summary>
-    Private Shared currentUserB As UserPrincipal
+    Private currentUserB As UserPrincipal
 
     ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
@@ -130,12 +140,11 @@ Public NotInheritable Class UserAccountUtil
     ''' A value that indicates whether the current user has Administrator privileges.
     ''' </value>
     ''' ----------------------------------------------------------------------------------------------------
-    Public Shared ReadOnly Property CurrentUserIsAdmin As Boolean
+    Public ReadOnly Property CurrentUserIsAdmin As Boolean
         <DebuggerStepThrough>
         Get
             Using group As GroupPrincipal =
-                GroupPrincipal.FindByIdentity(CurrentUser.Context,
-                                              IdentityType.Sid,
+                GroupPrincipal.FindByIdentity(CurrentUser.Context, IdentityType.Sid,
                                               New SecurityIdentifier(WellKnownSidType.BuiltinAdministratorsSid, Nothing).Value)
 
                 Return UserAccountUtil.CurrentUser.IsMemberOf(group)
@@ -145,39 +154,25 @@ Public NotInheritable Class UserAccountUtil
 
 #End Region
 
-#Region " Constructors "
-
-    ''' <summary>
-    ''' Prevents a default instance of the <see cref="UserAccountUtil"/> class from being created.
-    ''' </summary>
-    Private Sub New()
-    End Sub
-
-#End Region
-
 #Region " Public Methods "
 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : Get all user-accounts.
-    ''' Author: Elektro
-    ''' Date  : 20-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' Dim users As List(Of UserPrincipal) = UserAccountUtil.GetAllUsers()
-    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Find and returns all the user accounts of the current machine context.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim users As List(Of UserPrincipal) = UserAccountUtil.GetAllUsers()
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <returns>
     ''' A <see cref="List(Of UserPrincipal)"/> collection that contains the users.
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function GetAllUsers() As List(Of UserPrincipal)
+    Public Function GetAllUsers() As List(Of UserPrincipal)
 
         Dim context As New PrincipalContext(ContextType.Machine)
 
@@ -194,19 +189,15 @@ Public NotInheritable Class UserAccountUtil
     End Function
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : Find user-account by name.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' Dim user As UserPrincipal = UserAccountUtil.FindUser(username:="Administrator")
-    ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Finds an user account that matches the specified name in the current machine context.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim user As UserPrincipal = UserAccountUtil.FindUser(username:="Administrator")
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="username">
     ''' The user name to find.
@@ -221,7 +212,7 @@ Public NotInheritable Class UserAccountUtil
     ''' </exception>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function FindUser(ByVal username As String) As UserPrincipal
+    Public Function FindUser(ByVal username As String) As UserPrincipal
 
         Dim context As New PrincipalContext(ContextType.Machine)
 
@@ -247,19 +238,15 @@ Public NotInheritable Class UserAccountUtil
     End Function
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : Find user-account by SID.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' Dim user As UserPrincipal = UserAccountUtil.FindUser(sid:=New SecurityIdentifier("S-1-5-21-1780771175-1208154119-2269826705-500"))
-    ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Finds an user account that matches the specified security identifier (SID) in the current machine context.
-    ''' </summary>
+    ''' </summary>    
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim user As UserPrincipal = UserAccountUtil.FindUser(sid:=New SecurityIdentifier("S-1-5-21-1780771175-1208154119-2269826705-500"))
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="sid">
     ''' A <see cref="SecurityIdentifier"/> (SID) object.
@@ -269,8 +256,12 @@ Public NotInheritable Class UserAccountUtil
     ''' An <see cref="UserPrincipal"/> object that contains the user data.
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
+    ''' <exception cref="ArgumentException">
+    ''' User not found.;username
+    ''' </exception>
+    ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function FindUser(ByVal sid As SecurityIdentifier) As UserPrincipal
+    Public Function FindUser(ByVal sid As SecurityIdentifier) As UserPrincipal
 
         Dim context As New PrincipalContext(ContextType.Machine)
 
@@ -296,19 +287,15 @@ Public NotInheritable Class UserAccountUtil
     End Function
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : Find user-account name by SID.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' Dim username As String = UserAccountUtil.FindUsername(sid:=New SecurityIdentifier("S-1-5-21-1780771175-1208154119-2269826705-500"))
-    ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Finds the username of the specified security identifier (SID) in the current machine context.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim username As String = UserAccountUtil.FindUsername(sid:=New SecurityIdentifier("S-1-5-21-1780771175-1208154119-2269826705-500"))
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="sid">
     ''' A <see cref="SecurityIdentifier"/> (SID) object.
@@ -319,30 +306,24 @@ Public NotInheritable Class UserAccountUtil
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function FindUsername(ByVal sid As SecurityIdentifier) As String
+    Public Function FindUsername(ByVal sid As SecurityIdentifier) As String
 
         Using user As UserPrincipal = UserAccountUtil.FindUser(sid)
-
             Return user.Name
-
         End Using
 
     End Function
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : Find user-account SID by username.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' Dim sid As SecurityIdentifier = UserAccountUtil.FindSid(username:="Administrator"))
-    ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Finds the security identifier (SID) of the specified username account in the current machine context.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim sid As SecurityIdentifier = UserAccountUtil.FindSid(username:="Administrator"))
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="username">
     ''' The user name.
@@ -353,26 +334,22 @@ Public NotInheritable Class UserAccountUtil
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function FindSid(ByVal username As String) As SecurityIdentifier
+    Public Function FindSid(ByVal username As String) As SecurityIdentifier
 
         Return UserAccountUtil.FindUser(username).Sid
 
     End Function
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : Find user-account's profile path by username.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' Dim profilePath As String = UserAccountUtil.FindProfilePath(username:="Administrator"))
-    ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Finds the profile directory path of the specified username account in the current machine context.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim profilePath As String = UserAccountUtil.FindProfilePath(username:="Administrator"))
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="username">
     ''' The user name to find.
@@ -383,7 +360,7 @@ Public NotInheritable Class UserAccountUtil
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function FindProfilePath(ByVal userName As String) As String
+    Public Function FindProfilePath(ByVal userName As String) As String
 
         Using user As UserPrincipal = UserAccountUtil.FindUser(userName)
 
@@ -396,19 +373,16 @@ Public NotInheritable Class UserAccountUtil
     End Function
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : Find user-account's profile path by SID.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' Dim profilePath As String = UserAccountUtil.FindProfilePath(sid:=New SecurityIdentifier("S-1-5-21-1780771175-1208154119-2269826705-500"))
-    ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Finds the profile directory path of the specified username account in the current machine context.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim profilePath As String = 
+    '''     UserAccountUtil.FindProfilePath(sid:=New SecurityIdentifier("S-1-5-21-1780771175-1208154119-2269826705-500"))
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="sid">
     ''' A <see cref="SecurityIdentifier"/> (SID) object.
@@ -419,7 +393,7 @@ Public NotInheritable Class UserAccountUtil
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function FindProfilePath(ByVal sid As SecurityIdentifier) As String
+    Public Function FindProfilePath(ByVal sid As SecurityIdentifier) As String
 
         Using user As UserPrincipal = UserAccountUtil.FindUser(sid)
 
@@ -432,30 +406,26 @@ Public NotInheritable Class UserAccountUtil
     End Function
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : User is Admin?.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' Dim userIsAdmin As Boolean = UserAccountUtil.IsAdmin(username:="Administrator")
-    ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Determines whether an user-account of the current machine context is an Administrator.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim userIsAdmin As Boolean = UserAccountUtil.IsAdmin(username:="Administrator")
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="username">
     ''' The user name.
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <returns>
-    ''' <c>True</c> if the user is an Administrator, otherwise, <c>False</c>.
+    ''' <see langword="True"/> if the user is an Administrator, otherwise, <see langword="False"/>.
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function IsAdmin(ByVal username As String) As Boolean
+    Public Function IsAdmin(ByVal username As String) As Boolean
 
         Using user As UserPrincipal = UserAccountUtil.FindUser(username)
 
@@ -470,19 +440,16 @@ Public NotInheritable Class UserAccountUtil
     End Function
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : User is member of group...?.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' Dim userIsGuest As Boolean = UserAccountUtil.IsMemberOfGroup(username:="Administrator", groupSid:=WellKnownSidType.BuiltinGuestsSid)
-    ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Determines whether an user-account of the current machine context is a member of the specified group.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim userIsGuest As Boolean = 
+    '''     UserAccountUtil.IsMemberOfGroup(username:="Administrator", groupSid:=WellKnownSidType.BuiltinGuestsSid)
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="username">
     ''' The user name.
@@ -493,12 +460,12 @@ Public NotInheritable Class UserAccountUtil
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <returns>
-    ''' <c>True</c> if the user is a member of the specified group, otherwise, <c>False</c>.
+    ''' <see langword="True"/> if the user is a member of the specified group, otherwise, <see langword="False"/>.
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function IsMemberOfGroup(ByVal username As String,
-                                           ByVal groupSid As WellKnownSidType) As Boolean
+    Public Function IsMemberOfGroup(ByVal username As String,
+                                    ByVal groupSid As WellKnownSidType) As Boolean
 
         Using user As UserPrincipal = UserAccountUtil.FindUser(username)
 
@@ -513,19 +480,15 @@ Public NotInheritable Class UserAccountUtil
     End Function
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : User is member of group...?.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' Dim userIsGuest As Boolean = UserAccountUtil.IsMemberOfGroup(username:="Administrator", groupname:="Guests")
-    ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Determines whether an user-account of the current machine context is a member of the specified group.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim userIsGuest As Boolean = UserAccountUtil.IsMemberOfGroup(username:="Administrator", groupname:="Guests")
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="username">
     ''' The user name.
@@ -536,12 +499,12 @@ Public NotInheritable Class UserAccountUtil
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <returns>
-    ''' <c>True</c> if the user is a member of the specified group, otherwise, <c>False</c>.
+    ''' <see langword="True"/> if the user is a member of the specified group, otherwise, <see langword="False"/>.
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function IsMemberOfGroup(ByVal username As String,
-                                           ByVal groupname As String) As Boolean
+    Public Function IsMemberOfGroup(ByVal username As String,
+                                    ByVal groupname As String) As Boolean
 
         Using user As UserPrincipal = UserAccountUtil.FindUser(username)
 
@@ -556,13 +519,13 @@ Public NotInheritable Class UserAccountUtil
     End Function
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : Create user-account.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
+    ''' <summary>
+    ''' Creates a new user account in the current machine context.
+    ''' This function does NOT adds a new user in the current machine.
+    ''' </summary>
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
+    ''' <example> This is a code example.
+    ''' <code>
     ''' Dim user as UserPrincipal = UserAccountUtil.Create(username:="Elektro",
     '''                                                    password:="",
     '''                                                    displayName:="Elektro Account.",
@@ -570,12 +533,8 @@ Public NotInheritable Class UserAccountUtil
     '''                                                    canChangePwd:=True,
     '''                                                    pwdExpires:=False,
     '''                                                    groupSid:=WellKnownSidType.BuiltinAdministratorsSid)
+    ''' </code>
     ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <summary>
-    ''' Creates a new user account in the current machine context.
-    ''' This function does NOT adds a new user in the current machine.
-    ''' </summary>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="username">
     ''' The user name.
@@ -607,12 +566,12 @@ Public NotInheritable Class UserAccountUtil
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Function Create(ByVal username As String,
-                                  ByVal password As String,
-                                  ByVal displayName As String,
-                                  ByVal description As String,
-                                  ByVal canChangePwd As Boolean,
-                                  ByVal pwdExpires As Boolean) As UserPrincipal
+    Public Function Create(ByVal username As String,
+                           ByVal password As String,
+                           ByVal displayName As String,
+                           ByVal description As String,
+                           ByVal canChangePwd As Boolean,
+                           ByVal pwdExpires As Boolean) As UserPrincipal
 
         Using context As New PrincipalContext(ContextType.Machine)
 
@@ -643,13 +602,12 @@ Public NotInheritable Class UserAccountUtil
     End Function
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : Add user-account.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
+    ''' <summary>
+    ''' Adds a new user account in the current machine context.
+    ''' </summary>
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
+    ''' <example> This is a code example.
+    ''' <code>
     ''' UserAccountUtil.Add(username:="Elektro",
     '''                     password:="",
     '''                     displayName:="Elektro Account.",
@@ -657,11 +615,8 @@ Public NotInheritable Class UserAccountUtil
     '''                     canChangePwd:=True,
     '''                     pwdExpires:=False,
     '''                     groupSid:=WellKnownSidType.BuiltinAdministratorsSid)
+    ''' </code>
     ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <summary>
-    ''' Adds a new user account in the current machine context.
-    ''' </summary>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="username">
     ''' The user name.
@@ -693,13 +648,13 @@ Public NotInheritable Class UserAccountUtil
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Sub Add(ByVal username As String,
-                          ByVal password As String,
-                          ByVal displayName As String,
-                          ByVal description As String,
-                          ByVal canChangePwd As Boolean,
-                          ByVal pwdExpires As Boolean,
-                          Optional ByVal groupSid As WellKnownSidType = WellKnownSidType.BuiltinUsersSid)
+    Public Sub Add(ByVal username As String,
+                   ByVal password As String,
+                   ByVal displayName As String,
+                   ByVal description As String,
+                   ByVal canChangePwd As Boolean,
+                   ByVal pwdExpires As Boolean,
+                   Optional ByVal groupSid As WellKnownSidType = WellKnownSidType.BuiltinUsersSid)
 
         Using context As New PrincipalContext(ContextType.Machine)
 
@@ -719,19 +674,15 @@ Public NotInheritable Class UserAccountUtil
     End Sub
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : Add user-account.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' UserAccountUtil.Add(user:=myUserPrincipal, groupSid:=WellKnownSidType.BuiltinAdministratorsSid)
-    ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Adds a new user account in the current machine context.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' UserAccountUtil.Add(user:=myUserPrincipal, groupSid:=WellKnownSidType.BuiltinAdministratorsSid)
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="user">
     ''' An <see cref="UserPrincipal"/> object that contains the user data.
@@ -742,8 +693,8 @@ Public NotInheritable Class UserAccountUtil
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Sub Add(ByVal user As UserPrincipal,
-                          Optional ByVal groupSid As WellKnownSidType = WellKnownSidType.BuiltinUsersSid)
+    Public Sub Add(ByVal user As UserPrincipal,
+                   Optional ByVal groupSid As WellKnownSidType = WellKnownSidType.BuiltinUsersSid)
 
         Using context As New PrincipalContext(ContextType.Machine)
 
@@ -759,42 +710,32 @@ Public NotInheritable Class UserAccountUtil
     End Sub
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : Delete user-account.
-    ''' Author: Elektro
-    ''' Date  : 19-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' UserAccountUtil.Delete(username:="User name")
-    ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Deletes an user account in the current machine context.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' UserAccountUtil.Delete(username:="User name")
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <param name="username">
     ''' The user name of the user-account to delete.
     ''' </param>
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <exception cref="ArgumentException">
-    ''' User not found.;username
-    ''' </exception>
-    ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
-    Public Shared Sub Delete(ByVal username As String)
+    Public Sub Delete(ByVal username As String)
 
         Using curUser As UserPrincipal = UserAccountUtil.FindUser(username)
-
             curUser.Delete()
-
         End Using
 
     End Sub
 
 #End Region
 
-End Class
+End Module
 
 #End Region
 
