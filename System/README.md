@@ -381,8 +381,8 @@ It can add, delete or find an user, and much more.
 Public Members Summary
 
  - Properties
-   -UserAccountUtil.CurrentUser As UserPrincipal
-   -UserAccountUtil.CurrentUserIsAdmin As Boolean
+   - UserAccountUtil.CurrentUser As UserPrincipal
+   - UserAccountUtil.CurrentUserIsAdmin As Boolean
 
  - Functions
    - UserAccountUtil.Create(String, String, String, String, Boolean, Boolean) As UserPrincipal
