@@ -219,7 +219,7 @@ This class manages the system recycle bins.
 
 It has a property to manage the master recycle bin (the one that contains the recycled files of all drives)
 
-It can list recycled list, folders and items. Can permanently delete an specified item, or perform a cleaning operation, and more things. 
+It can list recycled files, folders and items. Can permanently delete an specified item, or perform a cleaning operation, and more things. 
 
  - Child Classes
    - RecycleBinUtil.MasterBinLayout <Hidden>
