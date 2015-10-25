@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
 <CodeSnippet Format="1.0.0">
 
@@ -34,7 +34,7 @@
 
 ' ***********************************************************************
 ' Author   : Elektro
-' Modified : 27-June-2015
+' Modified : 25-October-2015
 ' ***********************************************************************
 ' <copyright file="EnvironmentUtil.vb" company="Elektro Studios">
 '     Copyright (c) Elektro Studios. All rights reserved.
@@ -50,13 +50,13 @@
 #Region " Required References "
 
 ' Microsoft Shell Controls And Automation (COM) (Interop.SHDocVw.dll)
-' Microsoft Internet Controls (COM) (Interop.Shell32.dll)
+' Microsoft Internet Controls             (COM) (Interop.Shell32.dll)
 
 #End Region
 
 #Region " Public Members Summary "
 
-#Region " Child Util-Classes "
+#Region " Child Classes "
 
 ' EnvironmentUtil.EnvironmentVariables
 ' EnvironmentUtil.FileSystem
@@ -71,9 +71,18 @@
 
 #End Region
 
+#Region " Enumerations "
+
+' EnvironmentUtil.EnvironmentScope
+' EnvironmentUtil.OS.Architecture
+' EnvironmentUtil.Theming.CursorType
+' EnvironmentUtil.Theming.WallpaperStyle
+
+#End Region
+
 #Region " Properties "
 
-' EnvironmentUtil.EnvironmentVariables.CurrentVariables(EnvironmentUtil.EnvironmentUser) As ReadOnlyCollection(Of EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo)
+' EnvironmentUtil.EnvironmentVariables.CurrentVariables(EnvironmentUtil.EnvironmentScope) As ReadOnlyCollection(Of EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo)
 ' EnvironmentUtil.OS.ActiveWindowTrackingEnabled As Boolean
 ' EnvironmentUtil.OS.ActiveWindowTrackingTimeout As UShort
 ' EnvironmentUtil.OS.BeepEnabled As Boolean
@@ -158,8 +167,8 @@
 
 #Region " Functions "
 
-' EnvironmentUtil.EnvironmentVariables.GetValue(EnvironmentUtil.EnvironmentUser, String, Boolean) As String
-' EnvironmentUtil.EnvironmentVariables.GetVariableInfo(EnvironmentUtil.EnvironmentUser, String, Boolean) As EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo
+' EnvironmentUtil.EnvironmentVariables.GetValue(EnvironmentUtil.EnvironmentScope, String, Boolean) As String
+' EnvironmentUtil.EnvironmentVariables.GetVariableInfo(EnvironmentUtil.EnvironmentScope, String, Boolean) As EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo
 ' EnvironmentUtil.FileSystem.GetItemVerbs(String) As IEnumerable(Of FolderItemVerb)
 ' EnvironmentUtil.FileSystem.ItemNameIsInvalid(String) As Boolean
 ' EnvironmentUtil.FileSystem.ItemNameOrPathIsInvalid(String) As Boolean
@@ -169,9 +178,9 @@
 
 #Region " Methods "
 
-' EnvironmentUtil.EnvironmentVariables.RegisterVariable(EnvironmentUtil.EnvironmentUser, EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo, Boolean)
-' EnvironmentUtil.EnvironmentVariables.RegisterVariable(EnvironmentUtil.EnvironmentUser, String, String, Boolean)
-' EnvironmentUtil.EnvironmentVariables.UnregisterVariable(EnvironmentUtil.EnvironmentUser, String, Boolean)
+' EnvironmentUtil.EnvironmentVariables.RegisterVariable(EnvironmentUtil.EnvironmentScope, EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo, Boolean)
+' EnvironmentUtil.EnvironmentVariables.RegisterVariable(EnvironmentUtil.EnvironmentScope, String, String, Boolean)
+' EnvironmentUtil.EnvironmentVariables.UnregisterVariable(EnvironmentUtil.EnvironmentScope, String, Boolean)
 ' EnvironmentUtil.FileSystem.InvokeItemVerb(String, String)
 ' EnvironmentUtil.OS.NotifyDirectoryAttributesChanged(String)
 ' EnvironmentUtil.OS.NotifyDirectoryCreated(String)
@@ -220,6 +229,7 @@
 ' EnvironmentUtil.Theming.RemoveDesktopWallpaper()
 ' EnvironmentUtil.Theming.SetDesktopWallpaper(String, EnvironmentUtil.Theming.WallpaperStyle)
 ' EnvironmentUtil.Theming.SetSystemCursor(String, EnvironmentUtil.Theming.CursorType)
+' EnvironmentUtil.Theming.SetSystemVisualTheme(String, String, String)
 
 #End Region
 
@@ -269,7 +279,9 @@ Public NotInheritable Class EnvironmentUtil
     ''' This class is for methods that can be used anywhere because a stack walk will be performed.
     ''' </summary>
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>http://msdn.microsoft.com/en-us/library/ms182161.aspx</remarks>
+    ''' <remarks>
+    ''' <see href="http://msdn.microsoft.com/en-us/library/ms182161.aspx"/>
+    ''' </remarks>
     ''' ----------------------------------------------------------------------------------------------------
     Private NotInheritable Class NativeMethods
 
@@ -302,7 +314,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' The return value specifies the result of the message processing; it depends on the message sent.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms644950%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644950%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SendMessage(
@@ -331,16 +345,18 @@ Public NotInheritable Class EnvironmentUtil
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <returns>
-        ''' If the function succeeds, the return value is <c>True</c>.
-        ''' If the function fails, the return value is <c>False</c>.
+        ''' If the function succeeds, the return value is <see langword="True"/>.
+        ''' If the function fails, the return value is <see langword="False"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/ms648395%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms648395%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", SetLastError:=True)>
         Friend Shared Function SetSystemCursor(
                                ByVal hCursor As IntPtr,
-                               ByVal id As Short
+                               ByVal id As UInteger
         ) As Boolean
         End Function
 
@@ -359,9 +375,11 @@ Public NotInheritable Class EnvironmentUtil
         ''' If the function fails, the return value is <see cref="IntPtr.Zero"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/ms648392%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms648392%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
-        <DllImport("user32.dll", SetLastError:=True)>
+        <DllImport("user32.dll", SetLastError:=True, charSet:=CharSet.Ansi, bestFitMapping:=False, throwOnUnmappableChar:=True)>
         Friend Shared Function LoadCursorFromFile(
                                ByVal lpFileName As String
         ) As IntPtr
@@ -385,7 +403,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <param name="Msg">
         ''' The message to be sent.
         ''' For lists of the system-provided messages, see System-Defined Messages:
-        ''' https://msdn.microsoft.com/en-us/library/windows/desktop/ms644927%28v=vs.85%29.aspx#system_defined
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644927%28v=vs.85%29.aspx#system_defined"/>
         ''' </param>
         ''' 
         ''' <param name="wParam">
@@ -424,7 +442,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' If <see cref="Marshal.GetLastWin32Error"/> returns ERROR_TIMEOUT, then the function timed out.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms644952%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644952%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SendMessageTimeout(
@@ -452,7 +472,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </param>
         ''' 
         ''' <param name="pszColorBuff">
-        ''' Pointer to a string that receives the color scheme name. This parameter may be set to <c>Nothing</c>.
+        ''' Pointer to a string that receives the color scheme name. This parameter may be set to <see langword="Nothing"/>.
         ''' </param>
         ''' 
         ''' <param name="cchMaxColorChars">
@@ -466,9 +486,13 @@ Public NotInheritable Class EnvironmentUtil
         ''' The maximum number of characters allowed in the size name.
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <returns>Returns '0' if successful, otherwise, an error code.</returns>
+        ''' <returns>
+        ''' Returns '0' if successful, otherwise, an error code.
+        ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb773365%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb773365%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("uxtheme", CharSet:=CharSet.Auto, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function GetCurrentThemeName(
@@ -491,21 +515,23 @@ Public NotInheritable Class EnvironmentUtil
         ''' ----------------------------------------------------------------------------------------------------
         ''' <param name="lpClassName">
         ''' The class name or a class atom created by a previous call to the RegisterClass or RegisterClassEx function. 
-        ''' The atom must be in the low-order word of <paramref name="lpClassName"></paramref>; the high-order word must be zero.
-        ''' If <paramref name="lpClassName"></paramref> is NULL, it finds any window whose title matches the <paramref name="lpWindowName"></paramref> parameter.
+        ''' The atom must be in the low-order word of <paramref name="lpClassName"/>; the high-order word must be zero.
+        ''' If <paramref name="lpClassName"/> is NULL, it finds any window whose title matches the <paramref name="lpWindowName"/> parameter.
         ''' </param>
         ''' 
         ''' <param name="lpWindowName">
         ''' The window name (the window's titlebar title). 
-        ''' If this parameter is <c>Nothing</c>, all window names match.
+        ''' If this parameter is <see langword="Nothing"/>, all window names match.
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <returns>
         ''' If the function succeeds, the return value is a handle to the window that has the specified class name and window name.
-        ''' If the function fails, the return value is <c>Nothing</c>.
+        ''' If the function fails, the return value is <see langword="Nothing"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/ms633499%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms633499%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function FindWindow(
@@ -532,7 +558,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' If the window was previously hidden, the return value is zero.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/ms633548%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms633548%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll")>
         Friend Shared Function ShowWindow(
@@ -548,14 +576,16 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <param name="enabled">
-        ''' A pointer to a value that, when this function returns successfully, receives <c>True</c> if DWM composition is enabled; otherwise, <c>False</c>.
+        ''' A pointer to a value that, when this function returns successfully, receives <see langword="True"/> if DWM composition is enabled; otherwise, <see langword="False"/>.
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <returns>
         ''' this function succeeds, it returns S_OK. Otherwise, it returns an HRESULT error code.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/aa969518%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa969518%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("dwmapi.dll")>
         Friend Shared Function DwmIsCompositionEnabled(
@@ -582,7 +612,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <param name="pvParam">
         ''' A parameter whose usage and format depends on the system parameter being queried or set. 
         ''' For more information about system-wide parameters, see the <paramfer name="uiAction"></paramfer> parameter. 
-        ''' If not otherwise indicated, you must specify <c>Nothing</c> for this parameter.
+        ''' If not otherwise indicated, you must specify <see langword="Nothing"/> for this parameter.
         ''' For information on the PVOID datatype, see Windows Data Types.
         ''' </param>
         ''' 
@@ -601,7 +631,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", EntryPoint:="SystemParametersInfo", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SystemParametersInfo(
@@ -631,7 +663,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <param name="pvParam">
         ''' A parameter whose usage and format depends on the system parameter being queried or set. 
         ''' For more information about system-wide parameters, see the <paramfer name="uiAction"></paramfer> parameter. 
-        ''' If not otherwise indicated, you must specify <c>Nothing</c> for this parameter.
+        ''' If not otherwise indicated, you must specify <see langword="Nothing"/> for this parameter.
         ''' For information on the PVOID datatype, see Windows Data Types.
         ''' </param>
         ''' 
@@ -650,7 +682,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", EntryPoint:="SystemParametersInfo", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SystemParametersInfo(
@@ -680,7 +714,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <param name="pvParam">
         ''' A parameter whose usage and format depends on the system parameter being queried or set. 
         ''' For more information about system-wide parameters, see the <paramfer name="uiAction"></paramfer> parameter. 
-        ''' If not otherwise indicated, you must specify <c>Nothing</c> for this parameter.
+        ''' If not otherwise indicated, you must specify <see langword="Nothing"/> for this parameter.
         ''' For information on the PVOID datatype, see Windows Data Types.
         ''' </param>
         ''' 
@@ -699,7 +733,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", EntryPoint:="SystemParametersInfo", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SystemParametersInfo(
@@ -729,7 +765,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <param name="pvParam">
         ''' A parameter whose usage and format depends on the system parameter being queried or set. 
         ''' For more information about system-wide parameters, see the <paramfer name="uiAction"></paramfer> parameter. 
-        ''' If not otherwise indicated, you must specify <c>Nothing</c> for this parameter.
+        ''' If not otherwise indicated, you must specify <see langword="Nothing"/> for this parameter.
         ''' For information on the PVOID datatype, see Windows Data Types.
         ''' </param>
         ''' 
@@ -748,7 +784,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", EntryPoint:="SystemParametersInfo", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SystemParametersInfo(
@@ -778,7 +816,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <param name="pvParam">
         ''' A parameter whose usage and format depends on the system parameter being queried or set. 
         ''' For more information about system-wide parameters, see the <paramfer name="uiAction"></paramfer> parameter. 
-        ''' If not otherwise indicated, you must specify <c>Nothing</c> for this parameter.
+        ''' If not otherwise indicated, you must specify <see langword="Nothing"/> for this parameter.
         ''' For information on the PVOID datatype, see Windows Data Types.
         ''' </param>
         ''' 
@@ -797,7 +835,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", EntryPoint:="SystemParametersInfo", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SystemParametersInfo(
@@ -827,7 +867,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <param name="pvParam">
         ''' A parameter whose usage and format depends on the system parameter being queried or set. 
         ''' For more information about system-wide parameters, see the <paramfer name="uiAction"></paramfer> parameter. 
-        ''' If not otherwise indicated, you must specify <c>Nothing</c> for this parameter.
+        ''' If not otherwise indicated, you must specify <see langword="Nothing"/> for this parameter.
         ''' For information on the PVOID datatype, see Windows Data Types.
         ''' </param>
         ''' 
@@ -846,7 +886,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", EntryPoint:="SystemParametersInfo", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SystemParametersInfo(
@@ -876,7 +918,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <param name="pvParam">
         ''' A parameter whose usage and format depends on the system parameter being queried or set. 
         ''' For more information about system-wide parameters, see the <paramfer name="uiAction"></paramfer> parameter. 
-        ''' If not otherwise indicated, you must specify <c>Nothing</c> for this parameter.
+        ''' If not otherwise indicated, you must specify <see langword="Nothing"/> for this parameter.
         ''' For information on the PVOID datatype, see Windows Data Types.
         ''' </param>
         ''' 
@@ -895,7 +937,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", EntryPoint:="SystemParametersInfo", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SystemParametersInfo(
@@ -925,7 +969,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <param name="pvParam">
         ''' A parameter whose usage and format depends on the system parameter being queried or set. 
         ''' For more information about system-wide parameters, see the <paramfer name="uiAction"></paramfer> parameter. 
-        ''' If not otherwise indicated, you must specify <c>Nothing</c> for this parameter.
+        ''' If not otherwise indicated, you must specify <see langword="Nothing"/> for this parameter.
         ''' For information on the PVOID datatype, see Windows Data Types.
         ''' </param>
         ''' 
@@ -944,7 +988,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", EntryPoint:="SystemParametersInfo", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SystemParametersInfo(
@@ -974,7 +1020,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <param name="pvParam">
         ''' A parameter whose usage and format depends on the system parameter being queried or set. 
         ''' For more information about system-wide parameters, see the <paramfer name="uiAction"></paramfer> parameter. 
-        ''' If not otherwise indicated, you must specify <c>Nothing</c> for this parameter.
+        ''' If not otherwise indicated, you must specify <see langword="Nothing"/> for this parameter.
         ''' For information on the PVOID datatype, see Windows Data Types.
         ''' </param>
         ''' 
@@ -993,7 +1039,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", EntryPoint:="SystemParametersInfo", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SystemParametersInfo(
@@ -1023,7 +1071,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <param name="pvParam">
         ''' A parameter whose usage and format depends on the system parameter being queried or set. 
         ''' For more information about system-wide parameters, see the <paramfer name="uiAction"></paramfer> parameter. 
-        ''' If not otherwise indicated, you must specify <c>Nothing</c> for this parameter.
+        ''' If not otherwise indicated, you must specify <see langword="Nothing"/> for this parameter.
         ''' For information on the PVOID datatype, see Windows Data Types.
         ''' </param>
         ''' 
@@ -1042,7 +1090,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", EntryPoint:="SystemParametersInfo", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SystemParametersInfo(
@@ -1072,7 +1122,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <param name="pvParam">
         ''' A parameter whose usage and format depends on the system parameter being queried or set. 
         ''' For more information about system-wide parameters, see the <paramfer name="uiAction"></paramfer> parameter. 
-        ''' If not otherwise indicated, you must specify <c>Nothing</c> for this parameter.
+        ''' If not otherwise indicated, you must specify <see langword="Nothing"/> for this parameter.
         ''' For information on the PVOID datatype, see Windows Data Types.
         ''' </param>
         ''' 
@@ -1091,7 +1141,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' To get extended error information, call <see cref="Marshal.GetLastWin32Error"/>.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("user32.dll", EntryPoint:="SystemParametersInfo", CharSet:=CharSet.Auto, SetLastError:=True, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Function SystemParametersInfo(
@@ -1100,6 +1152,41 @@ Public NotInheritable Class EnvironmentUtil
                                ByVal pvParam As Long,
                                ByVal fWinIni As SystemParametersWinIniFlags
         ) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        End Function
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Sets the system visual theme.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="pszThemeFileName">
+        ''' The theme filepath (themme.msstyles).
+        ''' </param>
+        ''' 
+        ''' <param name="pszColor">
+        ''' The color scheme name.
+        ''' </param>
+        ''' 
+        ''' <param name="pszSize">
+        ''' The size name.</param>
+        ''' 
+        ''' <param name="dwReserved">
+        ''' Reserved parameter by the system.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <returns></returns>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <remarks>
+        ''' <see href="http://www.pinvoke.net/default.aspx/uxtheme/SetSystemVisualStyle.html"/>
+        ''' </remarks>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DllImport("UxTheme.DLL", BestFitMapping:=False, CallingConvention:=CallingConvention.Winapi, CharSet:=CharSet.Unicode, EntryPoint:="#65")>
+        Friend Shared Function SetSystemVisualStyle(
+                               ByVal pszThemeFileName As String,
+                               ByVal pszColor As String,
+                               ByVal pszSize As String,
+                               ByVal dwReserved As Integer
+        ) As Integer
         End Function
 
 #End Region
@@ -1133,7 +1220,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' Second event-dependent value.
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb762118%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb762118%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DllImport("shell32.dll", EntryPoint:="SHChangeNotify", SetLastError:=True, CharSet:=CharSet.Auto, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
         Friend Shared Sub SHChangeNotify(
@@ -1152,7 +1241,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' Flags for <paramref name="fuFlags"/> parameter of <see cref="EnvironmentUtil.NativeMethods.SendMessageTimeout"/> function.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms644952%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644952%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <Flags()>
         Friend Enum SendMessageTimeoutFlags As Integer
@@ -1189,79 +1280,81 @@ Public NotInheritable Class EnvironmentUtil
         ''' Flags for <paramref name="fWinIni"/> parameter of <see cref="EnvironmentUtil.NativeMethods.SetSystemCursor"/> function.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms648395%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms648395%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
-        Friend Enum SystemCursorId As Short
+        Friend Enum SystemCursorId As UInteger
 
             ''' <summary>
             ''' Standard arrow and small hourglass.
             ''' </summary>
-            AppStarting = 32650S
+            AppStarting = 32650UI
 
             ''' <summary>
             ''' Standard arrow.
             ''' </summary>
-            Arrow = 32512S
+            Arrow = 32512UI
 
             ''' <summary>
             ''' Crosshair.
             ''' </summary>
-            Crosshair = 32515S
+            Crosshair = 32515UI
 
             ''' <summary>
             ''' Hand.
             ''' </summary>
-            Hand = 32649S
+            Hand = 32649UI
 
             ''' <summary>
             ''' Arrow and question mark.
             ''' </summary>
-            Help = 32651S
+            Help = 32651UI
 
             ''' <summary>
             ''' I-beam.
             ''' </summary>
-            IBeam = 32513S
+            IBeam = 32513UI
 
             ''' <summary>
             ''' Slashed circle.
             ''' </summary>
-            No = 32648S
+            No = 32648UI
 
             ''' <summary>
             ''' Four-pointed arrow pointing north, south, east, and west.
             ''' </summary>
-            SizeAll = 32646S
+            SizeAll = 32646UI
 
             ''' <summary>
             ''' Double-pointed arrow pointing northeast and southwest.
             ''' </summary>
-            Size_NESW = 32643S
+            Size_NESW = 32643UI
 
             ''' <summary>
             ''' Double-pointed arrow pointing north and south.
             ''' </summary>
-            Size_NS = 32645S
+            Size_NS = 32645UI
 
             ''' <summary>
             ''' Double-pointed arrow pointing northwest and southeast.
             ''' </summary>
-            Size_NWSE = 32642S
+            Size_NWSE = 32642UI
 
             ''' <summary>
             ''' Double-pointed arrow pointing west and east.
             ''' </summary>
-            Size_WE = 32644S
+            Size_WE = 32644UI
 
             ''' <summary>
             ''' Vertical arrow.
             ''' </summary>
-            Up = 32516S
+            Up = 32516UI
 
             ''' <summary>
             ''' Hourglass.
             ''' </summary>
-            Wait = 32514S
+            Wait = 32514UI
 
         End Enum
 
@@ -1270,7 +1363,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' Flags for <paramref name="wEventId"/> parameter of <see cref="EnvironmentUtil.NativeMethods.SHChangeNotify"/> method.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb762118%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb762118%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <Flags>
         Friend Enum SHChangeNotifyEventID As UInteger
@@ -1455,7 +1550,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' Flags for <paramref name="uFlags"/> parameter of <see cref="EnvironmentUtil.NativeMethods.SHChangeNotify"/> method.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb762118%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb762118%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <Flags()>
         Friend Enum SHChangeNotifyFlags
@@ -1516,20 +1613,22 @@ Public NotInheritable Class EnvironmentUtil
         ''' Flags for <paramref name="uiAction"/> parameter of <see cref="EnvironmentUtil.NativeMethods.SystemParametersInfo"/> function.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947(v=vs.85).aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947(v=vs.85).aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         Friend Enum SystemParametersActionFlags As UInteger
 
             ''' <summary>
             ''' Determines whether the warning beeper is on.
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if the beeper is on,
-            ''' or <c>False</c> if it is off.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if the beeper is on,
+            ''' or <see langword="False"/> if it is off.
             ''' </summary>
             GetBeep = &H1
 
             ''' <summary>
             ''' Turns the warning beeper on or off. 
-            ''' The <paramref name="uiParam"/> parameter specifies <c>True</c> for on, or <c>False</c> for off.
+            ''' The <paramref name="uiParam"/> parameter specifies <see langword="True"/> for on, or <see langword="False"/> for off.
             ''' </summary>
             SetBeep = &H2
 
@@ -1565,7 +1664,7 @@ Public NotInheritable Class EnvironmentUtil
             ''' <summary>
             ''' Sets or retrieves the width, in pixels, of an icon cell. 
             ''' The system uses this rectangle to arrange icons in large icon view.
-            ''' To set this value, set <paramref name="uiParam"/> to the new value and set <paramref name="pvParam"/> to <c>Nothing</c>. 
+            ''' To set this value, set <paramref name="uiParam"/> to the new value and set <paramref name="pvParam"/> to <see langword="Nothing"/>. 
             ''' You cannot set this value to less than SM_CXICON.
             ''' To retrieve this value, <paramref name="pvParam"/> must point to an <see cref="Integer"/> that receives the current value.
             ''' </summary>
@@ -1593,7 +1692,7 @@ Public NotInheritable Class EnvironmentUtil
 
             ''' <summary>
             ''' Sets the state of the screen saver. 
-            ''' The <paramref name="uiParam"/> parameter specifies <c>True</c> to activate screen saving, or <c>False</c> to deactivate it.
+            ''' The <paramref name="uiParam"/> parameter specifies <see langword="True"/> to activate screen saving, or <see langword="False"/> to deactivate it.
             ''' </summary>
             SetScreensaveActive = &H11
 
@@ -1633,27 +1732,27 @@ Public NotInheritable Class EnvironmentUtil
 
             ''' <summary>
             ''' Determines whether icon-title wrapping is enabled. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if enabled, 
-            ''' or <c>False</c> otherwise.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if enabled, 
+            ''' or <see langword="False"/> otherwise.
             ''' </summary>
             GetIconTitleWrap = &H19
 
             ''' <summary>
             ''' Turns icon-title wrapping on or off. 
-            ''' The <paramref name="uiParam"/> parameter specifies <c>True</c> for on, or <c>False</c> for off.
+            ''' The <paramref name="uiParam"/> parameter specifies <see langword="True"/> for on, or <see langword="False"/> for off.
             ''' </summary>
             SetIconTitleWrap = &H1A
 
             ''' <summary>
             ''' Determines whether pop-up menus are left-aligned or right-aligned, relative to the corresponding menu-bar item.
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if left-aligned, 
-            ''' or <c>False</c> otherwise.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if left-aligned, 
+            ''' or <see langword="False"/> otherwise.
             ''' </summary>
             GetMenuDropAlignment = &H1B
 
             ''' <summary>
             ''' Sets the alignment value of pop-up menus. 
-            ''' The <paramref name="uiParam"/> parameter specifies <c>True</c> for right alignment, or <c>False</c> for left alignment.
+            ''' The <paramref name="uiParam"/> parameter specifies <see langword="True"/> for right alignment, or <see langword="False"/> for left alignment.
             ''' </summary>
             SetMenuDropAlignment = &H1C
 
@@ -1684,27 +1783,27 @@ Public NotInheritable Class EnvironmentUtil
 
             ''' <summary>
             ''' Swaps or restores the meaning of the left and right mouse buttons. 
-            ''' The <paramref name="uiParam"/> parameter specifies <c>True</c> to swap the meanings of the buttons, or <c>False</c> to restore their original meanings.
+            ''' The <paramref name="uiParam"/> parameter specifies <see langword="True"/> to swap the meanings of the buttons, or <see langword="False"/> to restore their original meanings.
             ''' </summary>
             SetMousebuttonSwap = &H21
 
             ''' <summary>
             ''' Determines whether dragging of full windows is enabled. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if enabled, or <c>False</c> otherwise.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if enabled, or <see langword="False"/> otherwise.
             ''' </summary>
             GetDragFullWindows = &H26
 
             ''' <summary>
             ''' Sets dragging of full windows either on or off. 
-            ''' The <paramref name="uiParam"/> parameter specifies <c>True</c> for on, or <c>False</c> for off.
+            ''' The <paramref name="uiParam"/> parameter specifies <see langword="True"/> for on, or <see langword="False"/> for off.
             ''' </summary>
             SetDragFullWindows = &H25
 
             ''' <summary>
             ''' Determines whether the font smoothing feature is enabled. 
             ''' This feature uses font antialiasing to make font curves appear smoother by painting pixels at different gray levels.
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if the feature is enabled,
-            '''  or <c>False</c> if it is not.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if the feature is enabled,
+            '''  or <see langword="False"/> if it is not.
             ''' Windows 95:  This flag is supported only if Windows Plus! is installed. See GETWINDOWSEXTENSION.
             ''' </summary>
             GetFontSmoothing = &H4A
@@ -1789,15 +1888,15 @@ Public NotInheritable Class EnvironmentUtil
             ''' <summary>
             ''' Determines whether the snap-to-default-button feature is enabled. 
             ''' If enabled, the mouse cursor automatically moves to the default button, such as "OK" or "Apply", of a dialog box. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if the feature is on, 
-            ''' or <c>False</c> if it is off.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if the feature is on, 
+            ''' or <see langword="False"/> if it is off.
             ''' </summary>
             GetSnapToDefButton = &H5F
 
             ''' <summary>
             ''' Enables or disables the snap-to-default-button feature. 
             ''' If enabled, the mouse cursor automatically moves to the default button, such as "OK" or "Apply", of a dialog box. 
-            ''' Set the <paramref name="uiParam"/> parameter to <c>True</c> to enable the feature, or <c>False</c> to disable it.
+            ''' Set the <paramref name="uiParam"/> parameter to <see langword="True"/> to enable the feature, or <see langword="False"/> to disable it.
             ''' Applications should use the ShowWindow function when displaying a dialog box so the dialog manager can position the mouse cursor.
             ''' </summary>
             SetSnapToDefButton = &H60
@@ -1895,22 +1994,22 @@ Public NotInheritable Class EnvironmentUtil
 
             ''' <summary>
             ''' Determines whether active window tracking (activating the window the mouse is on) is on or off. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> for on, 
-            ''' or <c>False</c> for off.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> for on, 
+            ''' or <see langword="False"/> for off.
             ''' </summary>
             GetActiveWindowTracking = &H1000
 
             ''' <summary>
             ''' Sets active window tracking (activating the window the mouse is on) either on or off. 
-            ''' Set <paramref name="pvParam"/> to <c>True</c> for on or <c>False</c> for off.
+            ''' Set <paramref name="pvParam"/> to <see langword="True"/> for on or <see langword="False"/> for off.
             ''' </summary>
             SetActiveWindowTracking = &H1001
 
             ''' <summary>
             ''' Determines whether the menu animation feature is enabled. 
             ''' This master switch must be on to enable menu animation effects.
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if animation is enabled 
-            ''' and <c>False</c> if it is disabled.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if animation is enabled 
+            ''' and <see langword="False"/> if it is disabled.
             ''' If animation is enabled, GETMENUFADE indicates whether menus use fade or slide animation.
             ''' </summary>
             GetMenuAnimation = &H1002
@@ -1919,49 +2018,49 @@ Public NotInheritable Class EnvironmentUtil
             ''' Enables or disables menu animation. 
             ''' This master switch must be on for any menu animation to occur.
             ''' The <paramref name="pvParam"/> parameter is a <see cref="Boolean"/> variable; 
-            ''' set <paramref name="pvParam"/> to <c>True</c> to enable animation and <c>False</c> to disable animation.
+            ''' set <paramref name="pvParam"/> to <see langword="True"/> to enable animation and <see langword="False"/> to disable animation.
             ''' If animation is enabled, GETMENUFADE indicates whether menus use fade or slide animation.
             ''' </summary>
             SetMenuAnimation = &H1003
 
             ''' <summary>
             ''' Determines whether the slide-open effect for combo boxes is enabled. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> for enabled, 
-            ''' or <c>False</c> for disabled.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> for enabled, 
+            ''' or <see langword="False"/> for disabled.
             ''' </summary>
             GetComboboxAnimation = &H1004
 
             ''' <summary>
             ''' Enables or disables the slide-open effect for combo boxes. 
-            ''' Set the <paramref name="pvParam"/> parameter to <c>True</c> to enable the gradient effect, or <c>False</c> to disable it.
+            ''' Set the <paramref name="pvParam"/> parameter to <see langword="True"/> to enable the gradient effect, or <see langword="False"/> to disable it.
             ''' </summary>
             SetComboboxAnimation = &H1005
 
             ''' <summary>
             ''' Determines whether the smooth-scrolling effect for list boxes is enabled. 
-            ''' The <paramref name="pvParam"/> parameter must point toa <see cref="Boolean"/> variable that receives <c>True</c> for enabled, 
-            ''' or <c>False</c> for disabled.
+            ''' The <paramref name="pvParam"/> parameter must point toa <see cref="Boolean"/> variable that receives <see langword="True"/> for enabled, 
+            ''' or <see langword="False"/> for disabled.
             ''' </summary>
             GetListboxSmoothScrolling = &H1006
 
             ''' <summary>
             ''' Enables or disables the smooth-scrolling effect for list boxes. 
-            ''' Set the <paramref name="pvParam"/> parameter to <c>True</c> to enable the smooth-scrolling effect,
-            ''' or <c>False</c> to disable it.
+            ''' Set the <paramref name="pvParam"/> parameter to <see langword="True"/> to enable the smooth-scrolling effect,
+            ''' or <see langword="False"/> to disable it.
             ''' </summary>
             SetListboxSmoothScrolling = &H1007
 
             ''' <summary>
             ''' Determines whether the gradient effect for window title bars is enabled. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> for enabled, 
-            ''' or <c>False</c> for disabled. 
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> for enabled, 
+            ''' or <see langword="False"/> for disabled. 
             ''' For more information about the gradient effect, see the GetSysColor function.
             ''' </summary>
             GetGradientCaptions = &H1008
 
             ''' <summary>
             ''' Enables or disables the gradient effect for window title bars. 
-            ''' Set the <paramref name="pvParam"/> parameter to <c>True</c> to enable it, or <c>False</c> to disable it.
+            ''' Set the <paramref name="pvParam"/> parameter to <see langword="True"/> to enable it, or <see langword="False"/> to disable it.
             ''' The gradient effect is possible only if the system has a color depth of more than 256 colors. For more information about
             ''' the gradient effect, see the GetSysColor function.
             ''' </summary>
@@ -1970,23 +2069,23 @@ Public NotInheritable Class EnvironmentUtil
             ''' <summary>
             ''' Determines whether menu access keys are always underlined. 
             ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that 
-            ''' receives <c>True</c> if menu access keys are always underlined, 
-            ''' and <c>False</c> if they are underlined only when the menu is activated by the keyboard.
+            ''' receives <see langword="True"/> if menu access keys are always underlined, 
+            ''' and <see langword="False"/> if they are underlined only when the menu is activated by the keyboard.
             ''' </summary>
             GetKeyboardCues = &H100A
 
             ''' <summary>
             ''' Sets the underlining of menu access key letters. 
             ''' The <paramref name="pvParam"/> parameter is a <see cref="Boolean"/> variable. 
-            ''' Set <paramref name="pvParam"/> to <c>True</c> to always underline menu access keys, 
-            ''' or <c>False</c> to underline menu access keys only when the menu is activated from the keyboard.
+            ''' Set <paramref name="pvParam"/> to <see langword="True"/> to always underline menu access keys, 
+            ''' or <see langword="False"/> to underline menu access keys only when the menu is activated from the keyboard.
             ''' </summary>
             SetKeyboardCues = &H100B
 
             ''' <summary>
             ''' Determines whether hot tracking of user-interface elements, such as menu names on menu bars, is enabled.
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> for enabled, 
-            ''' or <c>False</c> for disabled.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> for enabled, 
+            ''' or <see langword="False"/> for disabled.
             ''' Hot tracking means that when the cursor moves over an item, it is highlighted but not selected. 
             ''' You can query this value to decide whether to use hot tracking in the user interface of your application.
             ''' </summary>
@@ -1994,15 +2093,15 @@ Public NotInheritable Class EnvironmentUtil
 
             ''' <summary>
             ''' Enables or disables hot tracking of user-interface elements such as menu names on menu bars. 
-            ''' Set the <paramref name="pvParam"/> parameter to <c>True</c> to enable it, or <c>False</c> to disable it.
+            ''' Set the <paramref name="pvParam"/> parameter to <see langword="True"/> to enable it, or <see langword="False"/> to disable it.
             ''' Hot-tracking means that when the cursor moves over an item, it is highlighted but not selected.
             ''' </summary>
             SetHotTracking = &H100F
 
             ''' <summary>
             ''' Determines whether menu fade animation is enabled.
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c>
-            ''' when fade animation is enabled and <c>False</c> when it is disabled. 
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/>
+            ''' when fade animation is enabled and <see langword="False"/> when it is disabled. 
             ''' If fade animation is disabled, menus use slide animation.
             ''' This flag is ignored unless menu animation is enabled, which you can do using the SETMENUANIMATION flag.
             ''' For more information, see AnimateWindow.
@@ -2011,7 +2110,7 @@ Public NotInheritable Class EnvironmentUtil
 
             ''' <summary>
             ''' Enables or disables menu fade animation. 
-            ''' Set <paramref name="pvParam"/> to <c>True</c> to enable the menu fade effect or <c>False</c> to disable it.
+            ''' Set <paramref name="pvParam"/> to <see langword="True"/> to enable the menu fade effect or <see langword="False"/> to disable it.
             ''' If fade animation is disabled, menus use slide animation.
             ''' The menu fade effect is possible only if the system has a color depth of more than 256 colors. 
             ''' This flag is ignored unless MENUANIMATION is also set. 
@@ -2021,8 +2120,8 @@ Public NotInheritable Class EnvironmentUtil
 
             ''' <summary>
             ''' Determines whether the selection fade effect is enabled. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if enabled 
-            ''' or <c>False</c> if disabled.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if enabled 
+            ''' or <see langword="False"/> if disabled.
             ''' The selection fade effect causes the menu item selected by the user to remain on the screen briefly while fading out
             ''' after the menu is dismissed.
             ''' </summary>
@@ -2032,28 +2131,28 @@ Public NotInheritable Class EnvironmentUtil
             ''' The selection fade effect causes the menu item selected by the user to remain on the screen briefly while fading out
             ''' after the menu is dismissed. 
             ''' The selection fade effect is possible only if the system has a color depth of more than 256 colors.
-            ''' Set <paramref name="pvParam"/> to <c>True</c> to enable the selection fade effect or <c>False</c> to disable it.
+            ''' Set <paramref name="pvParam"/> to <see langword="True"/> to enable the selection fade effect or <see langword="False"/> to disable it.
             ''' </summary>
             SetSelectionFade = &H1015
 
             ''' <summary>
             ''' Determines whether ToolTip animation is enabled. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if enabled 
-            ''' or <c>False</c> if disabled. 
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if enabled 
+            ''' or <see langword="False"/> if disabled. 
             ''' If ToolTip animation is enabled, GETTOOLTIPFADE indicates whether ToolTips use fade or slide animation.
             ''' </summary>
             GetTooltipAnimation = &H1016
 
             ''' <summary>
-            ''' Set <paramref name="pvParam"/> to <c>True</c> to enable ToolTip animation or <c>False</c> to disable it. 
+            ''' Set <paramref name="pvParam"/> to <see langword="True"/> to enable ToolTip animation or <see langword="False"/> to disable it. 
             ''' If enabled, you can use SETTOOLTIPFADE to specify fade or slide animation.
             ''' </summary>
             SetTooltipAnimation = &H1017
 
             ''' <summary>
             ''' Determines whether the cursor has a shadow around it. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if the shadow is enabled, 
-            ''' <c>False</c> if it is disabled. 
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if the shadow is enabled, 
+            ''' <see langword="False"/> if it is disabled. 
             ''' This effect appears only if the system has a color depth of more than 256 colors.
             ''' </summary>
             GetCursorShadow = &H101A
@@ -2061,15 +2160,15 @@ Public NotInheritable Class EnvironmentUtil
             ''' <summary>
             ''' Enables or disables a shadow around the cursor. 
             ''' The <paramref name="pvParam"/> parameter is a <see cref="Boolean"/> variable. 
-            ''' Set <paramref name="pvParam"/> to <c>True</c> to enable the shadow or <c>False</c> to disable the shadow. 
+            ''' Set <paramref name="pvParam"/> to <see langword="True"/> to enable the shadow or <see langword="False"/> to disable the shadow. 
             ''' This effect appears only if the system has a color depth of more than 256 colors.
             ''' </summary>
             SetCursorShadow = &H101B
 
             ''' <summary>
             ''' Retrieves the state of the Mouse Sonar feature. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if enabled or
-            ''' <c>False</c> otherwise. 
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if enabled or
+            ''' <see langword="False"/> otherwise. 
             ''' For more information, see About Mouse Input on MSDN.
             ''' </summary>
             GetMouseSonar = &H101C
@@ -2077,7 +2176,7 @@ Public NotInheritable Class EnvironmentUtil
             ''' <summary>
             ''' Turns the Sonar accessibility feature on or off. 
             ''' This feature briefly shows several concentric circles around the mouse pointer when the user presses and releases the CTRL key. 
-            ''' The <paramref name="pvParam"/> parameter specifies <c>True</c> for on and <c>False</c> for off. 
+            ''' The <paramref name="pvParam"/> parameter specifies <see langword="True"/> for on and <see langword="False"/> for off. 
             ''' The default is off.
             ''' For more information, see About Mouse Input.
             ''' </summary>
@@ -2085,8 +2184,8 @@ Public NotInheritable Class EnvironmentUtil
 
             ''' <summary>
             ''' Retrieves the state of the Mouse ClickLock feature. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if enabled, 
-            ''' or <c>False</c> otherwise. 
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if enabled, 
+            ''' or <see langword="False"/> otherwise. 
             ''' For more information, see About Mouse Input.
             ''' </summary>
             GetMouseClickLock = &H101E
@@ -2095,15 +2194,15 @@ Public NotInheritable Class EnvironmentUtil
             ''' Turns the Mouse ClickLock accessibility feature on or off. 
             ''' This feature temporarily locks down the primary mouse button when that button is clicked and 
             ''' held down for the time specified by SETMOUSECLICKLOCKTIME. 
-            ''' The <paramref name="uiParam"/> parameter specifies <c>True</c> for on, or <c>False</c> for off. The default is off. 
+            ''' The <paramref name="uiParam"/> parameter specifies <see langword="True"/> for on, or <see langword="False"/> for off. The default is off. 
             ''' For more information, see Remarks and About Mouse Input on MSDN.
             ''' </summary>
             SetMouseClickLock = &H101F
 
             ''' <summary>
             ''' Retrieves the state of the Mouse Vanish feature. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if enabled or 
-            ''' <c>False</c> otherwise. 
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if enabled or 
+            ''' <see langword="False"/> otherwise. 
             ''' For more information, see About Mouse Input on MSDN.
             ''' </summary>
             GetMouseVanish = &H1020
@@ -2111,21 +2210,21 @@ Public NotInheritable Class EnvironmentUtil
             ''' <summary>
             ''' Turns the Vanish feature on or off. 
             ''' This feature hides the mouse pointer when the user types; the pointer reappears when the user moves the mouse. 
-            ''' The <paramref name="pvParam"/> parameter specifies <c>True</c> for on and <c>False</c> for off. The default is off.
+            ''' The <paramref name="pvParam"/> parameter specifies <see langword="True"/> for on and <see langword="False"/> for off. The default is off.
             ''' For more information, see About Mouse Input on MSDN.
             ''' </summary>
             SetMouseVanish = &H1021
 
             ''' <summary>
             ''' Determines whether native User menus have flat menu appearance. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that returns <c>True</c> if the 
-            ''' flat menu appearance is set, or <c>False</c> otherwise.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that returns <see langword="True"/> if the 
+            ''' flat menu appearance is set, or <see langword="False"/> otherwise.
             ''' </summary>
             GetFlatMenu = &H1022
 
             ''' <summary>
             ''' Enables or disables flat menu appearance for native User menus. 
-            ''' Set <paramref name="pvParam"/> to <c>True</c> to enable flat menu appearance or <c>False</c> to disable it.
+            ''' Set <paramref name="pvParam"/> to <see langword="True"/> to enable flat menu appearance or <see langword="False"/> to disable it.
             ''' When enabled, the menu bar uses COLOR_MENUBAR for the menubar background, COLOR_MENU for the menu-popup background, COLOR_MENUHILIGHT
             ''' for the fill of the current menu selection, and COLOR_HILIGHT for the outline of the current menu selection.
             ''' If disabled, menus are drawn using the same metrics and colors as in Windows 2000 and earlier.
@@ -2134,14 +2233,14 @@ Public NotInheritable Class EnvironmentUtil
 
             ''' <summary>
             ''' Determines whether the drop shadow effect is enabled. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that returns <c>True</c> if enabled or 
-            ''' <c>False</c> if disabled.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that returns <see langword="True"/> if enabled or 
+            ''' <see langword="False"/> if disabled.
             ''' </summary>
             GetDropShadow = &H1024
 
             ''' <summary>
             ''' Enables or disables the drop shadow effect.
-            ''' Set <paramref name="pvParam"/> to <c>True</c> to enable the drop shadow effect or <c>False</c> to disable it.
+            ''' Set <paramref name="pvParam"/> to <see langword="True"/> to enable the drop shadow effect or <see langword="False"/> to disable it.
             ''' You must also have CS_DROPSHADOW in the window class style.
             ''' </summary>
             SetDropShadow = &H1025
@@ -2149,29 +2248,29 @@ Public NotInheritable Class EnvironmentUtil
             ''' <summary>
             ''' Retrieves a <see cref="Boolean"/> indicating whether an application can reset the screensaver's timer by calling the SendInput function
             ''' to simulate keyboard or mouse input. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c>
-            ''' if the simulated input will be blocked, or <c>False</c> otherwise.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/>
+            ''' if the simulated input will be blocked, or <see langword="False"/> otherwise.
             ''' </summary>
             GetBlockSendInputResets = &H1026
 
             ''' <summary>
             ''' Determines whether an application can reset the screensaver's timer by calling the SendInput function to simulate keyboard
             ''' or mouse input. 
-            ''' The <paramref name="uiParam"/> parameter specifies <c>True</c> if the screensaver will not be deactivated by simulated input,
-            ''' or <c>False</c> if the screensaver will be deactivated by simulated input.
+            ''' The <paramref name="uiParam"/> parameter specifies <see langword="True"/> if the screensaver will not be deactivated by simulated input,
+            ''' or <see langword="False"/> if the screensaver will be deactivated by simulated input.
             ''' </summary>
             SetBlockSendInputResets = &H1027
 
             ''' <summary>
             ''' Determines whether UI effects are enabled or disabled. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c>
-            ''' if all UI effects are enabled, or <c>False</c> if they are disabled.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/>
+            ''' if all UI effects are enabled, or <see langword="False"/> if they are disabled.
             ''' </summary>
             GetUiEffects = &H103E
 
             ''' <summary>
             ''' Enables or disables UI effects. 
-            ''' Set the <paramref name="pvParam"/> parameter to <c>True</c> to enable all UI effects or <c>False</c> to disable all UI effects.
+            ''' Set the <paramref name="pvParam"/> parameter to <see langword="True"/> to enable all UI effects or <see langword="False"/> to disable all UI effects.
             ''' </summary>
             SetUiEffects = &H103F
 
@@ -2230,7 +2329,7 @@ Public NotInheritable Class EnvironmentUtil
             ''' <summary>
             ''' Retrieves the time delay before the primary mouse button is locked. 
             ''' The <paramref name="pvParam"/> parameter must point to <see cref="Integer"/> that receives the time delay. 
-            ''' This is only enabled if SETMOUSECLICKLOCK is set to <c>True</c>. 
+            ''' This is only enabled if SETMOUSECLICKLOCK is set to <see langword="True"/>. 
             ''' For more information, see About Mouse Input on MSDN.
             ''' </summary>
             GetMouseClickLockTime = &H2008
@@ -2239,7 +2338,7 @@ Public NotInheritable Class EnvironmentUtil
             ''' Turns the Mouse ClickLock accessibility feature on or off. 
             ''' This feature temporarily locks down the primary mouse button when that button is clicked and 
             ''' held down for the time specified by SETMOUSECLICKLOCKTIME. 
-            ''' The <paramref name="uiParam"/> parameter specifies <c>True</c> for on, or <c>False</c> for off. 
+            ''' The <paramref name="uiParam"/> parameter specifies <see langword="True"/> for on, or <see langword="False"/> for off. 
             ''' The default is off. 
             ''' For more information, see Remarks and About Mouse Input on MSDN.
             ''' </summary>
@@ -2287,30 +2386,30 @@ Public NotInheritable Class EnvironmentUtil
 
             ''' <summary>
             ''' Determines whether animations are enabled or disabled. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if animations are enabled, 
-            ''' or <c>False</c> otherwise.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if animations are enabled, 
+            ''' or <see langword="False"/> otherwise.
             ''' </summary>
             GetClientAreaAnimation = &H1042
 
             ''' <summary>
             ''' Turns client area animations on or off. 
             ''' The <paramref name="pvParam"/> parameter is a <see cref="Boolean"/> variable. 
-            ''' Set <paramref name="pvParam"/> to <c>True</c> to enable animations and other transient effects in the client area, 
-            ''' or <c>False</c> to disable them..
+            ''' Set <paramref name="pvParam"/> to <see langword="True"/> to enable animations and other transient effects in the client area, 
+            ''' or <see langword="False"/> to disable them..
             ''' </summary>
             SetClientAreaAnimation = &H1043
 
             ''' <summary>
             ''' Determines whether overlapped content is enabled or disabled. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if enabled, 
-            ''' or <c>False</c> otherwise.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if enabled, 
+            ''' or <see langword="False"/> otherwise.
             ''' </summary>
             GetDisableOverlappedContent = &H1040
 
             ''' <summary>
             ''' Turns overlapped content (such as background images and watermarks) on or off. 
             ''' The <paramref name="pvParam"/> parameter is a <see cref="Boolean"/> variable. 
-            ''' Set <paramref name="pvParam"/> to <c>True</c> to disable overlapped content, or <c>False</c> to enable overlapped content.
+            ''' Set <paramref name="pvParam"/> to <see langword="True"/> to disable overlapped content, or <see langword="False"/> to enable overlapped content.
             ''' </summary>
             SetDisableOverlappedContent = &H1041
 
@@ -2328,27 +2427,27 @@ Public NotInheritable Class EnvironmentUtil
 
             ''' <summary>
             ''' Determines whether ClearType is enabled. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if ClearType is enabled, or <c>False</c> otherwise.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if ClearType is enabled, or <see langword="False"/> otherwise.
             ''' </summary>
             GetCleartype = &H1048
 
             ''' <summary>
             ''' Turns ClearType on or off. 
             ''' The <paramref name="pvParam"/> parameter is a <see cref="Boolean"/> variable. 
-            ''' Set <paramref name="pvParam"/> to <c>True</c> to enable ClearType, or <c>False</c> to disable it.
+            ''' Set <paramref name="pvParam"/> to <see langword="True"/> to enable ClearType, or <see langword="False"/> to disable it.
             ''' </summary>
             SetCleartype = &H1049
 
             ''' <summary>
             ''' Starting with Windows 8: Determines whether the system language bar is enabled or disabled. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if the language bar is enabled, or <c>False</c> otherwise.
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if the language bar is enabled, or <see langword="False"/> otherwise.
             ''' </summary>
             GetSystemlanguageBar = &H1050
 
             ''' <summary>
             ''' Starting with Windows 8: Turns the legacy language bar feature on or off. 
             ''' The <paramref name="pvParam"/> parameter is a pointer to a <see cref="Boolean"/> variable. 
-            ''' Set <paramref name="pvParam"/> to <c>True</c> to enable the legacy language bar, or <c>False</c> to disable it. 
+            ''' Set <paramref name="pvParam"/> to <see langword="True"/> to enable the legacy language bar, or <see langword="False"/> to disable it. 
             ''' The flag is supported on Windows 8 where the legacy language bar is replaced by Input Switcher and therefore turned off by default. 
             ''' Turning the legacy language bar on is provided for compatibility reasons and has no effect on the Input Switcher.
             ''' </summary>
@@ -2369,7 +2468,7 @@ Public NotInheritable Class EnvironmentUtil
 
             ''' <summary>
             ''' Determines whether the screen saver requires a password to display the Windows desktop. 
-            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if the screen saver requires a password, or <c>False</c> otherwise. 
+            ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if the screen saver requires a password, or <see langword="False"/> otherwise. 
             ''' The <paramref name="uiParam"/> parameter is ignored.
             ''' </summary>
             GetScreensaveSecure = &H76
@@ -2378,7 +2477,7 @@ Public NotInheritable Class EnvironmentUtil
             ''' Sets whether the screen saver requires the user to enter a password to display the Windows desktop. 
             ''' The <paramref name="uiParam"/> parameter is a <see cref="Boolean"/> variable. 
             ''' The <paramref name="pvParam"/> parameter is ignored. 
-            ''' Set <paramref name="uiParam"/> to <c>True</c> to require a password, or <c>False</c> to not require a password.
+            ''' Set <paramref name="uiParam"/> to <see langword="True"/> to require a password, or <see langword="False"/> to not require a password.
             ''' If the machine has entered power saving mode or system lock state, an ERROR_OPERATION_IN_PROGRESS exception occurs.
             ''' </summary>
             SetScreensaveSecure = &H77
@@ -2422,15 +2521,15 @@ Public NotInheritable Class EnvironmentUtil
 
             ' ''' <summary>
             ' ''' Windows Me/98/95: Pen windows is being loaded or unloaded. 
-            ' ''' The <paramref name="uiParam"/> parameter is <c>True</c> when loading and <c>False</c> when unloading pen windows. 
+            ' ''' The <paramref name="uiParam"/> parameter is <see langword="True"/> when loading and <see langword="False"/> when unloading pen windows. 
             ' ''' The <paramref name="pvParam"/> parameter is null.
             ' ''' </summary>
             ' SetPenWindows = &H31
 
             ' ''' <summary>
             ' ''' Determines whether a screen saver is currently running on the window station of the calling process.
-            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if a screen saver is currently running, 
-            ' ''' or <c>False</c> otherwise.
+            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if a screen saver is currently running, 
+            ' ''' or <see langword="False"/> otherwise.
             ' ''' Note that only the interactive window station, "WinSta0", can have a screen saver running.
             ' ''' </summary>
             ' GetScreensaverRunning = &H72
@@ -2486,8 +2585,8 @@ Public NotInheritable Class EnvironmentUtil
             ' ''' Determines whether the Show Sounds accessibility flag is on or off.
             ' ''' If it is on, the user requires an application to present information visually in situations where 
             ' ''' it would otherwise present the information only in audible form.
-            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if the feature is on, 
-            ' ''' or <c>False</c> if it is off.
+            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if the feature is on, 
+            ' ''' or <see langword="False"/> if it is off.
             ' ''' Using this value is equivalent to calling GetSystemMetrics (SM_SHOWSOUNDS). That is the recommended call.
             ' ''' </summary>
             ' GetShowSounds = &H38
@@ -2595,15 +2694,15 @@ Public NotInheritable Class EnvironmentUtil
 
             ' ''' <summary>
             ' ''' If SETTOOLTIPANIMATION is enabled, GETTOOLTIPFADE indicates whether ToolTip animation uses a fade effect or a slide effect.
-            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> for fade animation 
-            ' ''' or <c>False</c> for slide animation.
+            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> for fade animation 
+            ' ''' or <see langword="False"/> for slide animation.
             ' ''' For more information on slide and fade effects, see AnimateWindow.
             ' ''' </summary>
             ' GetTooltipFade = &H1018
 
             ' ''' <summary>
             ' ''' If the SETTOOLTIPANIMATION flag is enabled, use SETTOOLTIPFADE to indicate whether ToolTip animation uses a fade effect or a slide effect. 
-            ' ''' Set <paramref name="pvParam"/> to <c>True</c> for fade animation or <c>False</c> for slide animation. 
+            ' ''' Set <paramref name="pvParam"/> to <see langword="True"/> for fade animation or <see langword="False"/> for slide animation. 
             ' ''' The tooltip fade effect is possible only if the system has a color depth of more than 256 colors. 
             ' ''' For more information on the slide and fade effects, see the AnimateWindow function.
             ' ''' </summary>
@@ -2621,27 +2720,27 @@ Public NotInheritable Class EnvironmentUtil
 
             ' ''' <summary>
             ' ''' Determines whether windows activated through active window tracking will be brought to the top. 
-            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> for on,
-            ' ''' or <c>False</c> for off.
+            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> for on,
+            ' ''' or <see langword="False"/> for off.
             ' ''' </summary>
             ' GetActiveWndTrkZorder = &H100C
 
             ' ''' <summary>
             ' ''' Determines whether or not windows activated through active window tracking should be brought to the top. 
-            ' ''' Set <paramref name="pvParam"/> to <c>True</c> for on or <c>False</c> for off.
+            ' ''' Set <paramref name="pvParam"/> to <see langword="True"/> for on or <see langword="False"/> for off.
             ' ''' </summary>
             ' SetActiveWndTrkZorder = &H100D
 
             ' ''' <summary>
             ' ''' Determines whether the IME status window is visible (on a per-user basis). 
             ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable  that 
-            ' ''' receives <c>True</c> if the status window is visible, or <c>False</c> if it is not.
+            ' ''' receives <see langword="True"/> if the status window is visible, or <see langword="False"/> if it is not.
             ' ''' </summary>
             ' GetShowIMEui = &H6E
 
             ' ''' <summary>
             ' ''' Sets whether the IME status window is visible or not on a per-user basis. 
-            ' ''' The <paramref name="uiParam"/> parameter specifies <c>True</c> for on or <c>False</c> for off.
+            ' ''' The <paramref name="uiParam"/> parameter specifies <see langword="True"/> for on or <see langword="False"/> for off.
             ' ''' </summary>
             ' SetShowIMEui = &H6F
 
@@ -2649,7 +2748,7 @@ Public NotInheritable Class EnvironmentUtil
             ' ''' Windows 95:  Determines whether the Windows extension, Windows Plus!, is installed.
             ' ''' Set the <paramref name="uiParam"/> parameter to 1.
             ' ''' The <paramref name="pvParam"/> parameter is not used. 
-            ' ''' The function returns <c>True</c> if the extension is installed, or <c>False</c> if it is not.
+            ' ''' The function returns <see langword="True"/> if the extension is installed, or <see langword="False"/> if it is not.
             ' ''' </summary>
             ' GetWindowsExtension = &H5C
 
@@ -2690,7 +2789,7 @@ Public NotInheritable Class EnvironmentUtil
             ' ''' <summary>
             ' ''' Determines whether the low-power phase of screen saving is enabled. 
             ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable
-            ' ''' that receives <c>True</c> if enabled, or <c>False</c> if disabled. 
+            ' ''' that receives <see langword="True"/> if enabled, or <see langword="False"/> if disabled. 
             ' ''' This flag is supported for 32-bit applications only.
             ' ''' </summary>
             ' GetLowPowerActive = &H53
@@ -2706,7 +2805,7 @@ Public NotInheritable Class EnvironmentUtil
             ' ''' <summary>
             ' ''' Determines whether the power-off phase of screen saving is enabled. 
             ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable
-            ' ''' that receives <c>True</c> if enabled, or <c>False</c> if disabled. 
+            ' ''' that receives <see langword="True"/> if enabled, or <see langword="False"/> if disabled. 
             ' ''' This flag is supported for 32-bit applications only.
             ' ''' </summary>
             ' GetPowerOffActive = &H54
@@ -2749,16 +2848,16 @@ Public NotInheritable Class EnvironmentUtil
             ' ''' <summary>
             ' ''' Determines whether the user relies on the keyboard instead of the mouse, 
             ' ''' and wants applications to display keyboard interfaces that would otherwise be hidden. 
-            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if the user relies on the keyboard; 
-            ' ''' or <c>False</c> otherwise.
+            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if the user relies on the keyboard; 
+            ' ''' or <see langword="False"/> otherwise.
             ' ''' Windows NT: This value is not supported.
             ' ''' </summary>
             ' GetKeyboardPref = &H44
 
             ' ''' <summary>
             ' ''' Sets the keyboard preference. 
-            ' ''' The <paramref name="uiParam"/> parameter specifies <c>True</c> if the user relies on the keyboard instead of the mouse,
-            ' ''' and wants applications to display keyboard interfaces that would otherwise be hidden; <paramref name="uiParam"/> is <c>False</c> otherwise.
+            ' ''' The <paramref name="uiParam"/> parameter specifies <see langword="True"/> if the user relies on the keyboard instead of the mouse,
+            ' ''' and wants applications to display keyboard interfaces that would otherwise be hidden; <paramref name="uiParam"/> is <see langword="False"/> otherwise.
             ' ''' Windows NT: This value is not supported.
             ' ''' </summary>
             ' SetKeyboardPref = &H45
@@ -2767,13 +2866,13 @@ Public NotInheritable Class EnvironmentUtil
             ' ''' Determines whether a screen reviewer utility is running. A screen reviewer utility directs textual information to an output device,
             ' ''' such as a speech synthesizer or Braille display. When this flag is set, an application should provide textual information
             ' ''' in situations where it would otherwise present the information graphically.
-            ' ''' The <paramref name="pvParam"/> parameter is a pointer to a <see cref="Boolean"/> variable that receives <c>True</c> if a screen reviewer utility is running, or <c>False</c> otherwise.
+            ' ''' The <paramref name="pvParam"/> parameter is a pointer to a <see cref="Boolean"/> variable that receives <see langword="True"/> if a screen reviewer utility is running, or <see langword="False"/> otherwise.
             ' ''' Windows NT:  This value is not supported.
             ' ''' </summary>
             ' GetScreenReader = &H46
 
             ' ''' <summary>
-            ' ''' Determines whether a screen review utility is running. The <paramref name="uiParam"/> parameter specifies <c>True</c> for on, or <c>False</c> for off.
+            ' ''' Determines whether a screen review utility is running. The <paramref name="uiParam"/> parameter specifies <see langword="True"/> for on, or <see langword="False"/> for off.
             ' ''' Windows NT:  This value is not supported.
             ' ''' </summary>
             ' SetScreenReader = &H47
@@ -2915,7 +3014,7 @@ Public NotInheritable Class EnvironmentUtil
             ' ''' <summary>
             ' ''' Determines whether screen saving is enabled. 
             ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that 
-            ' ''' receives <c>True</c> if screen saving is enabled, or <c>False</c> otherwise.
+            ' ''' receives <see langword="True"/> if screen saving is enabled, or <see langword="False"/> otherwise.
             ' ''' Does not work for Windows 7: http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947(v=vs.85).aspx
             ' ''' </summary>
             ' GetScreensaveActive = &H10
@@ -3004,41 +3103,41 @@ Public NotInheritable Class EnvironmentUtil
             ' SetPenVisualization = &H201F
 
             ' ''' <summary>
-            ' ''' Starting with Windows 8: Determines whether the active input settings have Local (per-thread, <c>True</c>) or Global (session, <c>False</c>) scope. 
+            ' ''' Starting with Windows 8: Determines whether the active input settings have Local (per-thread, <see langword="True"/>) or Global (session, <see langword="False"/>) scope. 
             ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable.
             ' ''' </summary>
             ' GetThreadLocalInputSettings = &H104E
 
             ' ''' <summary>
-            ' ''' Starting with Windows 8: Determines whether the active input settings have Local (per-thread, <c>True</c>) or Global (session, <c>False</c>) scope. 
+            ' ''' Starting with Windows 8: Determines whether the active input settings have Local (per-thread, <see langword="True"/>) or Global (session, <see langword="False"/>) scope. 
             ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable, casted by PVOID.
             ' ''' </summary>
             ' SetThreadLocalInputSettings = &H104F
 
             ' ''' <summary>
             ' ''' Determines whether a window is docked when it is moved to the top, left, or right edges of a monitor or monitor array. 
-            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if enabled, or <c>False</c> otherwise.
+            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if enabled, or <see langword="False"/> otherwise.
             ' ''' Use <see cref="EnvironmentUtil.NativeMethods.SystemParametersActionFlags.GetWinArranging"/>  to determine whether this behavior is enabled.
             ' ''' </summary>
             ' GetDockMoving = &H90
 
             ' ''' <summary>
             ' ''' Sets whether a window is docked when it is moved to the top, left, or right docking targets on a monitor or monitor array. 
-            ' ''' Set <paramref name="pvParam"/> to <c>True</c> for on or <c>False</c> for off.
+            ' ''' Set <paramref name="pvParam"/> to <see langword="True"/> for on or <see langword="False"/> for off.
             ' ''' Use <see cref="EnvironmentUtil.NativeMethods.SystemParametersActionFlags.GetWinArranging"/>  to determine whether this behavior is enabled.
             ' ''' </summary>
             ' SetDockMoving = &H91
 
             ' ''' <summary>
             ' ''' Determines whether a maximized window is restored when its caption bar is dragged. 
-            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if enabled, or <c>False</c> otherwise.
+            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if enabled, or <see langword="False"/> otherwise.
             ' ''' Use <see cref="EnvironmentUtil.NativeMethods.SystemParametersActionFlags.GetWinArranging"/>  to determine whether this behavior is enabled.
             ' ''' </summary>
             ' GetDragFromMaximize = &H8C
 
             ' ''' <summary>
             ' ''' Sets whether a maximized window is restored when its caption bar is dragged. 
-            ' ''' Set <paramref name="pvParam"/> to <c>True</c> for on or <c>False</c> for off.
+            ' ''' Set <paramref name="pvParam"/> to <see langword="True"/> for on or <see langword="False"/> for off.
             ' ''' </summary>
             ' SetDragFromMaximize = &H8D
 
@@ -3092,21 +3191,21 @@ Public NotInheritable Class EnvironmentUtil
 
             ' ''' <summary>
             ' ''' Determines whether a window is vertically maximized when it is sized to the top or bottom of a monitor or monitor array. 
-            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if enabled, or <c>False</c> otherwise.
+            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if enabled, or <see langword="False"/> otherwise.
             ' ''' Use <see cref="EnvironmentUtil.NativeMethods.SystemParametersActionFlags.GetWinArranging"/>  to determine whether this behavior is enabled.
             ' ''' </summary>
             ' GetSnapSizing = &H8E
 
             ' ''' <summary>
             ' ''' Sets whether a window is vertically maximized when it is sized to the top or bottom of the monitor. 
-            ' ''' Set <paramref name="pvParam"/> to <c>True</c> for on or <c>False</c> for off.
+            ' ''' Set <paramref name="pvParam"/> to <see langword="True"/> for on or <see langword="False"/> for off.
             ' ''' Use <see cref="EnvironmentUtil.NativeMethods.SystemParametersActionFlags.GetWinArranging"/>  to determine whether this behavior is enabled.
             ' ''' </summary>
             ' SetSnapSizing = &H8F
 
             ' ''' <summary>
             ' ''' Determines whether window arrangement is enabled. 
-            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <c>True</c> if enabled, or <c>False</c> otherwise.
+            ' ''' The <paramref name="pvParam"/> parameter must point to a <see cref="Boolean"/> variable that receives <see langword="True"/> if enabled, or <see langword="False"/> otherwise.
             ' ''' Window arrangement reduces the number of mouse, pen, or touch interactions needed to move and size top-level windows by 
             ' ''' simplifying the default behavior of a window when it is dragged or sized.
             ' ''' </summary>
@@ -3114,7 +3213,7 @@ Public NotInheritable Class EnvironmentUtil
 
             ' ''' <summary>
             ' ''' Sets whether window arrangement is enabled. 
-            ' ''' Set <paramref name="pvParam"/> to <c>True</c> for on or <c>False</c> for off.
+            ' ''' Set <paramref name="pvParam"/> to <see langword="True"/> for on or <see langword="False"/> for off.
             ' ''' Window arrangement reduces the number of mouse, pen, or touch interactions needed to move and size top-level windows by 
             ' ''' simplifying the default behavior of a window when it is dragged or sized.
             ' ''' </summary>
@@ -3127,7 +3226,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' Flags for <paramref name="fWinIni"/> parameter of <see cref="EnvironmentUtil.NativeMethods.SystemParametersInfo"/> function.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947(v=vs.85).aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724947(v=vs.85).aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <Flags>
         Friend Enum SystemParametersWinIniFlags As UInteger
@@ -3161,7 +3262,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' Applications generally use these messages to control the operation of control windows created by using preregistered window classes.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms644927%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644927%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         Friend Enum WindowsMessages As Integer
 
@@ -3172,7 +3275,9 @@ Public NotInheritable Class EnvironmentUtil
             ''' Therefore, the total wait time can be up to the value of uTimeout multiplied by the number of top-level windows.
             ''' </summary>
             ''' ----------------------------------------------------------------------------------------------------
-            ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms644952%28v=vs.85%29.aspx</remarks>
+            ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644952%28v=vs.85%29.aspx"/>
+        ''' </remarks>
             ''' ----------------------------------------------------------------------------------------------------
             HWND_BROADCAST = &HFFFF&
 
@@ -3190,7 +3295,9 @@ Public NotInheritable Class EnvironmentUtil
             ''' <see cref="EnvironmentUtil.NativeMethods.WindowsMessages.HWND_BROADCAST"/>.
             ''' </summary>
             ''' ----------------------------------------------------------------------------------------------------
-            ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms725497%28v=vs.85%29.aspx</remarks>
+            ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms725497%28v=vs.85%29.aspx"/>
+        ''' </remarks>
             ''' ----------------------------------------------------------------------------------------------------
             WM_SETTINGCHANGE = &H1A
 
@@ -3201,7 +3308,9 @@ Public NotInheritable Class EnvironmentUtil
             ''' or when an accelerator keystroke is translated.
             ''' </summary>
             ''' ----------------------------------------------------------------------------------------------------
-            ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/ms647591%28v=vs.85%29.aspx</remarks>
+            ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms647591%28v=vs.85%29.aspx"/>
+        ''' </remarks>
             ''' ----------------------------------------------------------------------------------------------------
             WM_COMMAND = &H111UI
 
@@ -3212,7 +3321,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' Specifies additional message-specific information for a System-Defined Message.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/ms644927%28v=vs.85%29.aspx#system_defined</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644927%28v=vs.85%29.aspx#system_defined"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         Friend Enum WParams As UInteger
 
@@ -3240,7 +3351,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' Specifies additional message-specific information for a System-Defined Message.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>http://msdn.microsoft.com/en-us/library/windows/desktop/ms644927%28v=vs.85%29.aspx#system_defined</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644927%28v=vs.85%29.aspx#system_defined"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         Friend Enum LParams As UInteger
 
@@ -3260,9 +3373,9 @@ Public NotInheritable Class EnvironmentUtil
 #Region " Enumerations "
 
     ''' <summary>
-    ''' Specified an environment user (registry root key).
+    ''' Specified an environment scope (registry root key).
     ''' </summary>
-    Public Enum EnvironmentUser As Integer
+    Public Enum EnvironmentScope As Integer
 
         ''' <summary>
         ''' This reffers to the commonly known "HKLM" or "HKEY_LOCAL_MACHINE" registry root key.
@@ -3401,7 +3514,9 @@ Public NotInheritable Class EnvironmentUtil
             ''' This method has the same effect as right-clicking the taskbar and selecting Cascade Windows.
             ''' </summary>
             ''' ----------------------------------------------------------------------------------------------------
-            ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb774067%28v=vs.85%29.aspx</remarks>
+            ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb774067%28v=vs.85%29.aspx"/>
+        ''' </remarks>
             ''' ----------------------------------------------------------------------------------------------------
             <DebuggerStepThrough>
             Public Shared Sub CascadeWindows()
@@ -3418,7 +3533,9 @@ Public NotInheritable Class EnvironmentUtil
             ''' This method has the same effect as right-clicking the taskbar and selecting Tile Windows Horizontally.
             ''' </summary>
             ''' ----------------------------------------------------------------------------------------------------
-            ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb774102%28v=vs.85%29.aspx</remarks>
+            ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb774102%28v=vs.85%29.aspx"/>
+        ''' </remarks>
             ''' ----------------------------------------------------------------------------------------------------
             <DebuggerStepThrough>
             Public Shared Sub TileWindowsHorizontally()
@@ -3435,7 +3552,9 @@ Public NotInheritable Class EnvironmentUtil
             ''' This method has the same effect as right-clicking the taskbar and selecting Tile Windows Vertically.
             ''' </summary>
             ''' ----------------------------------------------------------------------------------------------------
-            ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb774104%28v=vs.85%29.aspx</remarks>
+            ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb774104%28v=vs.85%29.aspx"/>
+        ''' </remarks>
             ''' ----------------------------------------------------------------------------------------------------
             <DebuggerStepThrough>
             Public Shared Sub TileWindowsVertically()
@@ -3525,7 +3644,9 @@ Public NotInheritable Class EnvironmentUtil
             ''' filePath
             ''' </exception>
             ''' ----------------------------------------------------------------------------------------------------
-            ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/gg537735%28v=vs.85%29.aspx</remarks>
+            ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/gg537735%28v=vs.85%29.aspx"/>
+        ''' </remarks>
             ''' ----------------------------------------------------------------------------------------------------
             <DebuggerStepThrough>
             Public Shared Sub AddFileToRecentDocs(ByVal filePath As String)
@@ -3559,15 +3680,17 @@ Public NotInheritable Class EnvironmentUtil
 #Region " Private Methods "
 
             ''' ----------------------------------------------------------------------------------------------------
-            ''' <example>
-            ''' For Each window As ShellBrowserWindow In GetExplorerWindows()
-            '''     Console.WriteLine(window.LocationURL)
-            ''' Next window
-            ''' </example>
-            ''' ----------------------------------------------------------------------------------------------------
             ''' <summary>
             ''' Gets a <see cref="IEnumerable(Of ShellBrowserWindow)"/> containing the opened windows explorer instances.
             ''' </summary>
+            ''' ----------------------------------------------------------------------------------------------------
+            ''' <example> This is a code example.
+            ''' <code>
+            ''' For Each window As ShellBrowserWindow In GetExplorerWindows()
+            '''     Console.WriteLine(window.LocationURL)
+            ''' Next window
+            ''' </code>
+            ''' </example>
             ''' ----------------------------------------------------------------------------------------------------
             ''' <returns>
             ''' A <see cref="IEnumerable(Of ShellBrowserWindow)"/> containing the opened windows explorer instances.
@@ -3604,15 +3727,17 @@ Public NotInheritable Class EnvironmentUtil
             End Function
 
             ''' ----------------------------------------------------------------------------------------------------
-            ''' <example>
-            ''' For Each folder As Folder2 In GetExplorerWindowsFolders()
-            '''     Console.WriteLine(folder.Self.Path)
-            ''' Next folder
-            ''' </example>
-            ''' ----------------------------------------------------------------------------------------------------
             ''' <summary>
             ''' Gets a <see cref="IEnumerable(Of Folder2)"/> containing the opened windows explorer folder instances.
             ''' </summary>
+            ''' ----------------------------------------------------------------------------------------------------
+            ''' <example> This is a code example.
+            ''' <code>
+            ''' For Each folder As Folder2 In GetExplorerWindowsFolders()
+            '''     Console.WriteLine(folder.Self.Path)
+            ''' Next folder
+            ''' </code>
+            ''' </example>
             ''' ----------------------------------------------------------------------------------------------------
             ''' <returns>
             ''' A <see cref="IEnumerable(Of Folder2)"/> containing the opened windows explorer folder instances.
@@ -4004,22 +4129,24 @@ Public NotInheritable Class EnvironmentUtil
         ''' Gets a <see cref="IEnumerable(Of EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo)"/> collection with the environment variables of the specified environment user.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <example>
-        ''' For Each envVar As EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo In EnvironmentUtil.EnvironmentVariables.CurrentVariables(EnvironmentUtil.EnvironmentUser.CurrentUser)
-        '''
+        ''' <example> This is a code example.
+        ''' <code>
+        ''' For Each envVar As EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo In EnvironmentUtil.EnvironmentVariables.CurrentVariables(EnvironmentUtil.EnvironmentScope.CurrentUser)
+        ''' 
         '''     Console.WriteLine(String.Format("Name:{0}; Value:{1}", envVar.Name, envVar.Value))
-        '''
+        ''' 
         ''' Next envVar
+        ''' </code>
         ''' </example>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
         ''' A <see cref="IEnumerable(Of EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo)"/> collection with the environment variables.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
-        Public Shared ReadOnly Property CurrentVariables(ByVal environmentUser As EnvironmentUtil.EnvironmentUser) As ReadOnlyCollection(Of EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo)
+        Public Shared ReadOnly Property CurrentVariables(ByVal environmentScope As EnvironmentUtil.EnvironmentScope) As ReadOnlyCollection(Of EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo)
             <DebuggerStepThrough>
             Get
-                Return New ReadOnlyCollection(Of EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo)(EnvironmentUtil.EnvironmentVariables.GetEnvironmentVariables(environmentUser).ToList)
+                Return New ReadOnlyCollection(Of EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo)(EnvironmentUtil.EnvironmentVariables.GetEnvironmentVariables(environmentScope).ToList)
             End Get
         End Property
 
@@ -4038,22 +4165,18 @@ Public NotInheritable Class EnvironmentUtil
 #Region " Public Methods "
 
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>
-        ''' Title : Register Windows environment variable.
-        ''' Author: Elektro
-        ''' Date  : 21-June-2015
-        ''' </remarks> 
-        ''' ----------------------------------------------------------------------------------------------------
-        ''' <example>
-        ''' EnvironmentUtil.EnvironmentVariables.RegisterVariable(EnvironmentUtil.EnvironmentUser.CurrentUser, "VariableName", "Elektro is the best!", throwOnExistingVariable:=True)
-        ''' </example>
-        ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
         ''' Registers a Windows environment variable.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <param name="environmentUser">
-        ''' The environment user that will owns the variable.
+        ''' <example> This is a code example.
+        ''' <code>
+        ''' EnvironmentUtil.EnvironmentVariables.RegisterVariable(EnvironmentUtil.EnvironmentScope.CurrentUser, "VariableName", "Elektro is the best!", throwOnExistingVariable:=True)
+        ''' </code>
+        ''' </example>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="environmentScope">
+        ''' The environment scope that will owns the variable.
         ''' </param>
         ''' 
         ''' <param name="name">
@@ -4065,7 +4188,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </param>
         ''' 
         ''' <param name="throwOnExistingVariable">
-        ''' If <c>True</c>, raises an exception if the variable already exists.
+        ''' If <see langword="True"/>, raises an exception if the variable already exists.
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="ArgumentNullException">
@@ -4073,7 +4196,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </exception>
         ''' 
         ''' <exception cref="ArgumentException">
-        ''' Invalid enumeration value;environmentUser
+        ''' Invalid enumeration value;environmentScope
         ''' </exception>
         ''' 
         ''' <exception cref="ArgumentException">
@@ -4081,7 +4204,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </exception>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
-        Public Shared Sub RegisterVariable(ByVal environmentUser As EnvironmentUtil.EnvironmentUser,
+        Public Shared Sub RegisterVariable(ByVal environmentScope As EnvironmentUtil.EnvironmentScope,
                                            ByVal name As String,
                                            ByVal value As String,
                                            Optional ByVal throwOnExistingVariable As Boolean = False)
@@ -4093,18 +4216,18 @@ Public NotInheritable Class EnvironmentUtil
                 Dim regKey As RegistryKey
                 Dim regPath As String
 
-                Select Case environmentUser
+                Select Case environmentScope
 
-                    Case environmentUser.Machine
+                    Case EnvironmentUtil.EnvironmentScope.Machine
                         regKey = Registry.LocalMachine
                         regPath = "SYSTEM\CurrentControlSet\Control\Session Manager\Environment\"
 
-                    Case environmentUser.CurrentUser
+                    Case EnvironmentUtil.EnvironmentScope.CurrentUser
                         regKey = Registry.CurrentUser
                         regPath = "Environment\"
 
                     Case Else
-                        Throw New ArgumentException(message:="Invalid enumeration value.", paramName:="environmentUser")
+                        Throw New ArgumentException(message:="Invalid enumeration value.", paramName:="environmentScope")
 
                 End Select
 
@@ -4129,24 +4252,20 @@ Public NotInheritable Class EnvironmentUtil
         End Sub
 
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>
-        ''' Title : Register Windows environment variable.
-        ''' Author: Elektro
-        ''' Date  : 21-June-2015
-        ''' </remarks> 
-        ''' ----------------------------------------------------------------------------------------------------
-        ''' <example>
-        ''' EnvironmentUtil.EnvironmentVariables.RegisterVariable(EnvironmentUtil.EnvironmentUser.CurrentUser, 
-        '''                                                       New EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo With {.Name = "VariableName", .Value = "Elektro is the best!"}, 
-        '''                                                       throwOnExistingVariable:=True)
-        ''' </example>
-        ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
         ''' Registers a Windows environment variable.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <param name="environmentUser">
-        ''' The environment user that will owns the variable.
+        ''' <example> This is a code example.
+        ''' <code>
+        ''' EnvironmentUtil.EnvironmentVariables.RegisterVariable(EnvironmentUtil.EnvironmentScope.CurrentUser,
+        '''                                                        New EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo With {.Name = "VariableName", .Value = "Elektro is the best!"},
+        '''                                                        throwOnExistingVariable:=True)
+        ''' </code>
+        ''' </example>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="environmentScope">
+        ''' The environment scope that will owns the variable.
         ''' </param>
         ''' 
         ''' <param name="variableInfo">
@@ -4154,35 +4273,31 @@ Public NotInheritable Class EnvironmentUtil
         ''' </param>
         ''' 
         ''' <param name="throwOnExistingVariable">
-        ''' If <c>True</c>, raises an exception if the variable already exists.
+        ''' If <see langword="True"/>, raises an exception if the variable already exists.
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
-        Public Shared Sub RegisterVariable(ByVal environmentUser As EnvironmentUtil.EnvironmentUser,
+        Public Shared Sub RegisterVariable(ByVal environmentScope As EnvironmentUtil.EnvironmentScope,
                                            ByVal variableInfo As EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo,
                                            Optional ByVal throwOnExistingVariable As Boolean = False)
 
-            EnvironmentUtil.EnvironmentVariables.RegisterVariable(environmentUser, variableInfo.Name, variableInfo.Value, throwOnExistingVariable)
+            EnvironmentUtil.EnvironmentVariables.RegisterVariable(environmentScope, variableInfo.Name, variableInfo.Value, throwOnExistingVariable)
 
         End Sub
 
-        ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>
-        ''' Title : Unregister Windows environment variable.
-        ''' Author: Elektro
-        ''' Date  : 21-June-2015
-        ''' </remarks> 
-        ''' ----------------------------------------------------------------------------------------------------
-        ''' <example>
-        ''' EnvironmentUtil.EnvironmentVariables.UnregisterVariable(EnvironmentUtil.EnvironmentUser.CurrentUser, "VariableName", throwOnMissingVariable:=True)
-        ''' </example>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
         ''' Unregisters a Windows environment variable.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <param name="environmentUser">
-        ''' The environment user that owns the variable.
+        ''' <example> This is a code example.
+        ''' <code>
+        ''' EnvironmentUtil.EnvironmentVariables.UnregisterVariable(EnvironmentUtil.EnvironmentScope.CurrentUser, "VariableName", throwOnMissingVariable:=True)
+        ''' </code>
+        ''' </example>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="environmentScope">
+        ''' The environment scope that owns the variable.
         ''' </param>
         ''' 
         ''' <param name="name">
@@ -4190,7 +4305,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </param>
         ''' 
         ''' <param name="throwOnMissingVariable">
-        ''' If <c>True</c>, raises an exception if the variable doesn't exists.
+        ''' If <see langword="True"/>, raises an exception if the variable doesn't exists.
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="ArgumentNullException">
@@ -4198,7 +4313,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </exception>
         ''' 
         ''' <exception cref="ArgumentException">
-        ''' Invalid enumeration value;environmentUser
+        ''' Invalid enumeration value;environmentScope
         ''' </exception>
         ''' 
         ''' <exception cref="ArgumentException">
@@ -4206,7 +4321,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </exception>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
-        Public Shared Sub UnregisterVariable(ByVal environmentUser As EnvironmentUtil.EnvironmentUser,
+        Public Shared Sub UnregisterVariable(ByVal environmentScope As EnvironmentUtil.EnvironmentScope,
                                              ByVal name As String,
                                              Optional throwOnMissingVariable As Boolean = False)
 
@@ -4217,18 +4332,18 @@ Public NotInheritable Class EnvironmentUtil
                 Dim regKey As RegistryKey
                 Dim regPath As String
 
-                Select Case environmentUser
+                Select Case EnvironmentScope
 
-                    Case environmentUser.Machine
+                    Case EnvironmentUtil.EnvironmentScope.Machine
                         regKey = Registry.LocalMachine
                         regPath = "SYSTEM\CurrentControlSet\Control\Session Manager\Environment\"
 
-                    Case environmentUser.CurrentUser
+                    Case EnvironmentUtil.EnvironmentScope.CurrentUser
                         regKey = Registry.CurrentUser
                         regPath = "Environment\"
 
                     Case Else
-                        Throw New ArgumentException(message:="Invalid enumeration value.", paramName:="environmentUser")
+                        Throw New ArgumentException(message:="Invalid enumeration value.", paramName:="environmentScope")
 
                 End Select
 
@@ -4259,11 +4374,11 @@ Public NotInheritable Class EnvironmentUtil
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exanple>
         ''' Dim envVarInfo As EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo =
-        '''     EnvironmentUtil.EnvironmentVariables.GetVariableInfo(EnvironmentUtil.EnvironmentUser.CurrentUser, "System32", throwOnMissingVariable:=False)
+        '''     EnvironmentUtil.EnvironmentVariables.GetVariableInfo(EnvironmentUtil.EnvironmentScope.CurrentUser, "System32", throwOnMissingVariable:=False)
         ''' </exanple>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <param name="environmentUser">
-        ''' The environment user that owns the variable.
+        ''' <param name="environmentScope">
+        ''' The environment scope that owns the variable.
         ''' </param>
         ''' 
         ''' <param name="name">
@@ -4271,7 +4386,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </param>
         ''' 
         ''' <param name="throwOnMissingVariable">
-        ''' If <c>True</c>, raises an exception if the variable doesn't exists.
+        ''' If <see langword="True"/>, raises an exception if the variable doesn't exists.
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="ArgumentNullException">
@@ -4279,7 +4394,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </exception>
         ''' 
         ''' <exception cref="ArgumentException">
-        ''' Invalid enumeration value;environmentUser
+        ''' Invalid enumeration value;environmentScope
         ''' </exception>
         ''' 
         ''' <exception cref="ArgumentException">
@@ -4291,7 +4406,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
-        Public Shared Function GetVariableInfo(ByVal environmentUser As EnvironmentUtil.EnvironmentUser,
+        Public Shared Function GetVariableInfo(ByVal environmentScope As EnvironmentUtil.EnvironmentScope,
                                                ByVal name As String,
                                                Optional throwOnMissingVariable As Boolean = False) As EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo
 
@@ -4302,18 +4417,18 @@ Public NotInheritable Class EnvironmentUtil
                 Dim regKey As RegistryKey
                 Dim regPath As String
 
-                Select Case environmentUser
+                Select Case environmentScope
 
-                    Case environmentUser.Machine
+                    Case EnvironmentUtil.EnvironmentScope.Machine
                         regKey = Registry.LocalMachine
                         regPath = "SYSTEM\CurrentControlSet\Control\Session Manager\Environment\"
 
-                    Case environmentUser.CurrentUser
+                    Case EnvironmentUtil.EnvironmentScope.CurrentUser
                         regKey = Registry.CurrentUser
                         regPath = "Environment\"
 
                     Case Else
-                        Throw New ArgumentException(message:="Invalid enumeration value.", paramName:="environmentUser")
+                        Throw New ArgumentException(message:="Invalid enumeration value.", paramName:="environmentScope")
 
                 End Select
 
@@ -4345,22 +4460,18 @@ Public NotInheritable Class EnvironmentUtil
         End Function
 
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>
-        ''' Title : Get value of environment variable.
-        ''' Author: Elektro
-        ''' Date  : 23-June-2015
-        ''' </remarks> 
-        ''' ----------------------------------------------------------------------------------------------------
-        ''' <example>
-        ''' EnvironmentUtil.EnvironmentVariables.GetValue(EnvironmentUtil.EnvironmentUser.CurrentUser, "System32", throwOnMissingVariable:=True)
-        ''' </example>
-        ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
         ''' Returns the value of the specified environment variable.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <param name="environmentUser">
-        ''' The environment user that owns the variable.
+        ''' <example> This is a code example.
+        ''' <code>
+        ''' EnvironmentUtil.EnvironmentVariables.GetValue(EnvironmentUtil.EnvironmentScope.CurrentUser, "System32", throwOnMissingVariable:=True)
+        ''' </code>
+        ''' </example>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="environmentScope">
+        ''' The environment scope that owns the variable.
         ''' </param>
         ''' 
         ''' <param name="name">
@@ -4368,7 +4479,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </param>
         ''' 
         ''' <param name="throwOnMissingVariable">
-        ''' If <c>True</c>, raises an exception if the variable doesn't exists.
+        ''' If <see langword="True"/>, raises an exception if the variable doesn't exists.
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="ArgumentNullException">
@@ -4376,7 +4487,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </exception>
         ''' 
         ''' <exception cref="ArgumentException">
-        ''' Invalid enumeration value;environmentUser
+        ''' Invalid enumeration value;environmentScope
         ''' </exception>
         ''' 
         ''' <exception cref="ArgumentException">
@@ -4388,7 +4499,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
-        Public Shared Function GetValue(ByVal environmentUser As EnvironmentUtil.EnvironmentUser,
+        Public Shared Function GetValue(ByVal environmentScope As EnvironmentUtil.EnvironmentScope,
                                         ByVal name As String,
                                         Optional throwOnMissingVariable As Boolean = False) As String
 
@@ -4399,18 +4510,18 @@ Public NotInheritable Class EnvironmentUtil
                 Dim regKey As RegistryKey
                 Dim regPath As String
 
-                Select Case environmentUser
+                Select Case environmentScope
 
-                    Case environmentUser.Machine
+                    Case EnvironmentUtil.EnvironmentScope.Machine
                         regKey = Registry.LocalMachine
                         regPath = "SYSTEM\CurrentControlSet\Control\Session Manager\Environment\"
 
-                    Case environmentUser.CurrentUser
+                    Case EnvironmentUtil.EnvironmentScope.CurrentUser
                         regKey = Registry.CurrentUser
                         regPath = "Environment\"
 
                     Case Else
-                        Throw New ArgumentException(message:="Invalid enumeration value.", paramName:="environmentUser")
+                        Throw New ArgumentException(message:="Invalid enumeration value.", paramName:="environmentScope")
 
                 End Select
 
@@ -4443,12 +4554,12 @@ Public NotInheritable Class EnvironmentUtil
         ''' environment variables of the specified environment user.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <param name="environmentUser">
-        ''' The environment user that owns the variable.
+        ''' <param name="environmentScope">
+        ''' The environment scope that owns the variable.
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="ArgumentException">
-        ''' Invalid enumeration value;environmentUser
+        ''' Invalid enumeration value;environmentScope
         ''' </exception>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <returns>
@@ -4456,23 +4567,23 @@ Public NotInheritable Class EnvironmentUtil
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
-        Private Shared Function GetEnvironmentVariables(ByVal environmentUser As EnvironmentUtil.EnvironmentUser) As IEnumerable(Of EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo)
+        Private Shared Function GetEnvironmentVariables(ByVal environmentScope As EnvironmentUtil.EnvironmentScope) As IEnumerable(Of EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo)
 
             Dim regKey As RegistryKey
             Dim regPath As String
 
-            Select Case environmentUser
+            Select Case environmentScope
 
-                Case environmentUser.Machine
+                Case EnvironmentUtil.EnvironmentScope.Machine
                     regKey = Registry.LocalMachine
                     regPath = "SYSTEM\CurrentControlSet\Control\Session Manager\Environment\"
 
-                Case environmentUser.CurrentUser
+                Case EnvironmentUtil.EnvironmentScope.CurrentUser
                     regKey = Registry.CurrentUser
                     regPath = "Environment\"
 
                 Case Else
-                    Throw New ArgumentException(message:="Invalid enumeration value.", paramName:="environmentUser")
+                    Throw New ArgumentException(message:="Invalid enumeration value.", paramName:="environmentScope")
 
             End Select
 
@@ -4531,7 +4642,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <returns>
-        ''' <c>true</c> if item contains invalid windows name characters, <c>false</c> otherwise.
+        ''' <see langword="True"/> if item contains invalid windows name characters, <see langword="False"/> otherwise.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
@@ -4551,7 +4662,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <returns>
-        ''' <c>true</c> if item contains invalid windows path characters, <c>false</c> otherwise.
+        ''' <see langword="True"/> if item contains invalid windows path characters, <see langword="False"/> otherwise.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
@@ -4572,7 +4683,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <returns>
-        ''' <c>true</c> if item contains invalid windows name characters, <c>false</c> otherwise.
+        ''' <see langword="True"/> if item contains invalid windows name characters, <see langword="False"/> otherwise.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
@@ -4857,7 +4968,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if the screen saver requires a password to display the Windows desktop, <c>False</c> otherwise.
+        ''' <see langword="True"/> if the screen saver requires a password to display the Windows desktop, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -4946,7 +5057,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if the system language bar is enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if the system language bar is enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -4990,7 +5101,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if ClearType is enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if ClearType is enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5034,7 +5145,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if effects are enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if effects are enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5074,7 +5185,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if overlapped content is enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if overlapped content is enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5115,7 +5226,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if font smoothing is enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if font smoothing is enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5147,7 +5258,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if dragging is enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if dragging is enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5179,7 +5290,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if mouse swap is enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if mouse swap is enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5211,7 +5322,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if UI effects are enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if UI effects are enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5244,7 +5355,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5284,7 +5395,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5316,7 +5427,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5356,7 +5467,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5396,7 +5507,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5436,7 +5547,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5476,7 +5587,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5509,7 +5620,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5541,7 +5652,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5574,7 +5685,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5606,7 +5717,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5638,7 +5749,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5670,7 +5781,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5702,7 +5813,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5734,7 +5845,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5766,7 +5877,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5798,7 +5909,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5830,7 +5941,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5862,7 +5973,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5901,7 +6012,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5935,7 +6046,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -5967,7 +6078,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if enabled, <c>False</c> otherwise.
+        ''' <see langword="True"/> if enabled, <see langword="False"/> otherwise.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="Win32Exception">
@@ -6717,7 +6828,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <exception cref="Win32Exception">
         ''' </exception>
         ''' ----------------------------------------------------------------------------------------------------
-        Public Shared Property MessageDuration As Long
+        Public Shared Property MessageDuration As ULong
 
             <DebuggerStepThrough>
             Get
@@ -6729,18 +6840,18 @@ Public NotInheritable Class EnvironmentUtil
 
                     ' Throw New Win32Exception([error]:=Marshal.GetLastWin32Error)
                 End If
-                Return CLng(result)
+                Return CULng(result)
             End Get
 
             <DebuggerStepThrough>
-            Set(ByVal value As Long)
+            Set(ByVal value As ULong)
                 If (value < 5) OrElse (value > 4294967295) Then
                     Throw New ArgumentException(message:="Value should be between 5 and 4294967295.", paramName:="value")
 
                 Else
                     If Not EnvironmentUtil.NativeMethods.SystemParametersInfo(EnvironmentUtil.NativeMethods.SystemParametersActionFlags.SetMessageDuration,
                                                                               0UI,
-                                                                              value,
+                                                                              CLng(value),
                                                                               EnvironmentUtil.NativeMethods.SystemParametersWinIniFlags.SendWinIniChange) Then
 
                         Throw New Win32Exception([error]:=Marshal.GetLastWin32Error)
@@ -7090,21 +7201,22 @@ Public NotInheritable Class EnvironmentUtil
         End Property
 
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <example>
-        ''' Dim dateAndTime As New Date(year:=2000, month:=1, day:=1,
-        '''                             hour:=0, minute:=0, second:=0)
-        '''
-        ''' Dim dateOnly As New Date(year:=2000, month:=1, day:=1,
-        '''                          hour:=Date.Now.Hour, minute:=Date.Now.Minute, second:=Date.Now.Second)
-        '''
-        ''' Dim timeOnly As New Date(year:=Date.Today.Year, month:=Date.Today.Month, day:=Date.Today.Day,
-        '''                          hour:=0, minute:=0, second:=0)
-        '''
-        ''' </example>
-        ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
         ''' Gets or sets the system date and time.
         ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <example> This is a code example.
+        ''' <code>
+        ''' Dim dateAndTime As New Date(year:=2000, month:=1, day:=1,
+        '''                             hour:=0, minute:=0, second:=0)
+        ''' 
+        ''' Dim dateOnly As New Date(year:=2000, month:=1, day:=1,
+        '''                          hour:=Date.Now.Hour, minute:=Date.Now.Minute, second:=Date.Now.Second)
+        ''' 
+        ''' Dim timeOnly As New Date(year:=Date.Today.Year, month:=Date.Today.Month, day:=Date.Today.Day,
+        '''                          hour:=0, minute:=0, second:=0)
+        ''' </code>
+        ''' </example>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
         ''' The system date and time.
@@ -7188,7 +7300,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' To effect a change in the environment variables for the system or the user, this parameter points to the string "Environment".
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms725497%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms725497%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
         Public Shared Sub NotifyRegistryChange(ByVal keyName As String)
@@ -7433,7 +7547,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </param>
         ''' 
         ''' <param name="createShellWindow">
-        ''' If <c>True</c>, tell the Shell to create a new window for the drive.
+        ''' If <see langword="True"/>, tell the Shell to create a new window for the drive.
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <exception cref="ArgumentNullException">
@@ -7741,7 +7855,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' This method has the same effect as right-clicking the taskbar and selecting Properties.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb774105%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb774105%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
         Public Shared Sub RunTrayProperties()
@@ -7758,7 +7874,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' This method has the same effect as right-clicking the clock in the taskbar status area and selecting Adjust Date/Time.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb774092%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb774092%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
         Public Shared Sub RunDateTime()
@@ -7774,7 +7892,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' Displays the Apps Search pane.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/jj635751%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/jj635751%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
         Public Shared Sub RunSearchCommand()
@@ -7790,7 +7910,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' Invokes the Window Switcher (ALT+TAB).
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/gg537749%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/gg537749%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
         Public Shared Sub RunWindowSwitcher()
@@ -7807,7 +7929,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' This method has the same effect as clicking the Start menu and selecting Run.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb774075%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb774075%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
         Public Shared Sub RunExecuteDialog()
@@ -7824,7 +7948,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' The dialog box shows the result of the search for a specified computer.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb774077%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb774077%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
         Public Shared Sub RunFindComputer()
@@ -7841,7 +7967,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' This is the same as clicking the Start menu and then selecting "Search".
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb774079%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb774079%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
         Public Shared Sub RunFindFiles()
@@ -7857,7 +7985,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' Displays the Find Printer dialog box.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/gg537738%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/gg537738%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
         Public Shared Sub RunFindPrinter()
@@ -7874,7 +8004,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' This method has the same effect as clicking the Start menu and selecting Help and Support.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/bb774081%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb774081%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
         Public Shared Sub RunHelpCenter()
@@ -7890,7 +8022,9 @@ Public NotInheritable Class EnvironmentUtil
         ''' Displays the Windows Security dialog box.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/gg537748%28v=vs.85%29.aspx</remarks>
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/gg537748%28v=vs.85%29.aspx"/>
+        ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         <DebuggerStepThrough>
         Public Shared Sub RunWindowsSecurity()
@@ -8193,8 +8327,8 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if Aero feature is enabled on the current operating system.
-        ''' <c>False</c> if Aero feature is not enabled or else is not supported by the current operating system (like Windows XP or previous versions).
+        ''' <see langword="True"/> if Aero feature is enabled on the current operating system.
+        ''' <see langword="False"/> if Aero feature is not enabled or else is not supported by the current operating system (like Windows XP or previous versions).
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         Public Shared ReadOnly Property AeroEnabled() As Boolean
@@ -8218,8 +8352,8 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if Aero feature is supported by the current operating system.
-        ''' <c>False</c> if Aero feature is not supported by the current operating system.
+        ''' <see langword="True"/> if Aero feature is supported by the current operating system.
+        ''' <see langword="False"/> if Aero feature is not supported by the current operating system.
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         Public Shared ReadOnly Property AeroSupported() As Boolean
@@ -8236,7 +8370,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if jpeg files are supported as wallpaper in the current operating system, otherwise, <c>False</c>
+        ''' <see langword="True"/> if jpeg files are supported as wallpaper in the current operating system, otherwise, <see langword="False"/>
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         Public Shared ReadOnly Property WallpaperAsJpegIsSupported() As Boolean
@@ -8255,8 +8389,8 @@ Public NotInheritable Class EnvironmentUtil
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <value>
-        ''' <c>True</c> if <see cref="WallpaperStyle.Fit"/> and <see cref="WallpaperStyle.Fill"/> are supported in the current operating system, 
-        ''' otherwise, <c>False</c>
+        ''' <see langword="True"/> if <see cref="WallpaperStyle.Fit"/> and <see cref="WallpaperStyle.Fill"/> are supported in the current operating system, 
+        ''' otherwise, <see langword="False"/>
         ''' </value>
         ''' ----------------------------------------------------------------------------------------------------
         Public Shared ReadOnly Property WallpaperStylesFitFillAreSupported() As Boolean
@@ -8270,9 +8404,11 @@ Public NotInheritable Class EnvironmentUtil
 
 #Region " Enumerations "
 
+        ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
         ''' Describes a wallpaper style.
         ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
         Public Enum WallpaperStyle As Integer
 
             ''' <summary>
@@ -8302,10 +8438,12 @@ Public NotInheritable Class EnvironmentUtil
 
         End Enum
 
+        ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
         ''' Specifies a cursor type.
         ''' </summary>
-        Public Enum CursorType As Short
+        ''' ----------------------------------------------------------------------------------------------------
+        Public Enum CursorType As UInteger
 
             ''' <summary>
             ''' Standard arrow and small hourglass.
@@ -8423,6 +8561,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <exception cref="Win32Exception">
         ''' </exception>
         ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
         Public Shared Sub SetDesktopWallpaper(ByVal imagePath As String,
                                               ByVal style As WallpaperStyle)
 
@@ -8502,6 +8641,7 @@ Public NotInheritable Class EnvironmentUtil
         ''' <exception cref="Win32Exception">
         ''' </exception>
         ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
         Public Shared Sub RemoveDesktopWallpaper()
 
             Dim uiAction As EnvironmentUtil.NativeMethods.SystemParametersActionFlags =
@@ -8514,13 +8654,15 @@ Public NotInheritable Class EnvironmentUtil
         End Sub
 
         ''' ----------------------------------------------------------------------------------------------------
-        ''' <example>
-        ''' EnvironmentUtil.Theming.SetSystemCursor("C:\Windows\Cursors\aero_pen.cur", EnvironmentUtil.Theming.CursorType.Arrow)
-        ''' </example>
-        ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
         ''' Sets the system cursor.
         ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <example> This is a code example.
+        ''' <code>
+        ''' EnvironmentUtil.Theming.SetSystemCursor("C:\Windows\Cursors\aero_pen.cur", EnvironmentUtil.Theming.CursorType.Arrow)
+        ''' </code>
+        ''' </example>
         ''' ----------------------------------------------------------------------------------------------------
         ''' <param name="filePath">
         ''' The cursor file path.
@@ -8530,12 +8672,45 @@ Public NotInheritable Class EnvironmentUtil
         ''' The cursor type.
         ''' </param>
         ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
         Public Shared Sub SetSystemCursor(ByVal filePath As String,
                                           ByVal cursorType As EnvironmentUtil.Theming.CursorType)
 
             If Not EnvironmentUtil.NativeMethods.SetSystemCursor(EnvironmentUtil.NativeMethods.LoadCursorFromFile(filePath), cursorType) Then
                 Throw New Win32Exception([error]:=Marshal.GetLastWin32Error)
             End If
+
+        End Sub
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Sets the system visual theme.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <example> This is a code example.
+        ''' <code>
+        ''' EnvironmentUtil.Theming.SetSystemVisualTheme("C:\ThemeName.msstyles", "NormalColor", "NormalSize")
+        ''' </code>
+        ''' </example>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="filePath">
+        ''' The theme file path.
+        ''' </param>
+        ''' 
+        ''' <param name="colorName">
+        ''' The coor scheme name.
+        ''' </param>
+        ''' 
+        ''' <param name="sizeName">
+        ''' The size name.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Shared Sub SetSystemVisualTheme(ByVal filePath As String,
+                                               ByVal colorName As String,
+                                               ByVal sizeName As String)
+
+            EnvironmentUtil.NativeMethods.SetSystemVisualStyle(filePath, colorName, sizeName, 65)
 
         End Sub
 
