@@ -10,7 +10,7 @@ The 'FileSystem' class has some validation methods for filenames, and also can i
 
 The 'Shell' class pins and unpins items in taskbar and startmenu, it also can show/hide taskbar and startmenu, can get all the Explorer windows instances, can refresh Explorer windows, or add a file to recent docs, and much more.
 
-The 'Theming' class manages the current theme and wallpaper, it can set other theme or wall.
+The 'Theming' class manages the current theme and wallpaper, it can set other theme or wall, or change the system cursors.
 
 Public Members Summary
 
