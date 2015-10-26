@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<CodeSnippet Format="1.0.0">
+
+<Header>
+  <Title>Multiline String Example</Title>
+  <Description>Example of a multiline String.</Description>
+  <Author>Elektro</Author>
+</Header>
+
+<Snippet>
+
+<Declarations>
+  <Literal Editable="false">
+    <ID>CDATAEnd</ID>
+    <ToolTip>CDATA end tag to scape XML illegal characters if needed.</ToolTip>
+    <Default>&gt;</Default>
+  </Literal>
+</Declarations>
+
+<Code Language="vb"><![CDATA[
+
+        Dim str As String =
+<a>
+      ___              _ _           _   _               _____ _ _   _      
+     / _ \            | (_)         | | (_)             |_   _(_) | | |    
+    / /_\ \_ __  _ __ | |_  ___ __ _| |_ _  ___  _ __     | |  _| |_| | ___
+    |  _  | '_ \| '_ \| | |/ __/ _` | __| |/ _ \| '_ \    | | | | __| |/ _ \
+    | | | | |_) | |_) | | | (_| (_| | |_| | (_) | | | |   | | | | |_| |  __/
+    \_| |_/ .__/| .__/|_|_|\___\__,_|\__|_|\___/|_| |_|   \_/ |_|\__|_|\___|
+         | |   | |                                                        
+         |_|   |_|                                                        
+</a>.Value
+
+            Dim str As String = 
+<a><![CDATA[
+      ___              _ _           _   _               _____ _ _   _      
+     / _ \            | (_)         | | (_)             |_   _(_) | | |    
+    / /_\ \_ __  _ __ | |_  ___ __ _| |_ _  ___  _ __     | |  _| |_| | ___
+    |  _  | '_ \| '_ \| | |/ __/ _` | __| |/ _ \| '_ \    | | | | __| |/ _ \
+    | | | | |_) | |_) | | | (_| (_| | |_| | (_) | | | |   | | | | |_| |  __/
+    \_| |_/ .__/| .__/|_|_|\___\__,_|\__|_|\___/|_| |_|   \_/ |_|\__|_|\___|
+         | |   | |                                                        
+         |_|   |_|                                                        
+     
+]]$cdataend$</a>.Value
+     
+    Console.WriteLine(str)
+
+]]></Code>
+  </Snippet>
+ </CodeSnippet>
+</CodeSnippets>
