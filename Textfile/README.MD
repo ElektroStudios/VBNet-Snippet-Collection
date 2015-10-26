@@ -47,6 +47,9 @@ Public Members Summary
    - TextfileStream.TexfileLines.TrimStart(Opt: Char()) As IEnumerable(Of String)
    - TextfileStream.TexfileLines.TrimEnd(Opt: Char()) As IEnumerable(Of String)
 
+ -  Constructors
+   -  TextfileStream.New(String, Opt: Encoding)
+
 #Textfile Util
 Contains related text-file utilities.
 
