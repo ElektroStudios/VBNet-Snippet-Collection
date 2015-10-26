@@ -2,7 +2,7 @@
 These snippets are intended to help managing Xml files or Xml operations.
 
 # General Information about this repository
- - .snippet files contains the formatted code that can be loaded through Visual Studio's code editorcontext menu.
+ - .snippet files contains the formatted code that can be loaded through Visual Studio's code editor context menu.
  - .vb files contains the raw code that can be copied then pasted in any project.
  - Each .snippet and .vb file contains a #Region section and/or Xml documentation with code examples.
  
