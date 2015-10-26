@@ -1,5 +1,5 @@
 # String snippets category
-These snippets are intended to help managing the (operating)system in some aspects.
+These snippets are intended to help managing Strings.
 
 # General Information about this repository
  - .snippet files contains the formatted code that can be loaded through Visual Studio's code editorcontext menu.
