@@ -22,9 +22,9 @@
 
 ' ***********************************************************************
 ' Author   : Elektro
-' Modified : 16-June-2015
+' Modified : 26-October-2015
 ' ***********************************************************************
-' <copyright file="ResourceUtil.vb" company="Elektro Studios">
+' <copyright file="Resource Util.vb" company="Elektro Studios">
 '     Copyright (c) Elektro Studios. All rights reserved.
 ' </copyright>
 ' ***********************************************************************
@@ -54,44 +54,32 @@ Imports System.Globalization
 
 #End Region
 
+''' ----------------------------------------------------------------------------------------------------
 ''' <summary>
-''' Contains related Application's Resource utilities.
+''' Contains related application's managed resource utilities.
 ''' </summary>
-Public NotInheritable Class ResourceUtil
-
-#Region " Constructors "
-
-    ''' <summary>
-    ''' Prevents a default instance of the <see cref="ResourceUtil"/> class from being created.
-    ''' </summary>
-    Private Sub New()
-    End Sub
-
-#End Region
+''' ----------------------------------------------------------------------------------------------------
+Public Module ResourceUtil
 
 #Region " Public Methods "
 
     ''' ----------------------------------------------------------------------------------------------------
-    ''' <remarks>
-    ''' Title : Get Application Resources Of Type...
-    ''' Author: Elektro
-    ''' Date  : 16-June-2015
-    ''' </remarks> 
-    ''' ----------------------------------------------------------------------------------------------------
-    ''' <example>
-    ''' Dim resources As IEnumerable(Of DictionaryEntry) = GetResources(Of String)()
-    '''
-    ''' For Each resource As DictionaryEntry In resources
-    '''
-    '''     MsgBox(resource.Key)            '''  Resource Name
-    '''     MsgBox(resource.Value.ToString) '''  Resource Data
-    '''
-    ''' Next resource
-    ''' </example>
-    ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
     ''' Gets the application resources of the specified type.
     ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> Get all String resources.
+    ''' <code>
+    ''' Dim resources As IEnumerable(Of DictionaryEntry) = GetResources(Of Bitmap)()
+    ''' 
+    ''' For Each resource As DictionaryEntry In resources
+    ''' 
+    '''     MsgBox(resource.Key)            '  Resource Name
+    '''     MsgBox(resource.Value.ToString) '  Resource Data
+    ''' 
+    ''' Next resource
+    ''' </code>
+    ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <typeparam name="T">
     ''' The type of the resource to find.
@@ -105,7 +93,8 @@ Public NotInheritable Class ResourceUtil
     ''' <see cref="IEnumerable(Of DictionaryEntry)"/>.
     ''' </returns>
     ''' ----------------------------------------------------------------------------------------------------
-    Public Shared Function GetResources(Of T)(Optional ByVal culture As CultureInfo = Nothing) As IEnumerable(Of DictionaryEntry)
+    <DebuggerStepThrough>
+    Public Function GetResources(Of T)(Optional ByVal culture As CultureInfo = Nothing) As IEnumerable(Of DictionaryEntry)
 
         Return From resource As DictionaryEntry
                In My.Resources.ResourceManager.
@@ -118,7 +107,7 @@ Public NotInheritable Class ResourceUtil
 
 #End Region
 
-End Class
+End Module
 
 ]]></Code>
   </Snippet>
