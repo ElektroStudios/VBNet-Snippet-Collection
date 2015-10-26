@@ -1,0 +1,88 @@
+' ***********************************************************************
+' Author   : Elektro
+' Modified : 26-October-2015
+' ***********************************************************************
+' <copyright file="Resource Util.vb" company="Elektro Studios">
+'     Copyright (c) Elektro Studios. All rights reserved.
+' </copyright>
+' ***********************************************************************
+
+#Region " Public Members Summary "
+
+#Region " Functions "
+
+' ResourceUtil.GetResources(OF T)
+
+#End Region
+
+#End Region
+
+#Region " Option Statements "
+
+Option Strict On
+Option Explicit On
+Option Infer Off
+
+#End Region
+
+#Region " Imports "
+
+Imports System
+Imports System.Globalization
+
+#End Region
+
+''' ----------------------------------------------------------------------------------------------------
+''' <summary>
+''' Contains related application's managed resource utilities.
+''' </summary>
+''' ----------------------------------------------------------------------------------------------------
+Public Module ResourceUtil
+
+#Region " Public Methods "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Gets the application resources of the specified type.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> Get all String resources.
+    ''' <code>
+    ''' Dim resources As IEnumerable(Of DictionaryEntry) = GetResources(Of Bitmap)()
+    ''' 
+    ''' For Each resource As DictionaryEntry In resources
+    ''' 
+    '''     MsgBox(resource.Key)            '  Resource Name
+    '''     MsgBox(resource.Value.ToString) '  Resource Data
+    ''' 
+    ''' Next resource
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <typeparam name="T">
+    ''' The type of the resource to find.
+    ''' </typeparam>
+    ''' 
+    ''' <param name="culture">
+    ''' The resource culture
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see cref="IEnumerable(Of DictionaryEntry)"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Function GetResources(Of T)(Optional ByVal culture As CultureInfo = Nothing) As IEnumerable(Of DictionaryEntry)
+
+        Return From resource As DictionaryEntry
+               In My.Resources.ResourceManager.
+                               GetResourceSet(If(culture Is Nothing,
+                                                 CultureInfo.CurrentCulture,
+                                                 culture), createIfNotExists:=True, tryParents:=True).Cast(Of DictionaryEntry)()
+               Where TypeOf resource.Value Is T
+
+    End Function
+
+#End Region
+
+End Module
