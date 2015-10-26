@@ -41,7 +41,7 @@ Public Members Summary
    - StringExtensions.GroupingInfo.GroupsClosedPositions As Dictionary(Of Integer, Integer)
    - StringExtensions.GroupingInfo.GroupsOpenPositions As List(Of Integer)
 
- - Functions
+ - Extension Functions
    - String.BinaryToAscII() As String
    - String.CountCharacter(Char) As Integer
    - String.CountCharacters(Char, StringComparison) As Integer
