@@ -1,5 +1,5 @@
 # IPC (Inter-process communications) snippets category
-These snippets are intended to help managing IPC or also software automation scenarios.
+These snippets are intended to help in IPC scenarios or also software automation.
 
 # General Information about this repository
  - .snippet files contains the formatted code that can be loaded through Visual Studio's code editor context menu.
