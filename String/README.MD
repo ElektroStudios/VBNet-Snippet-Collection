@@ -42,58 +42,58 @@ Public Members Summary
    - StringExtensions.GroupingInfo.GroupsOpenPositions As List(Of Integer)
 
  - Functions
-   - String.SizeInMemory(Font) As Integer
-   - String.SizeInFile(Encoding) As Integer
-   - String.SizeInFile(Encoding, Boolean) As Integer
-   - String.Measure(Font) As Size
+   - String.BinaryToAscII() As String
+   - String.CountCharacter(Char) As Integer
+   - String.CountCharacters(Char, StringComparison) As Integer
+   - String.Delimit(String, Integer, Opt: RegexOptions) As String
+   - String.Delimit(String, Opt: RegexOptions) As String
+   - String.Delimit(String, String, Integer, Opt: RegexOptions) As String
+   - String.Delimit(String, String, Opt: RegexOptions) As String
    - String.ExpandBlankSpace(Char, Opt: Integer) As String
    - String.ExpandBlankSpace(Opt: Integer) As String
    - String.Expandchars(Char, Opt: Integer) As String
    - String.Expandchars(Opt: Integer) As String
    - String.ExpandVariables() As String
-   - String.NormalizeDiacritics(NormalizationForm) As String
-   - String.Randomize() As String
-   - String.Randomize(Integer) As String
-   - String.Rename(StringExtensions.StringCase) As String
-   - String.Reverse() As String
-   - String.Rotate(StringExtensions.StringDirection, Integer) As String
-   - String.SplitByLength(Integer) As IEnumerable(Of String)
-   - String.SplitByPosition(Integer) As IEnumerable(Of String)
-   - String.Replace(String, String, StringComparison) As String
-   - String.ReplaceRegEx(String, String, RegExOptions) As String
+   - String.GetGroupingInfo(Opt: List(Of StringExtensions.GroupingCharsInfo)) As StringExtensions.GroupingInfo
    - String.HasDiacritics() As Boolean
-   - String.IsAlphabetic() As Boolean
-   - String.IsCase(StringExtensions.StringCase) As Boolean
-   - String.IsNumeric() As Boolean
-   - String.IsNumericOf(Of T) As Boolean
-   - String.IsValueOf(Of T) As Boolean
-   - String.ToByteArray(Opt: Encoding) As Byte()
-   - String.ToHtmlDocument() As Htmldocument
-   - String.ToBinary(Opt: String, Opt: Encoding) As String
-   - String.ToHex(Opt: String, Opt: Encoding) As String
-   - String.BinaryToAscII() As String
    - String.HexToAscII() As String
-   - String.ToBase64() As String
-   - String.ToMD5() As String
    - String.IndexOfAnyRegEx(IEnumerable(Of String), Integer, Integer, RegexOptions) As Integer
    - String.IndexOfAnyRegEx(IEnumerable(Of String), Integer, RegexOptions) As Integer
    - String.IndexOfAnyRegEx(IEnumerable(Of String), RegexOptions) As Integer
    - String.IndexOfRegEx(String, Integer, Integer, RegexOptions) As Integer
    - String.IndexOfRegEx(String, Integer, RegexOptions) As Integer
    - String.IndexOfRegEx(String, RegexOptions) As Integer
+   - String.IsAlphabetic() As Boolean
+   - String.IsCase(StringExtensions.StringCase) As Boolean
+   - String.IsNumeric() As Boolean
+   - String.IsNumericOf(Of T) As Boolean
+   - String.IsValueOf(Of T) As Boolean
    - String.LastIndexOfAnyRegEx(IEnumerable(Of String), Integer, Integer, RegexOptions) As Integer
    - String.LastIndexOfAnyRegEx(IEnumerable(Of String), Integer, RegexOptions) As Integer
    - String.LastIndexOfAnyRegEx(IEnumerable(Of String), RegexOptions) As Integer
    - String.LastIndexOfRegEx(String, Integer, Integer, RegexOptions) As Integer
    - String.LastIndexOfRegEx(String, Integer, RegexOptions) As Integer
    - String.LastIndexOfRegEx(String, RegexOptions) As Integer
-   - String.Delimit(String, Integer, Opt: RegexOptions) As String
-   - String.Delimit(String, Opt: RegexOptions) As String
-   - String.Delimit(String, String, Integer, Opt: RegexOptions) As String
-   - String.Delimit(String, String, Opt: RegexOptions) As String
-   - String.CountCharacter(Char) As Integer
-   - String.CountCharacters(Char, StringComparison) As Integer
-   - String.GetGroupingInfo(Opt: List(Of StringExtensions.GroupingCharsInfo)) As StringExtensions.GroupingInfo
+   - String.Measure(Font) As Size
+   - String.NormalizeDiacritics(NormalizationForm) As String
+   - String.Randomize() As String
+   - String.Randomize(Integer) As String
+   - String.Rename(StringExtensions.StringCase) As String
+   - String.Replace(String, String, StringComparison) As String
+   - String.ReplaceRegEx(String, String, RegExOptions) As String
+   - String.Reverse() As String
+   - String.Rotate(StringExtensions.StringDirection, Integer) As String
+   - String.SizeInFile(Encoding) As Integer
+   - String.SizeInFile(Encoding, Boolean) As Integer
+   - String.SizeInMemory(Font) As Integer
+   - String.SplitByLength(Integer) As IEnumerable(Of String)
+   - String.SplitByPosition(Integer) As IEnumerable(Of String)
+   - String.ToBase64() As String
+   - String.ToBinary(Opt: String, Opt: Encoding) As String
+   - String.ToByteArray(Opt: Encoding) As Byte()
+   - String.ToHex(Opt: String, Opt: Encoding) As String
+   - String.ToHtmlDocument() As Htmldocument
+   - String.ToMD5() As String
 
  - Methods
    - StringExtensions.GroupingCharsInfo.New(Char, Char)
