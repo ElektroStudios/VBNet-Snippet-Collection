@@ -95,7 +95,7 @@ Public Members Summary
    - String.ToHtmlDocument() As Htmldocument
    - String.ToMD5() As String
 
- - Methods
+ - Constructors
    - StringExtensions.GroupingCharsInfo.New(Char, Char)
    - StringExtensions.GroupingInfo.New(String, List(Of GroupingCharsInfo), Boolean, Boolean, Integer, Integer, Dictionary(Of Integer, Integer), List(Of Integer))
 
@@ -117,5 +117,5 @@ Public Members Summary
    - StringUtil.GetWhiteSpacedString(Integer) As String
    - StringUtil.FixedLengthString.ToString() As String
 
- - Methods
+ - Constructors
    - StringUtil.FixedLengthString.New(String, Integer, Opt: Char)
