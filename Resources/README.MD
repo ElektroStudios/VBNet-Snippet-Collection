@@ -10,9 +10,6 @@ Feel free to use and/or modify any file of this repository.
 
 If you like the job I've done, then please contribute with improvements to these snippets or by adding new ones.
 
-# Convert Xml Elements to Custom Type
-A simple example for beginners, to convert Xml elements to custom Type.
-
 # Resource Util
 Contains related application's managed resource utilities.
 
