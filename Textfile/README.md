@@ -46,3 +46,58 @@ Public Members Summary
    - TextfileStream.TexfileLines.Trim(Opt: Char()) As IEnumerable(Of String)
    - TextfileStream.TexfileLines.TrimStart(Opt: Char()) As IEnumerable(Of String)
    - TextfileStream.TexfileLines.TrimEnd(Opt: Char()) As IEnumerable(Of String)
+
+#Textfile Util
+Contains related text-file utilities.
+
+Public Members Summary
+
+ - Functions
+   - TextfileUtil.Contains(String, String, IEqualityComparer(Of String), Encoding) As Boolean
+   - TextfileUtil.CountAllLines(String, Opt: Encoding) As Integer
+   - TextfileUtil.CountBlankLines(String, Opt: Encoding) As Integer
+   - TextfileUtil.CountNonBlankLines(String, Opt: Encoding) As Integer
+   - TextfileUtil.GetEncoding(String) As Encoding
+   - TextfileUtil.GetLine(String, Integer, TextfileUtil.TextDirection, Opt: Encoding) As String
+   - TextfileUtil.GetLines(String, Integer(), TextfileUtil.TextDirection, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.InsertLine(String, Integer, String(), TextfileUtil.TextDirection, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.InsertLine(String, Integer, String, TextfileUtil.TextDirection, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.Randomize(String, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.RemoveLine(String, Integer, TextfileUtil.TextDirection, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.RemoveLines(String, Integer(), TextfileUtil.TextDirection, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.ReplaceLine(String, Integer, String(), TextfileUtil.TextDirection, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.ReplaceLine(String, Integer, String, TextfileUtil.TextDirection, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.ReplaceLines(String, Integer(), String(), TextfileUtil.TextDirection, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.ReplaceLines(String, Integer(), String, TextfileUtil.TextDirection, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.Reverse(String, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.SkipLines(String, Integer, TextfileUtil.TextDirection, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.Sort(String, ListSortDirection, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.SortBy(Of T)(String, ListSortDirection, Func(Of String, T), Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.Split(String, Char(),  Opt: StringSplitOptions, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.Split(String, Char,  Opt: StringSplitOptions, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.Split(String, String(),  Opt: StringSplitOptions, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.Split(String, String,  Opt: StringSplitOptions, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.SplitByLines(String, Integer, Opt: Encoding) As IEnumerable(Of IEnumerable(Of String))
+   - TextfileUtil.TakeLines(String, Integer, TextfileUtil.TextDirection, Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.Trim(String, Opt: Char(), Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.TrimEnd(String, Opt: Char(), Opt: Encoding) As IEnumerable(Of String)
+   - TextfileUtil.TrimStart(String, Opt: Char(), Opt: Encoding) As IEnumerable(Of String)
+
+ - Methods
+   - TextfileUtil.InsertLine(String, String, Integer, String(), TextfileUtil.TextDirection, Opt: Encoding)
+   - TextfileUtil.InsertLine(String, String, Integer, String, TextfileUtil.TextDirection, Opt: Encoding)
+   - TextfileUtil.Randomize(String, String, Opt: Encoding)
+   - TextfileUtil.RemoveLine(String, String, Integer, TextfileUtil.TextDirection, Opt: Encoding)
+   - TextfileUtil.RemoveLines(String, String, Integer(), TextfileUtil.TextDirection, Opt: Encoding)
+   - TextfileUtil.ReplaceLine(String, String, Integer, String(), TextfileUtil.TextDirection, Opt: Encoding)
+   - TextfileUtil.ReplaceLine(String, String, Integer, String, TextfileUtil.TextDirection, Opt: Encoding)
+   - TextfileUtil.ReplaceLines(String, String, Integer(), String(), TextfileUtil.TextDirection, Opt: Encoding)
+   - TextfileUtil.ReplaceLines(String, String, Integer(), String, TextfileUtil.TextDirection, Opt: Encoding)
+   - TextfileUtil.Reverse(String, String, Opt: Encoding)
+   - TextfileUtil.SkipLines(String, String, Integer, TextfileUtil.TextDirection, Opt: Encoding)
+   - TextfileUtil.Sort(String, String, ListSortDirection, Opt: Encoding)
+   - TextfileUtil.SortBy(Of T)(String, String, ListSortDirection, Func(Of String, T), Opt: Encoding)
+   - TextfileUtil.TakeLines(String, String, Integer, TextfileUtil.TextDirection, Opt: Encoding)
+   - TextfileUtil.Trim(String, String, Opt: Char(), Opt: Encoding)
+   - TextfileUtil.TrimEnd(String, String, Opt: Char(), Opt: Encoding)
+   - TextfileUtil.TrimStart(String, String, Opt: Char(), Opt: Encoding)
