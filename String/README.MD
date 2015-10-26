@@ -42,6 +42,9 @@ Public Members Summary
    - StringExtensions.GroupingInfo.GroupsOpenPositions As List(Of Integer)
 
  - Functions
+   - String.SizeInMemory(Font) As Integer
+   - String.SizeInFile(Encoding) As Integer
+   - String.SizeInFile(Encoding, Boolean) As Integer
    - String.Measure(Font) As Size
    - String.ExpandBlankSpace(Char, Opt: Integer) As String
    - String.ExpandBlankSpace(Opt: Integer) As String
