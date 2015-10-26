@@ -44,7 +44,6 @@ Public Members Summary
    - XmlUtil.XmlBeautifier(String) As String
 
  - Methods
-   - XmlUtil.EasyXmlTextWriter.New(String, Encoding)
    - XmlUtil.EasyXmlTextWriter.WriteBeginningElement(String, Formatting)
    - XmlUtil.EasyXmlTextWriter.WriteCommentLine(String, Formatting)
    - XmlUtil.EasyXmlTextWriter.WriteElement(String, String, Formatting)
@@ -52,3 +51,6 @@ Public Members Summary
    - XmlUtil.EasyXmlTextWriter.WriteEndElement(Formatting)
    - XmlUtil.EasyXmlTextWriter.WriteEof(Boolean)
    - XmlUtil.EasyXmlTextWriter.WriteHeader()
+   
+ - Constructors
+   - XmlUtil.EasyXmlTextWriter.New(String, Encoding)
