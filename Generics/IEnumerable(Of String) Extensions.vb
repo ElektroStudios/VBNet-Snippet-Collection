@@ -1,0 +1,404 @@
+' ***********************************************************************
+' Author   : Elektro
+' Modified : 26-October-2015
+' ***********************************************************************
+' <copyright file="IEnumerable(Of String) Extensions.vb" company="Elektro Studios">
+'     Copyright (c) Elektro Studios. All rights reserved.
+' </copyright>
+' ***********************************************************************
+
+#Region " Public Members Summary "
+
+#Region " Functions "
+
+' IEnumerable(Of String).BubbleSort As IEnumerable(Of String)
+' IEnumerable(Of String).CountEmptyItems As Integer
+' IEnumerable(Of String).CountNonEmptyItems As Integer
+' IEnumerable(Of String).FindByContains(String, Boolean) As IEnumerable(Of String)
+' IEnumerable(Of String).FindByLike(String, Boolean) As IEnumerable(Of String)
+' IEnumerable(Of String).FindExact(String, StringComparison) As IEnumerable(Of String)
+' IEnumerable(Of String).RemoveByContains(String, Boolean) As IEnumerable(Of String)
+' IEnumerable(Of String).RemoveByLike(String, Boolean) As IEnumerable(Of String)
+' IEnumerable(Of String).RemoveExact(String, StringComparison) As IEnumerable(Of String)
+
+#End Region
+
+#End Region
+
+#Region " Option Statements "
+
+Option Strict On
+Option Explicit On
+Option Infer Off
+
+#End Region
+
+#Region " Imports "
+
+Imports System
+Imports System.Collections.Generic
+Imports System.Diagnostics
+Imports System.Runtime.CompilerServices
+Imports System.Text.RegularExpressions
+
+#End Region
+
+''' ----------------------------------------------------------------------------------------------------
+''' <summary>
+''' Contains custom extension methods to use with a <see cref="IEnumerable(Of String)"/>.
+''' </summary>
+''' ----------------------------------------------------------------------------------------------------
+Public Module IEnumerableOfStringExtensions
+
+#Region " Public Extension Methods "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Counts the empty items of an <see cref="IEnumerable(Of String)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim emptyLinesCount As Integer = {"Hello", "   ", "World!"}.CountEmptyItems
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of String)"/>.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The total amount of empty items.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function CountEmptyItems(ByVal sender As IEnumerable(Of String)) As Integer
+
+        Return (From str As String In sender
+                Where String.IsNullOrEmpty(str) OrElse
+                      String.IsNullOrWhiteSpace(str)).Count
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Counts the non-empty items of an <see cref="IEnumerable(Of String)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim nonEmptyLinesCount As Integer = {"Hello", "   ", "World!"}.CountNonEmptyItems
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of String)"/>.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The total amount of non-empty items.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function CountNonEmptyItems(ByVal sender As IEnumerable(Of String)) As Integer
+
+        Return (From str As String In sender
+                Where Not String.IsNullOrEmpty(str) AndAlso
+                      Not String.IsNullOrWhiteSpace(str)).Count
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Sorts the source <see cref="IEnumerable(Of String)"/> by BubbleSort method.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim col As IEnumerable(Of String) = {"10", "333", "2", "45"}
+    ''' Debug.WriteLine(String.Join(", ", col.BubbleSort))
+    ''' </code>
+    ''' </example>
+    ''' ---------------------------------------------------------------------------------------------------- 
+    ''' <param name="sender">
+    ''' The source collection.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see cref="IEnumerable(Of T)"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function BubbleSort(ByVal sender As IEnumerable(Of String)) As IEnumerable(Of String)
+
+        Return sender.Select(Function(value As String)
+
+                                 Return New With
+                                            {
+                                               Key .OrgStr = value,
+                                               Key .SortStr =
+                                                    Regex.Replace(value, "(\d+)|(\D+)",
+                                                     Function(match As Match)
+                                                         Return match.Value.PadLeft(sender.Select(Function(str As String)
+                                                                                                      Return str.Length
+                                                                                                  End Function).Max,
+                                                     If(Char.IsDigit(match.Value(0)),
+                                                        " "c,
+                                                        Char.MaxValue))
+
+                                                     End Function)
+                                            }
+                             End Function).
+                             OrderBy(Function(anon) anon.SortStr).
+                             Select(Function(anon) anon.OrgStr)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Finds the elements that are equals to the specified string on the source <see cref="IEnumerable(Of String)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim col As IEnumerable(Of String) = {"Hello World !!", "a", "b", "c"}
+    ''' Debug.WriteLine(String.Join(", ", col.FindExact(searchString:="a", stringComparison:=StringComparison.OrdinalIgnoreCase)))
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source collections.
+    ''' </param>
+    ''' 
+    ''' <param name="searchString">
+    ''' The string to search for.
+    ''' </param>
+    ''' 
+    ''' <param name="stringComparison">
+    ''' The string comparison rule.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see cref="IEnumerable(Of String)"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function FindExact(ByVal sender As IEnumerable(Of String),
+                              ByVal searchString As String,
+                              ByVal stringComparison As StringComparison) As IEnumerable(Of String)
+
+        Return From value As String In sender
+               Where value.Equals(searchString, stringComparison)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Finds the elements that contains the specified string on the source <see cref="IEnumerable(Of String)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim col As IEnumerable(Of String) = {"Hello World !!", "a", "b", "c"}
+    ''' Debug.WriteLine(String.Join(", ", col.FindByContains(searchString:="World", ignoreCase:=True)))
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source collections.
+    ''' </param>
+    ''' 
+    ''' <param name="searchString">
+    ''' The string to search for.
+    ''' </param>
+    ''' 
+    ''' <param name="ignoreCase">
+    ''' If set to <c>true</c>, performs a non sensitive string-case comparison.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see cref="IEnumerable(Of String)"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function FindByContains(ByVal sender As IEnumerable(Of String),
+                                   ByVal searchString As String,
+                                   ByVal ignoreCase As Boolean) As IEnumerable(Of String)
+
+        Return From value As String In sender
+               Where If(ignoreCase,
+                        value.ToLower.Contains(searchString.ToLower),
+                        value.Contains(searchString))
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Performs a String-Like pattern search on the source <see cref="IEnumerable(Of String)"/> and returns all the matches.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim col As IEnumerable(Of String) = {"Hello World", "a", "b", "c"}
+    ''' Debug.WriteLine(String.Join(", ", col.FindByLike(likePattern:="*hello*", ignoreCase:=True)))
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source collections.
+    ''' </param>
+    ''' 
+    ''' <param name="likePattern">
+    ''' The pattern comparison to use with the <see langword="Like"/> operator.
+    ''' </param>
+    ''' 
+    ''' <param name="ignoreCase">
+    ''' If set to <c>true</c>, performs a non sensitive string-case comparison.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see cref="IEnumerable(Of String)"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function FindByLike(ByVal sender As IEnumerable(Of String),
+                               ByVal likePattern As String,
+                               ByVal ignoreCase As Boolean) As IEnumerable(Of String)
+
+        Return From value As String In sender
+               Where If(ignoreCase,
+                        value.ToLower Like likePattern.ToLower,
+                        value Like likePattern)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Removes the elements that are equals to the specified string on the source <see cref="IEnumerable(Of String)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim col As IEnumerable(Of String) = {"Hello World !!", "a", "b", "c"}
+    ''' Debug.WriteLine(String.Join(", ", col.RemoveExact(searchString:="Hello", ignoreCase:=True)))
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source collections.
+    ''' </param>
+    ''' 
+    ''' <param name="searchString">
+    ''' The string to search for.
+    ''' </param>
+    ''' 
+    ''' <param name="stringComparison">
+    ''' The string comparison rule.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see cref="IEnumerable(Of String)"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function RemoveExact(ByVal sender As IEnumerable(Of String),
+                                ByVal searchString As String,
+                                ByVal stringComparison As StringComparison) As IEnumerable(Of String)
+
+        Return From value As String In sender
+               Where Not value.Equals(searchString, stringComparison)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Removes the elements that contains the specified string on the source <see cref="IEnumerable(Of String)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim col As IEnumerable(Of String) = {"Hello World !!", "a", "b", "c"}
+    ''' Debug.WriteLine(String.Join(", ", col.RemoveByContains(searchString:="Hello", ignoreCase:=True)))
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source collections.
+    ''' </param>
+    ''' 
+    ''' <param name="searchString">
+    ''' The string to search for.
+    ''' </param>
+    ''' 
+    ''' <param name="ignoreCase">
+    ''' If set to <c>true</c>, performs a non sensitive string-case comparison.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see cref="IEnumerable(Of String)"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function RemoveByContains(ByVal sender As IEnumerable(Of String),
+                                     ByVal searchString As String,
+                                     ByVal ignoreCase As Boolean) As IEnumerable(Of String)
+
+        Return From value As String In sender
+               Where If(ignoreCase,
+                        Not value.ToLower.Contains(searchString.ToLower),
+                        Not value.Contains(searchString))
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Performs a String-Like pattern search on the source <see cref="IEnumerable(Of String)"/> and removes all the matches.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Dim col As IEnumerable(Of String) = {"Hello World", "a", "b", "c"}
+    ''' Debug.WriteLine(String.Join(", ", col.RemoveByLike(likePattern:="*hello*", ignoreCase:=True)))
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source collections.
+    ''' </param>
+    ''' 
+    ''' <param name="likePattern">
+    ''' The pattern comparison to use with the <see langword="Like"/> operator.
+    ''' </param>
+    ''' 
+    ''' <param name="ignoreCase">
+    ''' If set to <c>true</c>, performs a non sensitive string-case comparison.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see cref="IEnumerable(Of String)"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function RemoveByLike(ByVal sender As IEnumerable(Of String),
+                                 ByVal likePattern As String,
+                                 ByVal ignoreCase As Boolean) As IEnumerable(Of String)
+
+        Return From value As String In sender
+               Where If(ignoreCase,
+                        Not value.ToLower Like likePattern.ToLower,
+                        Not value Like likePattern)
+
+    End Function
+
+#End Region
+
+End Module
