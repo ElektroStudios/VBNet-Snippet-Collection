@@ -50,3 +50,6 @@ Public Members Summary
    - IpcUtil.SharedMemory.WriteString(String, String, Opt: Encoding)
    - IpcUtil.SharedMemory.WriteStringAt(MemoryMappedFile, String, Long, Opt: Encoding)
    - IpcUtil.SharedMemory.WriteStringAt(String, String, Long, Opt: Encoding)
+
+# Sharing memory across different running applications example
+Example for beginners to share a memory segment between two applications.
