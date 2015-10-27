@@ -15,5 +15,38 @@ Contains related Inter-process communication (IPC) utilities.
 
 Public Members Summary
 
+ - Child Classes
+   - IpcUtil.SharedMemory
+   - IpcUtil.UIAutomation
+
  - Functions
-   - IpcUtil.GetTitlebarText(IntPtr) As String
+   - IpcUtil.SharedMemory.Create(String, Integer, Opt: MemoryMappedFileAccess) As MemoryMappedFile
+   - IpcUtil.SharedMemory.Read(MemoryMappedFile, Long, Long) As Byte()
+   - IpcUtil.SharedMemory.Read(String, Long, Long) As Byte()
+   - IpcUtil.SharedMemory.ReadAt(MemoryMappedFile, Long) As Byte
+   - IpcUtil.SharedMemory.ReadAt(String, Long) As Byte
+   - IpcUtil.SharedMemory.ReadCharAt(MemoryMappedFile, Long) As Char
+   - IpcUtil.SharedMemory.ReadCharAt(String, Long) As Char
+   - IpcUtil.SharedMemory.ReadString(MemoryMappedFile, Long, Long, Opt: Encoding) As String
+   - IpcUtil.SharedMemory.ReadString(String, Long, Long, Opt: Encoding) As String
+   - IpcUtil.SharedMemory.ReadStringToEnd(MemoryMappedFile, Opt: Encoding) As String
+   - IpcUtil.SharedMemory.ReadStringToEnd(String, Opt: Encoding) As String
+   - IpcUtil.SharedMemory.ReadToEnd(MemoryMappedFile) As Byte()
+   - IpcUtil.SharedMemory.ReadToEnd(String) As Byte()
+   - IpcUtil.UIAutomation.GetTitlebarText(IntPtr) As String
+
+ - Methods
+   - IpcUtil.SharedMemory.Clear(MemoryMappedFile)
+   - IpcUtil.SharedMemory.Clear(String)
+   - IpcUtil.SharedMemory.Write(MemoryMappedFile, Byte())
+   - IpcUtil.SharedMemory.Write(String, Byte())
+   - IpcUtil.SharedMemory.WriteAt(MemoryMappedFile, Byte(), Long)
+   - IpcUtil.SharedMemory.WriteAt(MemoryMappedFile, Byte, Long)
+   - IpcUtil.SharedMemory.WriteAt(String, Byte(), Long)
+   - IpcUtil.SharedMemory.WriteAt(String, Byte, Long)
+   - IpcUtil.SharedMemory.WriteCharAt(MemoryMappedFile, Char, Long, Opt: Encoding)
+   - IpcUtil.SharedMemory.WriteCharAt(String, Char, Long, Opt: Encoding)
+   - IpcUtil.SharedMemory.WriteString(MemoryMappedFile, String, Opt: Encoding)
+   - IpcUtil.SharedMemory.WriteString(String, String, Opt: Encoding)
+   - IpcUtil.SharedMemory.WriteStringAt(MemoryMappedFile, String, Long, Opt: Encoding)
+   - IpcUtil.SharedMemory.WriteStringAt(String, String, Long, Opt: Encoding)
