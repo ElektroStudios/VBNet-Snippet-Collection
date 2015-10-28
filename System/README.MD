@@ -1,4 +1,3 @@
-
 # System snippets category
 These snippets are intended to help managing the (operating)system in some aspects.
 
@@ -11,179 +10,35 @@ Feel free to use and/or modify any file of this repository.
 
 If you like the job I've done, then please contribute with improvements to these snippets or by adding new ones.
 
-#Environment Util
-Huge class that contains related Windows environment utilities.
-
-The 'EnvironmentVariables' class manages the environment variables, it can find, register and unregister vars.
-
-The 'OS' class is very useful to tweak some Windows values, it also notifies the system about changes to perform a friendly update.
-
-The 'FileSystem' class has some validation methods for filenames, and also can invoke item verbs.
-
-The 'Shell' class pins and unpins items in taskbar and startmenu, it also can show/hide taskbar and startmenu, can get all the Explorer windows instances, can refresh Explorer windows, or add a file to recent docs, and much more.
-
-The 'Theming' class manages the current theme and wallpaper, it can set other theme or wall, or change the system cursors.
+#Environment Variable Util
+Contains related Environment Variable utilities, such as register or unregister a variable.
 
 Public Members Summary
 
- - Child Classes
-   - EnvironmentUtil.EnvironmentVariables
-   - EnvironmentUtil.FileSystem
-   - EnvironmentUtil.OS
-   - EnvironmentUtil.Programs
-   - EnvironmentUtil.Shell
-   - EnvironmentUtil.Shell.Desktop
-   - EnvironmentUtil.Shell.Explorer
-   - EnvironmentUtil.Shell.StartMenu
-   - EnvironmentUtil.Shell.TaskBar
-   - EnvironmentUtil.Theming
+ - Types
+   - EnvironmentVariableUtil.VariableInfo <Serializable>
+
+ - Constructors
+   - EnvironmentVariableUtil.VariableInfo.New(EnvironmentVariableUtil.VariableScope, String, String)
 
  - Enumerations
-   - EnvironmentUtil.EnvironmentScope
-   - EnvironmentUtil.OS.Architecture
-   - EnvironmentUtil.Theming.CursorType
-   - EnvironmentUtil.Theming.WallpaperStyle
+   - EnvironmentVariableUtil.VariableScope As Integer
 
  - Properties
-   - EnvironmentUtil.EnvironmentVariables.CurrentVariables(EnvironmentUtil.EnvironmentScope) As ReadOnlyCollection(Of EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo)
-   - EnvironmentUtil.OS.ActiveWindowTrackingEnabled As Boolean
-   - EnvironmentUtil.OS.ActiveWindowTrackingTimeout As UShort
-   - EnvironmentUtil.OS.BeepEnabled As Boolean
-   - EnvironmentUtil.OS.BlockSendInputResetsEnabled As Boolean
-   - EnvironmentUtil.OS.BorderMultiplierFactor As Integer
-   - EnvironmentUtil.OS.CaretWidth As Integer
-   - EnvironmentUtil.OS.CleartypeEnabled As Boolean
-   - EnvironmentUtil.OS.ClientAreaAnimationEnabled As Boolean
-   - EnvironmentUtil.OS.ComboBoxAnimationEnabled As Boolean
-   - EnvironmentUtil.OS.CurrentArchitecture() As EnvironmentUtil.OS.Architecture
-   - EnvironmentUtil.OS.CursorShadowEnabled As Boolean
-   - EnvironmentUtil.OS.DoubleClickSize As Size
-   - EnvironmentUtil.OS.DoubleClickTime As Integer
-   - EnvironmentUtil.OS.DragFullWindowsEnabled As Boolean
-   - EnvironmentUtil.OS.DragSize As Size
-   - EnvironmentUtil.OS.DropShadowEnabled As Boolean
-   - EnvironmentUtil.OS.FlatMenuEnabled As Boolean
-   - EnvironmentUtil.OS.FocusBorderSize As Size
-   - EnvironmentUtil.OS.FontSmoothingContrast As Integer
-   - EnvironmentUtil.OS.FontSmoothingEnabled As Boolean
-   - EnvironmentUtil.OS.ForegroundFlashCount As UShort
-   - EnvironmentUtil.OS.ForegroundLockTimeout As UShort
-   - EnvironmentUtil.OS.HotTrackingEnabled As Boolean
-   - EnvironmentUtil.OS.HungAppTimeout As Integer
-   - EnvironmentUtil.OS.IconSpacing As Size
-   - EnvironmentUtil.OS.IconTitleWrappingEnabled As Boolean
-   - EnvironmentUtil.OS.KeyboardDelay As Integer
-   - EnvironmentUtil.OS.KeyboardSpeed As Integer
-   - EnvironmentUtil.OS.ListBoxSmoothScrollingEnabled As Boolean
-   - EnvironmentUtil.OS.MenuAccessKeysUnderlined As Boolean
-   - EnvironmentUtil.OS.MenuAnimationEnabled As Boolean
-   - EnvironmentUtil.OS.MenuFadeEnabled As Boolean
-   - EnvironmentUtil.OS.MenuShowDelay As Integer
-   - EnvironmentUtil.OS.MessageDuration As Long
-   - EnvironmentUtil.OS.MouseButtonsSwapEnabled As Boolean
-   - EnvironmentUtil.OS.MouseClickLockEnabled As Boolean
-   - EnvironmentUtil.OS.MouseClickLockTime As Integer
-   - EnvironmentUtil.OS.MouseHoverSize As Size
-   - EnvironmentUtil.OS.MouseHoverTime As Integer
-   - EnvironmentUtil.OS.MouseSonarEnabled As Boolean
-   - EnvironmentUtil.OS.MouseSpeed As Integer
-   - EnvironmentUtil.OS.MouseTrailAmount As Integer
-   - EnvironmentUtil.OS.MouseVanishEnabled As Boolean
-   - EnvironmentUtil.OS.MouseWheelScrollLines As Integer
-   - EnvironmentUtil.OS.OverlappedContentEnabled As Boolean
-   - EnvironmentUtil.OS.PopupMenuAlignment As LeftRightAlignment
-   - EnvironmentUtil.OS.ScreensaverEnabled As Boolean
-   - EnvironmentUtil.OS.ScreensaverPath As String
-   - EnvironmentUtil.OS.ScreensaverTimeout As Integer
-   - EnvironmentUtil.OS.ScreensaveSecureEnabled As Boolean
-   - EnvironmentUtil.OS.SelectionFadeEnabled As Boolean
-   - EnvironmentUtil.OS.SnapToDefaultEnabled As Boolean
-   - EnvironmentUtil.OS.SystemDateTime As Date
-   - EnvironmentUtil.OS.SystemLanguageBarEnabled As Boolean
-   - EnvironmentUtil.OS.TitleBarGradientEnabled As Boolean
-   - EnvironmentUtil.OS.ToolTipAnimationEnabled As Boolean
-   - EnvironmentUtil.OS.UIEffectsEnabled As Boolean
-   - EnvironmentUtil.OS.WaitToKillAppTimeout As Integer
-   - EnvironmentUtil.OS.WaitToKillServiceTimeout As Integer
-   - EnvironmentUtil.OS.WheelscrollChars As Integer
-   - EnvironmentUtil.Programs.DefaultWebBrowser() As String
-   - EnvironmentUtil.Programs.IExplorerVersion() As Version
-   - EnvironmentUtil.Shell.Explorer.ExplorerWindows As ReadOnlyCollection(Of ShellBrowserWindow)
-   - EnvironmentUtil.Shell.Explorer.ExplorerWindowsFolders As ReadOnlyCollection(Of Shell32.Folder2)
-   - EnvironmentUtil.Shell.TaskBar.ClassName() As String
-   - EnvironmentUtil.Shell.TaskBar.Hwnd() As Intptr
-   - EnvironmentUtil.Theming.AeroEnabled() As Boolean
-   - EnvironmentUtil.Theming.AeroSupported() As Boolean
-   - EnvironmentUtil.Theming.CurrentTheme() As EnvironmentUtil.Theming.ThemeInfo
-   - EnvironmentUtil.Theming.CurrentWallpaper() As String
-   - EnvironmentUtil.Theming.WallpaperAsJpegIsSupported() As Boolean
-   - EnvironmentUtil.Theming.WallpaperStylesFitFillAreSupported() As Boolean
-
- - Types
-   - EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo
-   - EnvironmentUtil.Theming.ThemeInfo
+   - EnvironmentVariableUtil.CurrentVariables(EnvironmentVariableUtil.VariableScope) As ReadOnlyCollection(Of EnvironmentVariableUtil.VariableInfo)
+   - EnvironmentVariableUtil.VariableInfo.Name As String
+   - EnvironmentVariableUtil.VariableInfo.Value As String
+   - EnvironmentVariableUtil.VariableInfo.Scope As EnvironmentVariableUtil.VariableScope
 
  - Functions
-   - EnvironmentUtil.EnvironmentVariables.GetValue(EnvironmentUtil.EnvironmentScope, String, Boolean) As String
-   - EnvironmentUtil.EnvironmentVariables.GetVariableInfo(EnvironmentUtil.EnvironmentScope, String, Boolean) As EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo
-   - EnvironmentUtil.FileSystem.GetItemVerbs(String) As IEnumerable(Of FolderItemVerb)
-   - EnvironmentUtil.FileSystem.ItemNameIsInvalid(String) As Boolean
-   - EnvironmentUtil.FileSystem.ItemNameOrPathIsInvalid(String) As Boolean
-   - EnvironmentUtil.FileSystem.ItemPathIsInvalid(String) As Boolean
+   - EnvironmentVariableUtil.GetValue(EnvironmentVariableUtil.VariableScope, String, Boolean) As Opt: Boolean
+   - EnvironmentVariableUtil.GetVariableInfo(EnvironmentVariableUtil.VariableScope, String, Opt: Boolean) As EnvironmentVariableUtil.VariableInfo
 
  - Methods
-   - EnvironmentUtil.EnvironmentVariables.RegisterVariable(EnvironmentUtil.EnvironmentScope, EnvironmentUtil.EnvironmentVariables.EnvironmentVariableInfo, Boolean)
-   - EnvironmentUtil.EnvironmentVariables.RegisterVariable(EnvironmentUtil.EnvironmentScope, String, String, Boolean)
-   - EnvironmentUtil.EnvironmentVariables.UnregisterVariable(EnvironmentUtil.EnvironmentScope, String, Boolean)
-   - EnvironmentUtil.FileSystem.InvokeItemVerb(String, String)
-   - EnvironmentUtil.OS.NotifyDirectoryAttributesChanged(String)
-   - EnvironmentUtil.OS.NotifyDirectoryCreated(String)
-   - EnvironmentUtil.OS.NotifyDirectoryDeleted(String)
-   - EnvironmentUtil.OS.NotifyDirectoryRenamed(String, String)
-   - EnvironmentUtil.OS.NotifyDriveAdded(String, Boolean)
-   - EnvironmentUtil.OS.NotifyDriveRemoved(String)
-   - EnvironmentUtil.OS.NotifyFileAssociationChanged()
-   - EnvironmentUtil.OS.NotifyFileAttributesChanged(String)
-   - EnvironmentUtil.OS.NotifyFileCreated(String)
-   - EnvironmentUtil.OS.NotifyFileDeleted(String)
-   - EnvironmentUtil.OS.NotifyFileRenamed(String, String)
-   - EnvironmentUtil.OS.NotifyFreespaceChanged(String)
-   - EnvironmentUtil.OS.NotifyMediaInserted(String)
-   - EnvironmentUtil.OS.NotifyMediaRemoved(String)
-   - EnvironmentUtil.OS.NotifyNetworkFolderShared(String)
-   - EnvironmentUtil.OS.NotifyNetworkFolderUnshared(String)
-   - EnvironmentUtil.OS.NotifyUpdateDirectory(String)
-   - EnvironmentUtil.OS.NotifyUpdateImage()
-   - EnvironmentUtil.OS.ReloadSystemCursors()
-   - EnvironmentUtil.OS.ReloadSystemIcons()
-   - EnvironmentUtil.OS.RunDateTime()
-   - EnvironmentUtil.OS.RunExecuteDialog()
-   - EnvironmentUtil.OS.RunFindComputer()
-   - EnvironmentUtil.OS.RunFindFiles()
-   - EnvironmentUtil.OS.RunFindPrinter()
-   - EnvironmentUtil.OS.RunHelpCenter()
-   - EnvironmentUtil.OS.RunSearchCommand()
-   - EnvironmentUtil.OS.RunTrayProperties()
-   - EnvironmentUtil.OS.RunWindowsSecurity()
-   - EnvironmentUtil.OS.RunWindowSwitcher()
-   - EnvironmentUtil.Shell.Desktop.CascadeWindows()
-   - EnvironmentUtil.Shell.Desktop.Hide()
-   - EnvironmentUtil.Shell.Desktop.Show()
-   - EnvironmentUtil.Shell.Desktop.TileWindowsHorizontally()
-   - EnvironmentUtil.Shell.Desktop.TileWindowsVertically()
-   - EnvironmentUtil.Shell.Desktop.ToggleState()
-   - EnvironmentUtil.Shell.Explorer.AddFileToRecentDocs(String)
-   - EnvironmentUtil.Shell.Explorer.RefreshWindows()
-   - EnvironmentUtil.Shell.StartMenu.PinItem(String)
-   - EnvironmentUtil.Shell.StartMenu.UnpinItem(String)
-   - EnvironmentUtil.Shell.TaskBar.Hide(Boolean)
-   - EnvironmentUtil.Shell.TaskBar.PinItem(String)
-   - EnvironmentUtil.Shell.TaskBar.Show(Boolean)
-   - EnvironmentUtil.Shell.TaskBar.UnpinItem(String)
-   - EnvironmentUtil.Theming.RemoveDesktopWallpaper()
-   - EnvironmentUtil.Theming.SetDesktopWallpaper(String, EnvironmentUtil.Theming.WallpaperStyle)
-   - EnvironmentUtil.Theming.SetSystemCursor(String, EnvironmentUtil.Theming.CursorType)
-   - EnvironmentUtil.Theming.SetSystemVisualTheme(String, String, String)
+   - EnvironmentVariableUtil.RegisterVariable(EnvironmentVariableUtil.VariableInfo, Opt: Boolean)
+   - EnvironmentVariableUtil.RegisterVariable(EnvironmentVariableUtil.VariableScope, String, String, Opt: Boolean)
+   - EnvironmentVariableUtil.UnregisterVariable(EnvironmentVariableUtil.VariableScope, String, Opt: Boolean)
+   - EnvironmentVariableUtil.UnregisterVariable(EnvironmentVariableUtil.VariableInfo, Opt: Boolean)
 
 # File-Assoc Util
 Contains related Windows file association utilities. 
@@ -228,12 +83,28 @@ Public Members Summary
  - Methods
    - FileAssocUtil.Register(FileAssocUtil.RegistryScope, String, String, Opt: String, Opt: String, Opt: Integer, Opt: String, Opt: String)
 
+#Environment Variable Util
+Contains related FileSystem utilities, such as filepath validation or invoke an item verb.
+
+Public Members Summary
+
+ - Function
+   - FileSystemUtil.GetItemVerbs(String) As IEnumerable(Of FolderItemVerb)
+   - FileSystemUtil.ItemNameIsInvalid(String) As Boolean
+   - FileSystemUtil.ItemNameOrPathIsInvalid(String) As Boolean
+   - FileSystemUtil.ItemPathIsInvalid(String) As Boolean
+
+ - Methods
+   - FileSystemUtil.InvokeItemVerb(String, String)
+
 # RecycleBin Util
 This class manages the system recycle bins.
 
 It has a property to manage the master recycle bin (the one that contains the recycled files of all drives)
 
 It can list recycled files, folders and items. Can permanently delete an specified item, or perform a cleaning operation, and more things. 
+
+Public Members Summary
 
  - Child Classes
    - RecycleBinUtil.MasterBinLayout <Hidden>
@@ -274,7 +145,7 @@ It can list recycled files, folders and items. Can permanently delete an specifi
    - RecycleBinUtil.Tools.InvokeItemVerb(ShellObject, RecycleBinUtil.ItemVerbs)
    - RecycleBinUtil.Tools.InvokeItemVerb(ShellObject, String)
 
-# RegEdit
+# RegEdit (Registry Editor)
 Contains related registry utilities.
 
 It can do a lot of common registry operations.
@@ -364,10 +235,104 @@ Public Members Summary
    - RegEdit.MoveValue(String, String, String, String)
    - RegEdit.MoveValue(String, String, String, String, String, String)
 
+#Shell Util
+Contains related Windows shell utilities, such as pin or unpin items in taskbar and startmenu, show/hide taskbar and startmenu, get all the Explorer windows instances, refresh Explorer windows, or add a file to recent docs.
+
+Public Members Summary
+
+ - Child Classes
+   - ShellUtil.Applets
+   - ShellUtil.Desktop
+   - ShellUtil.Explorer
+   - ShellUtil.StartMenu
+   - ShellUtil.TaskBar
+
+ - Enumerations
+   - ShellUtil.TaskBar.TaskbarVisibility As Integer
+
+ - Properties
+   - ShellUtil.Explorer.ExplorerWindows As ReadOnlyCollection(Of ShellBrowserWindow)
+   - ShellUtil.Explorer.ExplorerWindowsFolders As ReadOnlyCollection(Of Shell32.Folder2)
+   - ShellUtil.TaskBar.ClassName() As String
+   - ShellUtil.TaskBar.Hwnd() As Intptr
+
+ - Methods
+   - ShellUtil.Applets.RunDateTime()
+   - ShellUtil.Applets.RunExecuteDialog()
+   - ShellUtil.Applets.RunFindComputer()
+   - ShellUtil.Applets.RunFindFiles()
+   - ShellUtil.Applets.RunFindPrinter()
+   - ShellUtil.Applets.RunHelpCenter()
+   - ShellUtil.Applets.RunSearchCommand()
+   - ShellUtil.Applets.RunTrayProperties()
+   - ShellUtil.Applets.RunWindowsSecurity()
+   - ShellUtil.Applets.RunWindowSwitcher()
+   - ShellUtil.Desktop.CascadeWindows()
+   - ShellUtil.Desktop.Hide()
+   - ShellUtil.Desktop.Show()
+   - ShellUtil.Desktop.TileWindowsHorizontally()
+   - ShellUtil.Desktop.TileWindowsVertically()
+   - ShellUtil.Desktop.ToggleState()
+   - ShellUtil.Explorer.AddFileToRecentDocs(String)
+   - ShellUtil.Explorer.RefreshWindows()
+   - ShellUtil.StartMenu.PinItem(String)
+   - ShellUtil.StartMenu.UnpinItem(String)
+   - ShellUtil.TaskBar.Hide(Boolean)
+   - ShellUtil.TaskBar.PinItem(String)
+   - ShellUtil.TaskBar.Show(Boolean)
+   - ShellUtil.TaskBar.UnpinItem(String)
+   
+#System Info
+Contains related Windows operating system's information utilities.
+
+Public Members Summary
+
+ - Child Classes
+
+   - SystemInfo.OS
+   - SystemInfo.Programs
+
+ - Enumerations
+   - SystemInfo.Architecture As Integer
+
+ - Properties
+   - SystemInfo.OS.CurrentArchitecture As SystemInfo.Architecture
+   - SystemInfo.Programs.DefaultWebBrowser() As String
+   - SystemInfo.Programs.IExplorerVersion() As Version
+
+#System Notifier
+Notifies the system about changes on the environment to update quickly
+
+Public Members Summary
+
+ - Methods
+   - SystemNotifier.NotifyDirectoryAttributesChanged(String)
+   - SystemNotifier.NotifyDirectoryCreated(String)
+   - SystemNotifier.NotifyDirectoryDeleted(String)
+   - SystemNotifier.NotifyDirectoryRenamed(String, String)
+   - SystemNotifier.NotifyDriveAdded(String, Boolean)
+   - SystemNotifier.NotifyDriveRemoved(String)
+   - SystemNotifier.NotifyFileAssociationChanged()
+   - SystemNotifier.NotifyFileAttributesChanged(String)
+   - SystemNotifier.NotifyFileCreated(String)
+   - SystemNotifier.NotifyFileDeleted(String)
+   - SystemNotifier.NotifyFileRenamed(String, String)
+   - SystemNotifier.NotifyFreespaceChanged(String)
+   - SystemNotifier.NotifyMediaInserted(String)
+   - SystemNotifier.NotifyMediaRemoved(String)
+   - SystemNotifier.NotifyNetworkFolderShared(String)
+   - SystemNotifier.NotifyNetworkFolderUnshared(String)
+   - SystemNotifier.NotifyUpdateDirectory(String)
+   - SystemNotifier.NotifyUpdateImage()
+   - SystemNotifier.ReloadSystemCursors()
+   - SystemNotifier.ReloadSystemIcons()
+
 # System Restarter
 Safely shutdowns, restarts or logoffs the local or remote computer.
 
 A shutdown operation can be programmed and/or aborted at any time.
+
+Public Members Summary
 
  - Constants
    - SystemRestarter.MaxShutdownTimeout As Integer
@@ -386,6 +351,119 @@ A shutdown operation can be programmed and/or aborted at any time.
    - SystemRestarter.RestartApps(Opt: String, Opt: Integer, Opt: String, Opt: ShutdownMode, Opt: ShutdownReason, Opt: ShutdownPlanning, Opt: Boolean) As Boolean
    - SystemRestarter.Shutdown(Opt: String, Opt: Integer, Opt: String, Opt: ShutdownMode, Opt: ShutdownReason, Opt: ShutdownPlanning, Opt: Boolean) As Boolean
    - SystemRestarter.HybridShutdown(Opt: String, Opt: Integer, Opt: String, Opt: ShutdownMode, Opt: ShutdownReason, Opt: ShutdownPlanning, Opt: Boolean) As Boolean
+
+#Theming Util
+Contains related theming/personalization utilities, such as set the current system cursors, theme or wallpaper.
+
+Public Members Summary
+
+ - Child Classes
+   - ThemingUtil.Cursors
+   - ThemingUtil.Fonts
+   - ThemingUtil.ScreenSavers
+   - ThemingUtil.VisualThemes
+   - ThemingUtil.Wallpapers
+
+ - Types
+   - ThemingUtil.VisualThemes.ThemeInfo
+
+ - Constructors
+   - ThemingUtil.VisualThemes.ThemeInfo.New(String, String, String)
+
+ - Enumerations
+   - ThemingUtil.Cursors.CursorType
+   - ThemingUtil.Wallpapers.WallpaperStyle
+
+ - Properties
+   - ThemingUtil.Fonts.InstalledFonts As IEnumerable(Of FontFamily)
+   - ThemingUtil.Fonts.InstalledFontNames As IEnumerable(Of FontFamily)
+   - ThemingUtil.ScreenSavers.CurrentScreensaver As String
+   - ThemingUtil.VisualThemes.AeroEnabled() As Boolean
+   - ThemingUtil.VisualThemes.AeroSupported() As Boolean
+   - ThemingUtil.VisualThemes.CurrentTheme() As ThemingUtil.VisualThemes.ThemeInfo
+   - ThemingUtil.Wallpapers.CurrentWallpaper() As String
+   - ThemingUtil.Wallpapers.WallpaperAsJpegIsSupported() As Boolean
+   - ThemingUtil.Wallpapers.WallpaperStylesFitFillAreSupported() As Boolean
+
+ - Functions
+   - ThemingUtil.Fonts.IsFontInstalled(String) As Boolean
+   - ThemingUtil.Fonts.IsFontInstalled(FontFamily) As Boolean
+
+ - Methods
+   - ThemingUtil.Cursors.SetSystemCursor(String, ThemingUtil.Cursors.CursorType)
+   - ThemingUtil.ScreenSavers.SetScreensaver(String)
+   - ThemingUtil.VisualThemes.SetSystemVisualTheme(String, String, String)
+   - ThemingUtil.Wallpapers.RemoveDesktopWallpaper()
+   - ThemingUtil.Wallpapers.SetDesktopWallpaper(String, ThemingUtil.Wallpapers.WallpaperStyle)
+
+#Tweaking Util
+Contains related Windows tweaking utilities to change system parameters.
+
+Public Members Summary
+
+ - Child Classes
+   - TweakingUtil.SystemParameters
+
+ - Properties
+   - TweakingUtil.SystemParameters.ActiveWindowTrackingEnabled As Boolean
+   - TweakingUtil.SystemParameters.ActiveWindowTrackingTimeout As UShort
+   - TweakingUtil.SystemParameters.BeepEnabled As Boolean
+   - TweakingUtil.SystemParameters.BlockSendInputResetsEnabled As Boolean
+   - TweakingUtil.SystemParameters.BorderMultiplierFactor As Integer
+   - TweakingUtil.SystemParameters.CaretWidth As Integer
+   - TweakingUtil.SystemParameters.CleartypeEnabled As Boolean
+   - TweakingUtil.SystemParameters.ClientAreaAnimationEnabled As Boolean
+   - TweakingUtil.SystemParameters.ComboBoxAnimationEnabled As Boolean
+   - TweakingUtil.SystemParameters.CursorShadowEnabled As Boolean
+   - TweakingUtil.SystemParameters.DoubleClickSize As Size
+   - TweakingUtil.SystemParameters.DoubleClickTime As Integer
+   - TweakingUtil.SystemParameters.DragFullWindowsEnabled As Boolean
+   - TweakingUtil.SystemParameters.DragSize As Size
+   - TweakingUtil.SystemParameters.DropShadowEnabled As Boolean
+   - TweakingUtil.SystemParameters.FlatMenuEnabled As Boolean
+   - TweakingUtil.SystemParameters.FocusBorderSize As Size
+   - TweakingUtil.SystemParameters.FontSmoothingContrast As Integer
+   - TweakingUtil.SystemParameters.FontSmoothingEnabled As Boolean
+   - TweakingUtil.SystemParameters.ForegroundFlashCount As UShort
+   - TweakingUtil.SystemParameters.ForegroundLockTimeout As UShort
+   - TweakingUtil.SystemParameters.HotTrackingEnabled As Boolean
+   - TweakingUtil.SystemParameters.HungAppTimeout As Integer
+   - TweakingUtil.SystemParameters.IconSpacing As Size
+   - TweakingUtil.SystemParameters.IconTitleWrappingEnabled As Boolean
+   - TweakingUtil.SystemParameters.KeyboardDelay As Integer
+   - TweakingUtil.SystemParameters.KeyboardSpeed As Integer
+   - TweakingUtil.SystemParameters.ListBoxSmoothScrollingEnabled As Boolean
+   - TweakingUtil.SystemParameters.MenuAccessKeysUnderlined As Boolean
+   - TweakingUtil.SystemParameters.MenuAnimationEnabled As Boolean
+   - TweakingUtil.SystemParameters.MenuFadeEnabled As Boolean
+   - TweakingUtil.SystemParameters.MenuShowDelay As Integer
+   - TweakingUtil.SystemParameters.MessageDuration As Long
+   - TweakingUtil.SystemParameters.MouseButtonsSwapEnabled As Boolean
+   - TweakingUtil.SystemParameters.MouseClickLockEnabled As Boolean
+   - TweakingUtil.SystemParameters.MouseClickLockTime As Integer
+   - TweakingUtil.SystemParameters.MouseHoverSize As Size
+   - TweakingUtil.SystemParameters.MouseHoverTime As Integer
+   - TweakingUtil.SystemParameters.MouseSonarEnabled As Boolean
+   - TweakingUtil.SystemParameters.MouseSpeed As Integer
+   - TweakingUtil.SystemParameters.MouseTrailAmount As Integer
+   - TweakingUtil.SystemParameters.MouseVanishEnabled As Boolean
+   - TweakingUtil.SystemParameters.MouseWheelScrollLines As Integer
+   - TweakingUtil.SystemParameters.OverlappedContentEnabled As Boolean
+   - TweakingUtil.SystemParameters.PopupMenuAlignment As LeftRightAlignment
+   - TweakingUtil.SystemParameters.ScreensaverEnabled As Boolean
+   - TweakingUtil.SystemParameters.ScreensaverPath As String
+   - TweakingUtil.SystemParameters.ScreensaverTimeout As Integer
+   - TweakingUtil.SystemParameters.ScreensaveSecureEnabled As Boolean
+   - TweakingUtil.SystemParameters.SelectionFadeEnabled As Boolean
+   - TweakingUtil.SystemParameters.SnapToDefaultEnabled As Boolean
+   - TweakingUtil.SystemParameters.SystemDateTime As Date
+   - TweakingUtil.SystemParameters.SystemLanguageBarEnabled As Boolean
+   - TweakingUtil.SystemParameters.TitleBarGradientEnabled As Boolean
+   - TweakingUtil.SystemParameters.ToolTipAnimationEnabled As Boolean
+   - TweakingUtil.SystemParameters.UIEffectsEnabled As Boolean
+   - TweakingUtil.SystemParameters.WaitToKillAppTimeout As Integer
+   - TweakingUtil.SystemParameters.WaitToKillServiceTimeout As Integer
+   - TweakingUtil.SystemParameters.WheelscrollChars As Integer
 
 # User-Account Util
 Contains related Windows user-account utilities.
