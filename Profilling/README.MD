@@ -17,7 +17,7 @@ This module was developed principally to validate and measure the code execution
 
 Public Members Summary
 
- - Types
+ - Types/Structures
    - ProfillingUtil.TestExecutionInfo
 
  - Constructors
