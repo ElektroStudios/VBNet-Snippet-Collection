@@ -10,8 +10,16 @@ Feel free to use and/or modify any file of this repository.
 
 If you like the job I've done, then please contribute with improvements to these snippets or by adding new ones.
 
+# Array Extensions
+Contains custom extension methods to use with an Array.
+
+Public Members Summary
+
+ - Extension Functions
+   - T().Resize As T()
+
 # IEnumerable(Of T) Extensions
-Contains custom extension methods to use with an IEnumerable(Of T)
+Contains custom extension methods to use with an IEnumerable(Of T).
 
 Public Members Summary
 
@@ -29,8 +37,17 @@ Public Members Summary
    - IEnumerable(Of T).UniqueDuplicates As IEnumerable(Of T)
    - IEnumerable(Of T).Uniques As IEnumerable(Of T)
 
+# IEnumerable(Of Byte) Extensions
+Contains custom extension methods to use with an IEnumerable(Of Byte).
+
+Public Members Summary
+
+ - Extension Functions
+   - IEnumerable(Of Byte).ToString(Encoding) As String
+   - Byte().ToString(Encoding) As String
+
 # IEnumerable(Of String) Extensions
-Contains custom extension methods to use with an IEnumerable(Of String)
+Contains custom extension methods to use with an IEnumerable(Of String).
 
 Public Members Summary
 
