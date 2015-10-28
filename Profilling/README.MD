@@ -33,7 +33,9 @@ Public Members Summary
    - ProfillingUtil.FlushMemory As Boolean
    - ProfillingUtil.FlushMemory(IntPtr) As Boolean
    - ProfillingUtil.TestSuccess(Action) As Boolean
+   - ProfillingUtil.TestSuccessAsync(Action) As Task(Of Boolean)
    - ProfillingUtil.TestTime(Action) As TestExecutionInfo
+   - ProfillingUtil.TestTimeAsync(Action) As Task(Of TestExecutionInfo)
    - ProfillingUtil.InlineAssignHelper(Of T)(T, T) As T
    - ProfillingUtil.InlineAssignHelper(Object, Object) As Object
 
