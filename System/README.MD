@@ -83,7 +83,7 @@ Public Members Summary
  - Methods
    - FileAssocUtil.Register(FileAssocUtil.RegistryScope, String, String, Opt: String, Opt: String, Opt: Integer, Opt: String, Opt: String)
 
-#Environment Variable Util
+#FileSystem Util
 Contains related FileSystem utilities, such as filepath validation or invoke an item verb.
 
 Public Members Summary
