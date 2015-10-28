@@ -22,7 +22,7 @@
 
 ' ***********************************************************************
 ' Author   : Elektro
-' Modified : 26-October-2015
+' Modified : 28-October-2015
 ' ***********************************************************************
 ' <copyright file="String Extensions.vb" company="Elektro Studios">
 '     Copyright (c) Elektro Studios. All rights reserved.
@@ -35,6 +35,13 @@
 
 ' StringExtensions.GroupingInfo <Serializable>
 ' StringExtensions.GroupingCharsInfo <Serializable>
+
+#End Region
+
+#Region " Constructors "
+
+' StringExtensions.GroupingCharsInfo.New(Char, Char)
+' StringExtensions.GroupingInfo.New(String, List(Of GroupingCharsInfo), Boolean, Boolean, Integer, Integer, Dictionary(Of Integer, Integer), List(Of Integer))
 
 #End Region
 
@@ -70,8 +77,8 @@
 
 ' String.ExpandBlankSpace(Char, Opt: Integer) As String
 ' String.ExpandBlankSpace(Opt: Integer) As String
-' String.Expandchars(Char, Opt: Integer) As String
-' String.Expandchars(Opt: Integer) As String
+' String.ExpandChars(Char, Opt: Integer) As String
+' String.ExpandChars(Opt: Integer) As String
 ' String.ExpandVariables() As String
 ' String.NormalizeDiacritics(NormalizationForm) As String
 ' String.Randomize() As String
@@ -95,11 +102,17 @@
 ' String.ToByteArray(Opt: Encoding) As Byte()
 ' String.ToHtmlDocument() As Htmldocument
 
+' String.BinaryToAscII() As String
+' String.HexToCSharpHex() As String
+' String.HexToInt32() As Integer
+' String.HexToInt64() As Long
+' String.HexToString() As String
+' String.HexToUInt32() As UInteger
+' String.HexToUInt64() As ULong
+' String.HexToVbHex() As String
+' String.ToBase64() As String
 ' String.ToBinary(Opt: String, Opt: Encoding) As String
 ' String.ToHex(Opt: String, Opt: Encoding) As String
-' String.BinaryToAscII() As String
-' String.HexToAscII() As String
-' String.ToBase64() As String
 ' String.ToMD5() As String
 
 ' String.IndexOfAnyRegEx(IEnumerable(Of String), Integer, Integer, RegexOptions) As Integer
@@ -126,13 +139,6 @@
 ' String.CountCharacter(Char) As Integer
 ' String.CountCharacters(Char, StringComparison) As Integer
 ' String.GetGroupingInfo(Opt: List(Of StringExtensions.GroupingCharsInfo)) As StringExtensions.GroupingInfo
-
-#End Region
-
-#Region " Methods "
-
-' StringExtensions.GroupingCharsInfo.New(Char, Char)
-' StringExtensions.GroupingInfo.New(String, List(Of GroupingCharsInfo), Boolean, Boolean, Integer, Integer, Dictionary(Of Integer, Integer), List(Of Integer))
 
 #End Region
 
@@ -177,7 +183,7 @@ Public Module StringExtensions
     ''' </summary>
     ''' ----------------------------------------------------------------------------------------------------
     <Serializable>
-    Public NotInheritable Class GroupingCharsInfo
+    Public Structure GroupingCharsInfo
 
 #Region " Properties "
 
@@ -229,14 +235,6 @@ Public Module StringExtensions
 
 #Region " Constructors "
 
-        ''' ----------------------------------------------------------------------------------------------------
-        ''' <summary>
-        ''' Prevents a default instance of the <see cref="GroupingCharsInfo"/> class from being created.
-        ''' </summary>
-        ''' ----------------------------------------------------------------------------------------------------
-        Private Sub New()
-        End Sub
-
         ''' <summary>
         ''' Initializes a new instance of the <see cref="GroupingCharsInfo"/> class.
         ''' </summary>
@@ -258,7 +256,7 @@ Public Module StringExtensions
 
 #End Region
 
-    End Class
+    End Structure
 
 #End Region
 
@@ -270,7 +268,7 @@ Public Module StringExtensions
     ''' </summary>
     ''' ----------------------------------------------------------------------------------------------------
     <Serializable>
-    Public NotInheritable Class GroupingInfo
+    Public Structure GroupingInfo
 
 #Region " Properties "
 
@@ -455,14 +453,6 @@ Public Module StringExtensions
 
         ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
-        ''' Prevents a default instance of the <see cref="GroupingInfo"/> class from being created.
-        ''' </summary>
-        ''' ----------------------------------------------------------------------------------------------------
-        Private Sub New()
-        End Sub
-
-        ''' ----------------------------------------------------------------------------------------------------
-        ''' <summary>
         ''' Initializes a new instance of the <see cref="GroupingInfo"/> class.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
@@ -520,7 +510,7 @@ Public Module StringExtensions
 
 #End Region
 
-    End Class
+    End Structure
 
 #End Region
 
@@ -3445,12 +3435,12 @@ Public Module StringExtensions
 
     ''' ----------------------------------------------------------------------------------------------------
     ''' <summary>
-    ''' Converts a Hexadecimal string to ASCII string.
+    ''' Converts a Hexadecimal string to string.
     ''' </summary>
     ''' ----------------------------------------------------------------------------------------------------
     ''' <example> This is a code example.
     ''' <code>
-    ''' MessageBox.Show("48 65 6C 6C 6F 20 57 6F 72 6C 64 21".HexToASCII)
+    ''' MessageBox.Show("48 65 6C 6C 6F 20 57 6F 72 6C 64 21".HexToString)
     ''' </code>
     ''' </example>
     ''' ----------------------------------------------------------------------------------------------------
@@ -3464,7 +3454,7 @@ Public Module StringExtensions
     ''' ----------------------------------------------------------------------------------------------------
     <DebuggerStepThrough>
     <Extension>
-    Public Function HexToAscII(ByVal sender As String) As String
+    Public Function HexToString(ByVal sender As String) As String
 
         Dim sb As New StringBuilder
 
@@ -3473,6 +3463,226 @@ Public Module StringExtensions
         Next value
 
         Return sb.ToString
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Converts an Hexadecimal String to <see cref="Short"/> value.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox("0x0200".HexToInt16)
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The Hexadecimal value.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The <see cref="Short"/> representation of the Hexadecimal value.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function HexToInt16(ByVal sender As String) As Short
+
+        Return Convert.ToInt16(sender.Replace(" ", ""), fromBase:=16)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Converts an Hexadecimal String to <see cref="UShort"/> value.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox("0x0200".HexToUInt16)
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The Hexadecimal value.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The <see cref="UShort"/> representation of the Hexadecimal value.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function HexToUInt16(ByVal sender As String) As UShort
+
+        Return Convert.ToUInt16(sender.Replace(" ", ""), fromBase:=16)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Converts an Hexadecimal String to <see cref="Integer"/> value.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox("0x020032".HexToInt32)
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The Hexadecimal value.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The <see cref="Integer"/> representation of the Hexadecimal value.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function HexToInt32(ByVal sender As String) As Integer
+
+        Return Convert.ToInt32(sender.Replace(" ", ""), fromBase:=16)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Converts an Hexadecimal String to <see cref="UInteger"/> value.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox("0x020032".HexToUInt32)
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The Hexadecimal value.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The <see cref="UInteger"/> representation of the Hexadecimal value.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function HexToUInt32(ByVal sender As String) As UInteger
+
+        Return Convert.ToUInt32(sender.Replace(" ", ""), fromBase:=16)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Converts an Hexadecimal String to <see cref="Long"/> value.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox("0x020032".HexToInt64)
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The Hexadecimal value.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The <see cref="Long"/> representation of the Hexadecimal value.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function HexToInt64(ByVal sender As String) As Long
+
+        Return Convert.ToInt64(sender.Replace(" ", ""), fromBase:=16)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Converts an Hexadecimal String to <see cref="ULong"/> value.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox("0x020032".HexToUInt64)
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The Hexadecimal value.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The <see cref="ULong"/> representation of the Hexadecimal value.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function HexToUInt64(ByVal sender As String) As ULong
+
+        Return Convert.ToUInt64(sender.Replace(" ", ""), fromBase:=16)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Converts an Hexadecimal value to its Visual Basic literal Hexadecimal representation.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox("48 65 6C 6C 6F 20 57".HexToVbHex)
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source value.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The Hexadecimal value.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function HexToVbHex(ByVal sender As String) As String
+
+        Return String.Format("&H{0}", Convert.ToString(StringExtensions.HexToInt64(sender), toBase:=16).ToUpper)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Converts an Hexadecimal value to its C# literal Hexadecimal representation.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox("48 65 6C 6C 6F 20 57".HexToCSharpHex)
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source value.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The Hexadecimal value.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function HexToCSharpHex(ByVal sender As String) As String
+
+        If sender.StartsWith("&H", StringComparison.OrdinalIgnoreCase) Then
+            sender = sender.Substring(2)
+        End If
+
+        Return String.Format("0x{0}", Convert.ToString(StringExtensions.HexToInt64(sender), toBase:=16).ToUpper)
 
     End Function
 
