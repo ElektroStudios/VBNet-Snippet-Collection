@@ -94,6 +94,12 @@ Public Members Summary
    - String.ToHex(Opt: String, Opt: Encoding) As String
    - String.ToHtmlDocument() As Htmldocument
    - String.ToMD5() As String
+   - String.HexToInt32() As Integer
+   - String.HexToUInt32() As UInteger
+   - String.HexToInt64() As Long
+   - String.HexToUInt64() As ULong
+   - String.HexToVbHex() As String
+   - String.HexToCSharpHex() As String
 
  - Constructors
    - StringExtensions.GroupingCharsInfo.New(Char, Char)
