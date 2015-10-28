@@ -33,7 +33,9 @@
 #Region " Functions "
 
 ' ProfillingUtil.TestSuccess(Action) As Boolean
+' ProfillingUtil.TestSuccessAsync(Action) As Task(Of Boolean)
 ' ProfillingUtil.TestTime(Action) As TestExecutionInfo
+' ProfillingUtil.TestTimeAsync(Action) As Task(Of TestExecutionInfo)
 ' ProfillingUtil.InlineAssignHelper(Of T)(T, T) As T
 ' ProfillingUtil.InlineAssignHelper(Object, Object) As Object
 ' ProfillingUtil.FlushMemory As Boolean
@@ -52,6 +54,8 @@
 #Region " Usage Examples "
 
 #Region " TestExecutionInfo "
+
+#Region " Synchronous "
 
 'Sub Test()
 '
@@ -98,6 +102,58 @@
 
 #End Region
 
+#Region " Asynchronous "
+
+' Sub Test()
+'
+'    Dim taskTestTime As Task(Of TestExecutionInfo) =
+'        ProfillingUtil.TestTimeAsync(Sub()
+'                                         For x As Integer = 0 To 5000
+'                                             Console.WriteLine(x)
+'                                         Next x
+'                                     End Sub)
+'
+'    taskTestTime.ContinueWith(Sub() Me.ShowTestExecutionInfo(taskTestTime.Result))
+'
+'End Sub
+'
+'Private Sub ShowTestExecutionInfo(ByVal teInfo As TestExecutionInfo)
+'
+'    Dim sb As New StringBuilder
+'    Select Case teInfo.Success
+'
+'        Case True
+'            With sb ' Set an information message.
+'                .AppendLine(String.Format("Method Name: {0}", teInfo.Method.Name))
+'                .AppendLine()
+'                .AppendLine(String.Format("Elapsed Time: {0}", teInfo.Elapsed.ToString("hh\:mm\:ss\:fff")))
+'            End With
+'            MessageBox.Show(sb.ToString, "Code Execution Measurer", MessageBoxButtons.OK, MessageBoxIcon.Information)
+'
+'        Case Else
+'            With sb ' Set an error message.
+'                .AppendLine("Exception occurred during code execution measuring.")
+'                .AppendLine()
+'                .AppendLine(String.Format("Method Name: {0}", teInfo.Method.Name))
+'                .AppendLine()
+'                .AppendLine(String.Format("Exception Type: {0}", teInfo.Exception.GetType.Name))
+'                .AppendLine()
+'                .AppendLine("Exception Message:")
+'                .AppendLine(teInfo.Exception.Message)
+'                .AppendLine()
+'                .AppendLine("Exception Stack Trace:")
+'                .AppendLine(teInfo.Exception.StackTrace)
+'            End With
+'            MessageBox.Show(sb.ToString, "Code Execution Measurer", MessageBoxButtons.OK, MessageBoxIcon.Error)
+'
+'    End Select
+'
+'End Sub
+
+#End Region
+
+#End Region
+
 #End Region
 
 #Region " Option Statements "
@@ -116,6 +172,7 @@ Imports System.Diagnostics
 Imports System.Linq
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports System.Threading.Tasks
 
 #End Region
 
@@ -376,7 +433,7 @@ Public Module ProfillingUtil
 
 #Region " Properties "
 
-    ' ToDO: Add memory related properties (from Process Class or using Performance counters)
+    ' ToDO: Add useful memory related properties (from "System.Diagnostincs.Process" Class or using the Performance counters)
 
 #End Region
 
@@ -406,6 +463,32 @@ Public Module ProfillingUtil
             Return False
 
         End Try
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Tests the execution of a <see cref="System.Action"/> then returns a value that indicates whether the execution was successful.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="action">
+    ''' The <see cref="System.Action"/> to invoke.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see langword="True"/> if execution was successful, otherwise, <see langword="False"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Async Function TestSuccessAsync(ByVal action As Action) As Task(Of Boolean)
+
+        Dim taskTestSuccess As Task(Of Boolean) =
+            Task(Of Boolean).Factory.StartNew(Function() As Boolean
+                                                  Return ProfillingUtil.TestSuccess(action)
+                                              End Function)
+
+        Await taskTestSuccess
+        Return taskTestSuccess.Result
 
     End Function
 
@@ -492,6 +575,82 @@ Public Module ProfillingUtil
         End Try
 
         Return New TestExecutionInfo(elapsed:=stw.Elapsed, method:=action.Method, success:=success, exception:=exception)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Asynchronously tests the execution of a <see cref="System.Action"/> and measures the elapsed time.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Sub Test()
+    ''' 
+    '''     Dim taskTestTime As Task(Of TestExecutionInfo) =
+    '''         ProfillingUtil.TestTimeAsync(Sub()
+    '''                                          For x As Integer = 0 To 2500
+    '''                                              Console.WriteLine(x)
+    '''                                          Next x
+    '''                                      End Sub)
+    ''' 
+    '''     taskTestTime.ContinueWith(Sub() Me.ShowTestExecutionInfo(taskTestTime.Result))
+    ''' 
+    ''' End Sub
+    ''' 
+    ''' Private Sub ShowTestExecutionInfo(ByVal teInfo As TestExecutionInfo)
+    ''' 
+    '''     Dim sb As New StringBuilder
+    '''     Select Case teInfo.Success
+    ''' 
+    '''         Case True
+    '''             With sb ' Set an information message.
+    '''                 .AppendLine(String.Format("Method Name: {0}", teInfo.Method.Name))
+    '''                 .AppendLine()
+    '''                 .AppendLine(String.Format("Elapsed Time: {0}", teInfo.Elapsed.ToString("hh\:mm\:ss\:fff")))
+    '''             End With
+    '''             MessageBox.Show(sb.ToString, "Code Execution Measurer", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    ''' 
+    '''         Case Else
+    '''             With sb ' Set an error message.
+    '''                 .AppendLine("Exception occurred during code execution measuring.")
+    '''                 .AppendLine()
+    '''                 .AppendLine(String.Format("Method Name: {0}", teInfo.Method.Name))
+    '''                 .AppendLine()
+    '''                 .AppendLine(String.Format("Exception Type: {0}", teInfo.Exception.GetType.Name))
+    '''                 .AppendLine()
+    '''                 .AppendLine("Exception Message:")
+    '''                 .AppendLine(teInfo.Exception.Message)
+    '''                 .AppendLine()
+    '''                 .AppendLine("Exception Stack Trace:")
+    '''                 .AppendLine(teInfo.Exception.StackTrace)
+    '''             End With
+    '''             MessageBox.Show(sb.ToString, "Code Execution Measurer", MessageBoxButtons.OK, MessageBoxIcon.Error)
+    ''' 
+    '''     End Select
+    ''' 
+    ''' End Sub
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="action">
+    ''' The <see cref="System.Action"/> to invoke.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' An async <see cref="Task(Of ProfillingUtil.TestExecutionInfo)"/> object that contains the result of the test.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Async Function TestTimeAsync(ByVal action As Action) As Task(Of TestExecutionInfo)
+
+        Dim taskTestTime As Task(Of TestExecutionInfo) =
+            Task(Of TestExecutionInfo).Factory.StartNew(Function() As TestExecutionInfo
+                                                            Return ProfillingUtil.TestTime(action)
+                                                        End Function)
+
+        Await taskTestTime
+        Return taskTestTime.Result
 
     End Function
 
