@@ -1,0 +1,212 @@
+
+' ***********************************************************************
+' Author   : Elektro
+' Modified : 28-October-2015
+' ***********************************************************************
+' <copyright file="FileSystem Util.vb" company="Elektro Studios">
+'     Copyright (c) Elektro Studios. All rights reserved.
+' </copyright>
+' ***********************************************************************
+
+#Region " Required References "
+
+' Microsoft Shell Controls And Automation (COM) (Interop.SHDocVw.dll)
+' Microsoft Internet Controls             (COM) (Interop.Shell32.dll)
+
+#End Region
+
+#Region " Public Members Summary "
+
+#Region " Function "
+
+' FileSystemUtil.GetItemVerbs(String) As IEnumerable(Of FolderItemVerb)
+' FileSystemUtil.ItemNameIsInvalid(String) As Boolean
+' FileSystemUtil.ItemNameOrPathIsInvalid(String) As Boolean
+' FileSystemUtil.ItemPathIsInvalid(String) As Boolean
+
+#End Region
+
+#Region " Methods "
+
+' FileSystemUtil.InvokeItemVerb(String, String)
+
+#End Region
+
+#End Region
+
+#Region " Option Statements "
+
+Option Strict On
+Option Explicit On
+Option Infer Off
+
+#End Region
+
+#Region " Imports "
+
+Imports Shell32
+Imports System
+Imports System.ComponentModel
+Imports System.Diagnostics
+Imports System.IO
+Imports System.Linq
+
+#End Region
+
+#Region " FileSystem Util "
+
+''' ----------------------------------------------------------------------------------------------------
+''' <summary>
+''' Contains related FileSystem utilities.
+''' </summary>
+''' ----------------------------------------------------------------------------------------------------
+Public Module FileSystemUtil
+
+#Region " Public Methods "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Determines whether a directory name or file name contains invalid windows path characters.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="itemName">
+    ''' The item name.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see langword="True"/> if item contains invalid windows name characters, <see langword="False"/> otherwise.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Function ItemNameIsInvalid(ByVal itemName As String) As Boolean
+
+        Return itemName.Any(Function(c As Char) Path.GetInvalidFileNameChars.Contains(c))
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Determines whether a directory path or a file path contains invalid windows path characters.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="itemPath">
+    ''' The item path.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see langword="True"/> if item contains invalid windows path characters, <see langword="False"/> otherwise.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Function ItemPathIsInvalid(ByVal itemPath As String) As Boolean
+
+        Return itemPath.Any(Function(c As Char) Path.GetInvalidPathChars.Contains(c))
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Determines whether the specified item is a name or a path, 
+    ''' then, determines whether the item contains invalid windows name or path characters.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="itemNameOrPath">
+    ''' The item name or path.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see langword="True"/> if item contains invalid windows name characters, <see langword="False"/> otherwise.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Function ItemNameOrPathIsInvalid(ByVal itemNameOrPath As String) As Boolean
+
+        Try
+            Path.GetDirectoryName(itemNameOrPath)
+            ' It's a item path.
+            Return FileSystemUtil.ItemPathIsInvalid(itemNameOrPath)
+
+        Catch ex As ArgumentException
+            ' It's a item name.
+            Return FileSystemUtil.ItemNameIsInvalid(itemNameOrPath)
+
+        End Try
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Gets the avaliable item verbs of the specified file or directory.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="itemPath">
+    ''' The item path.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' An <see cref="IEnumerable(Of FolderItemVerb)"/> containing the avaliable item verbs.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Function GetItemVerbs(ByVal itemPath As String) As IEnumerable(Of FolderItemVerb)
+
+        Dim shell As New Shell32.Shell
+        Dim link As FolderItem = shell.NameSpace(Path.GetDirectoryName(itemPath)).ParseName(Path.GetFileName(itemPath))
+
+        Return link.Verbs.Cast(Of FolderItemVerb)()
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Invokes an item verb on the specified file or directory.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="itemPath">
+    ''' The item path.
+    ''' </param>
+    ''' 
+    ''' <param name="verbName">
+    ''' The verb name.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Sub InvokeItemVerb(ByVal itemPath As String,
+                              ByVal verbName As String)
+
+        Dim shell As New Shell32.Shell
+        Dim link As FolderItem = shell.NameSpace(Path.GetDirectoryName(itemPath)).ParseName(Path.GetFileName(itemPath))
+
+        link.InvokeVerb(verbName)
+
+    End Sub
+
+#End Region
+
+#Region " Hidden Methods "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Determines whether the specified System.Object instances are considered equal.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    <EditorBrowsable(EditorBrowsableState.Never)>
+    Public Function Equals(ByVal obj As Object) As Boolean
+        Return Nothing
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Determines whether the specified System.Object instances are the same instance.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    <EditorBrowsable(EditorBrowsableState.Never)>
+    Public Function ReferenceEquals(ByVal objA As Object, ByVal objB As Object) As Boolean
+        Return Nothing
+    End Function
+
+#End Region
+
+End Module
+
+#End Region
