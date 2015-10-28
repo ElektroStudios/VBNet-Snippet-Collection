@@ -376,7 +376,7 @@ Public Members Summary
 
  - Properties
    - ThemingUtil.Fonts.InstalledFonts As IEnumerable(Of FontFamily)
-   - ThemingUtil.Fonts.InstalledFontNames As IEnumerable(Of FontFamily)
+   - ThemingUtil.Fonts.InstalledFontNames As IEnumerable(Of String)
    - ThemingUtil.ScreenSavers.CurrentScreensaver As String
    - ThemingUtil.VisualThemes.AeroEnabled() As Boolean
    - ThemingUtil.VisualThemes.AeroSupported() As Boolean
