@@ -2,7 +2,7 @@
 ' Author   : Elektro
 ' Modified : 26-October-2015
 ' ***********************************************************************
-' <copyright file="IEnumerableExtensions.vb" company="Elektro Studios">
+' <copyright file="IEnumerable(Of T) Extensions.vb" company="Elektro Studios">
 '     Copyright (c) Elektro Studios. All rights reserved.
 ' </copyright>
 ' ***********************************************************************
@@ -23,6 +23,20 @@
 ' IEnumerable(Of T).SplitIntoParts(Integer) As IEnumerable(Of T)
 ' IEnumerable(Of T).UniqueDuplicates As IEnumerable(Of T)
 ' IEnumerable(Of T).Uniques As IEnumerable(Of T)
+
+' IEnumerableExtensions.IndexOf(IEnumerable(Of T), IEnumerable(Of T)) As Integer
+' IEnumerableExtensions.IndexOf(IEnumerable(Of T), IEnumerable(Of T), Integer) As Integer
+' IEnumerableExtensions.IndexOf(IEnumerable(Of T), IEnumerable(Of T), Integer, Integer) As Integer
+' IEnumerableExtensions.IndexOf(IEnumerable(Of T), T) As Integer
+' IEnumerableExtensions.IndexOf(IEnumerable(Of T), T, Integer) As Integer
+' IEnumerableExtensions.IndexOf(IEnumerable(Of T), T, Integer, Integer) As Integer
+
+' IEnumerableExtensions.IndexOfAll(IEnumerable(Of T), IEnumerable(Of T)) As IEnumerable(Of Integer)
+' IEnumerableExtensions.IndexOfAll(IEnumerable(Of T), IEnumerable(Of T), Integer) As IEnumerable(Of Integer)
+' IEnumerableExtensions.IndexOfAll(IEnumerable(Of T), IEnumerable(Of T), Integer, Integer) As IEnumerable(Of Integer)
+' IEnumerableExtensions.IndexOfAll(IEnumerable(Of T), T) As IEnumerable(Of Integer)
+' IEnumerableExtensions.IndexOfAll(IEnumerable(Of T), T, Integer) As IEnumerable(Of Integer)
+' IEnumerableExtensions.IndexOfAll(IEnumerable(Of T), T, Integer, Integer) As IEnumerable(Of Integer)
 
 #End Region
 
@@ -503,6 +517,639 @@ Public Module IEnumerableExtensions
     Public Function CountNonEmptyItems(Of T)(ByVal sender As IEnumerable(Of T)) As Integer
 
         Return (sender.Count - IEnumerableExtensions.CountEmptyItems(sender))
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Searches for the specified object and returns the zero-based index of the first occurrence within the 
+    ''' entire <see cref="IEnumerable(Of T)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox({1, 2, 3, 4, 5, 6, 7, 8, 9}.IndexOf(value:=1))
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="value">
+    ''' The object to locate in the <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The zero-based index of the first occurrence of object within the entire <see cref="IEnumerable(Of T)"/>, 
+    ''' if found; otherwise, –1.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function IndexOf(Of T)(ByVal sender As IEnumerable(Of T),
+                                  ByVal value As T) As Integer
+
+        Return IndexOf(sender, {value}, 0, sender.Count)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Searches for the specified object and returns the zero-based index of the first occurrence within the 
+    ''' entire <see cref="IEnumerable(Of T)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox({1, 2, 3, 4, 5, 6, 7, 8, 9}.IndexOf(value:=1))
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="value">
+    ''' The object to locate in the <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="index">
+    ''' The zero-based starting index of the search.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The zero-based index of the first occurrence of object within the entire <see cref="IEnumerable(Of T)"/>, 
+    ''' if found; otherwise, –1.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function IndexOf(Of T)(ByVal sender As IEnumerable(Of T),
+                                  ByVal value As T,
+                                  ByVal index As Integer) As Integer
+
+        Return IndexOf(sender, {value}, index, (sender.Count - index))
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Searches for the specified object and returns the zero-based index of the first occurrence within the 
+    ''' entire <see cref="IEnumerable(Of T)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox({1, 2, 3, 4, 5, 6, 7, 8, 9}.IndexOf(value:=1))
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="value">
+    ''' The object to locate in the <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="index">
+    ''' The zero-based starting index of the search.
+    ''' </param>
+    ''' 
+    ''' <param name="count">
+    ''' The number of elements in the <see cref="IEnumerable(Of T)"/> to search.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The zero-based index of the first occurrence of object within the entire <see cref="IEnumerable(Of T)"/>, 
+    ''' if found; otherwise, –1.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function IndexOf(Of T)(ByVal sender As IEnumerable(Of T),
+                                  ByVal value As T,
+                                  ByVal index As Integer,
+                                  ByVal count As Integer) As Integer
+
+        Return IndexOf(sender, {value}, index, count)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Searches for the specified object pattern and returns the zero-based index of the first occurrence within the 
+    ''' entire <see cref="IEnumerable(Of T)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox({0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.IndexOf(pattern:={5, 6, 7}))
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="pattern">
+    ''' The object pattern to locate in the <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The zero-based index of the first occurrence of object pattern within the entire <see cref="IEnumerable(Of T)"/>, 
+    ''' if found; otherwise, –1.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function IndexOf(Of T)(ByVal sender As IEnumerable(Of T),
+                                  ByVal pattern As IEnumerable(Of T)) As Integer
+
+        Return IndexOf(sender, pattern, 0, sender.Count)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Searches for the specified object pattern and returns the zero-based index of the first occurrence within the 
+    ''' entire <see cref="IEnumerable(Of T)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox({0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.IndexOf(pattern:={5, 6, 7}, index:=5))
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="pattern">
+    ''' The object pattern to locate in the <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="index">
+    ''' The zero-based starting index of the search.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The zero-based index of the first occurrence of object pattern within the entire <see cref="IEnumerable(Of T)"/>, 
+    ''' if found; otherwise, –1.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function IndexOf(Of T)(ByVal sender As IEnumerable(Of T),
+                                  ByVal pattern As IEnumerable(Of T),
+                                  ByVal index As Integer) As Integer
+
+        Return IndexOf(sender, pattern, index, (sender.Count - index))
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Searches for the specified object pattern and returns the zero-based index of the first occurrence within the 
+    ''' entire <see cref="IEnumerable(Of T)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' MsgBox({0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.IndexOf(pattern:={5, 6, 7}, index:=5, count:=3))
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="pattern">
+    ''' The object pattern to locate in the <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="index">
+    ''' The zero-based starting index of the search.
+    ''' </param>
+    ''' 
+    ''' <param name="count">
+    ''' The number of elements in the <see cref="IEnumerable(Of T)"/> to search.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The zero-based index of the first occurrence of object pattern within the entire <see cref="IEnumerable(Of T)"/>, 
+    ''' if found; otherwise, –1.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <exception cref="ArgumentOutOfRangeException">
+    ''' index;Value equals or bigger than 0 is required.
+    ''' or
+    ''' count;Value bigger than 0 is required.
+    ''' or
+    ''' count;Value equals or bigger than the pattern length is required.
+    ''' </exception>
+    ''' 
+    ''' <exception cref="IndexOutOfRangeException">
+    ''' </exception>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function IndexOf(Of T)(ByVal sender As IEnumerable(Of T),
+                                  ByVal pattern As IEnumerable(Of T),
+                                  ByVal index As Integer,
+                                  ByVal count As Integer) As Integer
+
+        If (sender Is Nothing) OrElse Not (sender.Any) Then
+            Return -1
+
+        ElseIf (pattern Is Nothing) OrElse Not (pattern.Any) Then
+            Return -1
+            
+        ElseIf (index < 0) Then
+            Throw New ArgumentOutOfRangeException(paramName:="index", message:="Value equals or bigger than 0 is required.")
+            
+        ElseIf (count <= 0) Then
+            Throw New ArgumentOutOfRangeException(paramName:="count", message:="Value bigger than 0 is required.")
+
+        ElseIf (count < pattern.Count) Then
+            Throw New ArgumentOutOfRangeException(paramName:="count", message:="Value equals or bigger than the pattern length is required.")
+
+        ElseIf (index >= sender.Count) OrElse ((index + count) > sender.Count) Then
+            Throw New IndexOutOfRangeException()
+
+        Else
+            Dim result As Integer =
+                Enumerable.Range(index, count).
+                           Where(Function(i As Integer) pattern.Select(Function(b1, b2) New With {b2, b1}).
+                           All(Function(p) sender(i + p.b2).Equals(p.b1))).FirstOrdefault
+
+            ' Fix default return value.
+            If (result = 0) AndAlso (index <> 0) Then
+                Return -1
+
+            ElseIf (result = 0) AndAlso Not (index <> 0) AndAlso (sender.Take(index + pattern.Count).Count > (count)) Then
+                Return -1
+
+            ElseIf (result = 0) AndAlso (index = 0) AndAlso Not (sender.Take(pattern.Count).
+                                                                 Select(Function(b1, b2) New With {b2, b1}).
+                                                                 All(Function(p) pattern(p.b2).Equals(p.b1))) Then
+                Return -1
+
+            ElseIf (result <> 0) AndAlso (index <> 0) AndAlso ((result + pattern.Count) > (index + count)) Then
+                Return -1
+
+            Else
+                Return result
+
+            End If
+
+        End If
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Searches for the specified object and returns the zero-based indexes of all the occurrence within the 
+    ''' entire <see cref="IEnumerable(Of T)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' 
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="value">
+    ''' The object to locate in the <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The zero-based index of all the occurrences of object within the entire <see cref="IEnumerable(Of T)"/>, 
+    ''' if found; otherwise, <see langword="Nothing"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <exception cref="ArgumentOutOfRangeException">
+    ''' index;Value equals or bigger than 0 is required.
+    ''' or
+    ''' count;Value bigger than 0 is required.
+    ''' or
+    ''' count;Value equals or bigger than the pattern length is required.
+    ''' </exception>
+    ''' 
+    ''' <exception cref="IndexOutOfRangeException">
+    ''' </exception>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function IndexOfAll(Of T)(ByVal sender As IEnumerable(Of T),
+                                     ByVal value As T) As IEnumerable(Of Integer)
+
+        Return IEnumerableExtensions.IndexOfAll(sender, {value}, 0, sender.Count)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Searches for the specified object and returns the zero-based indexes of all the occurrence within the 
+    ''' entire <see cref="IEnumerable(Of T)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' 
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="value">
+    ''' The object to locate in the <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="index">
+    ''' The zero-based starting index of the search.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The zero-based index of all the occurrences of object within the entire <see cref="IEnumerable(Of T)"/>, 
+    ''' if found; otherwise, <see langword="Nothing"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <exception cref="ArgumentOutOfRangeException">
+    ''' index;Value equals or bigger than 0 is required.
+    ''' or
+    ''' count;Value bigger than 0 is required.
+    ''' or
+    ''' count;Value equals or bigger than the pattern length is required.
+    ''' </exception>
+    ''' 
+    ''' <exception cref="IndexOutOfRangeException">
+    ''' </exception>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function IndexOfAll(Of T)(ByVal sender As IEnumerable(Of T),
+                                     ByVal value As T,
+                                     ByVal index As Integer) As IEnumerable(Of Integer)
+
+        Return IEnumerableExtensions.IndexOfAll(sender, {value}, index, (sender.Count - index))
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Searches for the specified object and returns the zero-based indexes of all the occurrence within the 
+    ''' entire <see cref="IEnumerable(Of T)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' 
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="value">
+    ''' The object to locate in the <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="index">
+    ''' The zero-based starting index of the search.
+    ''' </param>
+    ''' 
+    ''' <param name="count">
+    ''' The number of elements in the <see cref="IEnumerable(Of T)"/> to search.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The zero-based index of all the occurrences of object within the entire <see cref="IEnumerable(Of T)"/>, 
+    ''' if found; otherwise, <see langword="Nothing"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <exception cref="ArgumentOutOfRangeException">
+    ''' index;Value equals or bigger than 0 is required.
+    ''' or
+    ''' count;Value bigger than 0 is required.
+    ''' or
+    ''' count;Value equals or bigger than the pattern length is required.
+    ''' </exception>
+    ''' 
+    ''' <exception cref="IndexOutOfRangeException">
+    ''' </exception>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function IndexOfAll(Of T)(ByVal sender As IEnumerable(Of T),
+                                     ByVal value As T,
+                                     ByVal index As Integer,
+                                     ByVal count As Integer) As IEnumerable(Of Integer)
+
+        Return IEnumerableExtensions.IndexOfAll(sender, {value}, index, count)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Searches for the specified object pattern and returns the zero-based indexes of all the occurrence within the 
+    ''' entire <see cref="IEnumerable(Of T)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' 
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="pattern">
+    ''' The object pattern to locate in the <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The zero-based index of all the occurrences of object pattern within the entire <see cref="IEnumerable(Of T)"/>, 
+    ''' if found; otherwise, <see langword="Nothing"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <exception cref="ArgumentOutOfRangeException">
+    ''' index;Value equals or bigger than 0 is required.
+    ''' or
+    ''' count;Value bigger than 0 is required.
+    ''' or
+    ''' count;Value equals or bigger than the pattern length is required.
+    ''' </exception>
+    ''' 
+    ''' <exception cref="IndexOutOfRangeException">
+    ''' </exception>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function IndexOfAll(Of T)(ByVal sender As IEnumerable(Of T),
+                                     ByVal pattern As IEnumerable(Of T)) As IEnumerable(Of Integer)
+
+        Return IEnumerableExtensions.IndexOfAll(sender, pattern, 0, sender.Count)
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Searches for the specified object pattern and returns the zero-based indexes of all the occurrence within the 
+    ''' entire <see cref="IEnumerable(Of T)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' 
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="pattern">
+    ''' The object pattern to locate in the <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="index">
+    ''' The zero-based starting index of the search.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The zero-based index of all the occurrences of object pattern within the entire <see cref="IEnumerable(Of T)"/>, 
+    ''' if found; otherwise, <see langword="Nothing"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <exception cref="ArgumentOutOfRangeException">
+    ''' index;Value equals or bigger than 0 is required.
+    ''' or
+    ''' count;Value bigger than 0 is required.
+    ''' or
+    ''' count;Value equals or bigger than the pattern length is required.
+    ''' </exception>
+    ''' 
+    ''' <exception cref="IndexOutOfRangeException">
+    ''' </exception>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function IndexOfAll(Of T)(ByVal sender As IEnumerable(Of T),
+                                     ByVal pattern As IEnumerable(Of T),
+                                     ByVal index As Integer) As IEnumerable(Of Integer)
+
+        Return IEnumerableExtensions.IndexOfAll(sender, pattern, index, (sender.Count - index))
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Searches for the specified object pattern and returns the zero-based indexes of all the occurrence within the 
+    ''' entire <see cref="IEnumerable(Of T)"/>.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' 
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="sender">
+    ''' The source <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="pattern">
+    ''' The object pattern to locate in the <see cref="IEnumerable(Of T)"/>.
+    ''' </param>
+    ''' 
+    ''' <param name="index">
+    ''' The zero-based starting index of the search.
+    ''' </param>
+    ''' 
+    ''' <param name="count">
+    ''' The number of elements in the <see cref="IEnumerable(Of T)"/> to search.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' The zero-based index of all the occurrences of object pattern within the entire <see cref="IEnumerable(Of T)"/>, 
+    ''' if found; otherwise, <see langword="Nothing"/>.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <exception cref="ArgumentOutOfRangeException">
+    ''' index;Value equals or bigger than 0 is required.
+    ''' or
+    ''' count;Value bigger than 0 is required.
+    ''' or
+    ''' count;Value equals or bigger than the pattern length is required.
+    ''' </exception>
+    ''' 
+    ''' <exception cref="IndexOutOfRangeException">
+    ''' </exception>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    <Extension>
+    Public Function IndexOfAll(Of T)(ByVal sender As IEnumerable(Of T),
+                                     ByVal pattern As IEnumerable(Of T),
+                                     ByVal index As Integer,
+                                     ByVal count As Integer) As IEnumerable(Of Integer)
+
+        If (sender Is Nothing) OrElse Not (sender.Any) Then
+            Return Nothing
+
+        ElseIf (pattern Is Nothing) OrElse Not (pattern.Any) Then
+            Return Nothing
+
+        ElseIf (index < 0) Then
+            Throw New ArgumentOutOfRangeException(paramName:="index", message:="Value equals or bigger than 0 is required.")
+
+        ElseIf (count <= 0) Then
+            Throw New ArgumentOutOfRangeException(paramName:="count", message:="Value bigger than 0 is required.")
+
+        ElseIf (count < pattern.Count) Then
+            Throw New ArgumentOutOfRangeException(paramName:="count", message:="Value equals or bigger than the pattern length is required.")
+
+        ElseIf (index >= sender.Count) OrElse ((index + count) > sender.Count) Then
+            Throw New IndexOutOfRangeException()
+
+        Else
+            Dim result As IEnumerable(Of Integer) =
+                Enumerable.Range(index, count).
+                           Where(Function(i As Integer) pattern.Select(Function(b1, b2) New With {b2, b1}).
+                           All(Function(p) sender(i + p.b2).Equals(p.b1)))
+
+            ' Fix default return value.
+            If (result(0) = 0) AndAlso (index <> 0) Then
+                Return Nothing
+
+            ElseIf (result(0) = 0) AndAlso Not (index <> 0) AndAlso (sender.Take(index + pattern.Count).Count > (count)) Then
+                Return Nothing
+
+            ElseIf (result(0) = 0) AndAlso (index = 0) AndAlso Not (sender.Take(pattern.Count).
+                                                                    Select(Function(b1, b2) New With {b2, b1}).
+                                                                    All(Function(p) pattern(p.b2).Equals(p.b1))) Then
+                Return Nothing
+
+            ElseIf (result(0) <> 0) AndAlso (index <> 0) AndAlso ((result(0) + pattern.Count) > (index + count)) Then
+                Return Nothing
+
+            Else
+                Return result
+
+            End If
+
+        End If
 
     End Function
 
