@@ -15,6 +15,9 @@ A (very)simple logging system assistant that helps to create a log for the curre
 
 Public Members Summary
 
+ - Constructors
+   - LogfileWriter.New(String, Opt: Encoding)
+ 
  - Properties
    - LogfileWriter.Filepath As String
    - LogfileWriter.Encoding As Encoding
