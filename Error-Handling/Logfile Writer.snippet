@@ -4,7 +4,7 @@
 
 <Header>
   <Title>Logfile Writer</Title>
-  <Description>A logging system assistant that helps to create a log for the current application..</Description>
+  <Description>A logging system assistant that helps to create a log for the current application.</Description>
   <Author>Elektro</Author>
 </Header>
 
@@ -31,6 +31,12 @@
 
 #Region " Public Members Summary "
 
+#Region " Cosntructors "
+
+' LogfileWriter.New(String, Opt: Encoding)
+
+#End Region
+
 #Region " Properties "
 
 ' LogfileWriter.Filepath As String
@@ -42,6 +48,7 @@
 #Region " Methods "
 
 ' LogfileWriter.WriteEntry(TraceEventType, String)
+' LogfileWriter.WriteText(String)
 ' LogfileWriter.WriteNewLine()
 ' LogfileWriter.Clear()
 
@@ -109,7 +116,7 @@ Imports System.Text
 
 ''' ----------------------------------------------------------------------------------------------------
 ''' <summary>
-''' A logging system assistant that helps to create a log for the current application.
+''' A simple logging system assistant that helps to create a log for the current application.
 ''' </summary>
 ''' ----------------------------------------------------------------------------------------------------
 ''' <example> This is a code example.
@@ -150,7 +157,7 @@ Imports System.Text
 ''' </code>
 ''' </example>
 ''' ----------------------------------------------------------------------------------------------------
-Public NotInheritable Class LogfileWriter
+Public NotInheritable Class LogfileWriter : Implements IDisposable
 
 #Region " Properties "
 
@@ -327,6 +334,54 @@ Public NotInheritable Class LogfileWriter
 
         Me.sw = New StreamWriter(Me.filepathB, append:=False, encoding:=Me.encodingB, bufferSize:=4096) With {.AutoFlush = True}
         Me.sw.BaseStream.SetLength(0)
+
+    End Sub
+
+#End Region
+
+#Region " IDisposable Implementation "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' To detect redundant calls when disposing.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    Private isDisposed As Boolean = False
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Releases all the resources used by this instance.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Sub Dispose() Implements IDisposable.Dispose
+        Me.Dispose(isDisposing:=True)
+        GC.SuppressFinalize(obj:=Me)
+    End Sub
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    ''' Releases unmanaged and - optionally - managed resources.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="isDisposing">
+    ''' <see langword="True"/>  to release both managed and unmanaged resources; 
+    ''' <see langword="False"/> to release only unmanaged resources.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Protected Sub Dispose(ByVal isDisposing As Boolean)
+
+        If (Not Me.isDisposed) AndAlso (isDisposing) Then
+
+            If (Me.sw IsNot Nothing) Then
+                Me.sw.Close()
+            End If
+
+        End If
+
+        Me.isDisposed = True
 
     End Sub
 
