@@ -22,5 +22,6 @@ Public Members Summary
 
  - Methods
    - LogfileWriter.WriteEntry(TraceEventType, String)
+   - LogfileWriter.WriteText()
    - LogfileWriter.WriteNewLine()
    - LogfileWriter.Clear()
