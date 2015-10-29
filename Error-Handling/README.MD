@@ -20,7 +20,7 @@ Public Members Summary
    - LogfileWriter.Encoding As Encoding
    - LogfileWriter.EntryFormat As String
 
- - Functions
+ - Methods
    - LogfileWriter.WriteEntry(TraceEventType, String)
    - LogfileWriter.WriteNewLine()
    - LogfileWriter.Clear()
