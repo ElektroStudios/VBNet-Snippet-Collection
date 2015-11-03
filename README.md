@@ -8,6 +8,8 @@ Welcome to my VisualBasic.Net Snippet Collection  where I will provide samples f
  - .vb files contains the raw code that can be copied then pasted in any project.
  - Each .snippet and .vb file contains a #Region section and/or Xml documentation with code examples.
  
-Feel free to use and/or modify any file of this repository.
-
+# Contributions
+Contributions are always welcome!
 If you like the job I've done, then please contribute with improvements to these snippets or by submitting new ones.
+
+Feel free to use and/or modify any file of this repository.
