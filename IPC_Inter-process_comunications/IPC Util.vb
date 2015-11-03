@@ -1,3 +1,4 @@
+
 ' ***********************************************************************
 ' Author   : Elektro
 ' Modified : 03-November-2015
@@ -42,6 +43,7 @@
 
 ' IpcUtil.UIAutomation.GetTitlebarText(IntPtr) As String
 ' IpcUtil.UIAutomation.SendText(IntPtr) As String
+' IpcUtil.GetText(IntPtr) As String
 ' IpcUtil.SetText(IntPtr, String) As Boolean
 ' IpcUtil.AppendText(IntPtr, String) As Boolean
 ' IpcUtil.InsertText(IntPtr, Integer, String) As Boolean
@@ -152,6 +154,45 @@ Public Module IpcUtil
         Friend Shared Function SendMessage(ByVal hWnd As IntPtr,
                                            ByVal msg As WindowsMessages,
                                            ByVal wParam As IntPtr,
+                                           ByVal lParam As IntPtr
+        ) As IntPtr
+        End Function
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Sends the specified message to a window or windows.
+        ''' The SendMessage function calls the window procedure for the specified window
+        ''' and does not return until the window procedure has processed the message.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="hWnd">
+        ''' A handle to the window whose window procedure will receive the message.
+        ''' </param>
+        ''' 
+        ''' <param name="msg">
+        ''' The message to be sent.
+        ''' </param>
+        ''' 
+        ''' <param name="wParam">
+        ''' Additional message-specific information.
+        ''' </param>
+        ''' 
+        ''' <param name="lParam">
+        ''' Additional message-specific information.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <returns>
+        ''' The return value specifies the result of the message processing; it depends on the message sent.
+        ''' </returns>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644950%28v=vs.85%29.aspx"/>
+        ''' </remarks>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
+        Friend Shared Function SendMessage(ByVal hWnd As IntPtr,
+                                           ByVal msg As WindowsMessages,
+                                           ByVal wParam As IntPtr,
                                            ByVal lParam As String
         ) As IntPtr
         End Function
@@ -191,7 +232,7 @@ Public Module IpcUtil
         Friend Shared Function SendMessage(ByVal hWnd As IntPtr,
                                            ByVal msg As WindowsMessages,
                                            ByVal wParam As IntPtr,
-                                           ByVal lParam As IntPtr
+                                           ByVal lParam As StringBuilder
         ) As IntPtr
         End Function
 
@@ -212,6 +253,17 @@ Public Module IpcUtil
         ''' </remarks>
         ''' ----------------------------------------------------------------------------------------------------
         Friend Enum WindowsMessages As Integer
+
+            ''' ----------------------------------------------------------------------------------------------------
+            ''' <summary>
+            ''' Copies the text that corresponds to a window into a buffer provided by the caller.
+            ''' </summary>
+            ''' ----------------------------------------------------------------------------------------------------
+            ''' <remarks>
+            ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms632627%28v=vs.85%29.aspx"/>
+            ''' </remarks>
+            ''' ----------------------------------------------------------------------------------------------------
+            WmGetText = &HD
 
             ''' ----------------------------------------------------------------------------------------------------
             ''' <summary>
@@ -1496,6 +1548,51 @@ Public Module IpcUtil
 
         ''' ----------------------------------------------------------------------------------------------------
         ''' <summary>
+        ''' Gets the text of an Edit control.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="hwnd">
+        ''' A <see cref="IntPtr"/> handle to the Edit window.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <returns>
+        ''' The text.
+        ''' </returns>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <exception cref="Exception">
+        ''' Invalid handle, window not found.
+        ''' </exception>
+        ''' 
+        ''' <exception cref="Win32Exception">
+        ''' </exception>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Shared Function GetText(ByVal hwnd As IntPtr) As String
+
+            Dim win32Err As Integer
+            Dim textLength As Integer =
+                NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.WmGetTextLength,
+                                          New IntPtr(NativeMethods.WParams.None),
+                                          New IntPtr(NativeMethods.LParams.None)).ToInt32
+
+            win32Err = Marshal.GetLastWin32Error
+            If (win32Err = 1400) Then
+                Throw New Exception(message:="Invalid handle, window not found.")
+
+                'ElseIf (win32Err <> 1) Then
+                '    Throw New Win32Exception([error]:=win32Err)
+
+            Else
+                Dim sb As New StringBuilder(capacity:=textLength)
+                NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.WmGetText, New IntPtr(textLength), sb).ToInt32()
+                Return sb.ToString
+
+            End If
+
+        End Function
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
         ''' Sets the text of an Edit control.
         ''' </summary>
         ''' ----------------------------------------------------------------------------------------------------
@@ -1511,11 +1608,34 @@ Public Module IpcUtil
         ''' <see langword="True"/> if operation succeeds, <see langword="True"/> otherwise.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        Public Function SetText(ByVal hwnd As IntPtr,
-                                ByVal text As String) As Boolean
+        ''' <exception cref="Exception">
+        ''' Invalid handle, window not found.
+        ''' </exception>
+        ''' 
+        ''' <exception cref="Win32Exception">
+        ''' </exception>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Shared Function SetText(ByVal hwnd As IntPtr,
+                                       ByVal text As String) As Boolean
 
-            Return CBool(NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.WmSetText,
-                                                   New IntPtr(NativeMethods.WParams.None), text))
+            Dim result As Boolean
+            Dim win32Err As Integer
+
+            result = CBool(NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.WmSetText,
+                                                     New IntPtr(NativeMethods.WParams.None), text))
+
+            win32Err = Marshal.GetLastWin32Error
+            If (win32Err = 1400) Then
+                Throw New Exception(message:="Invalid handle, window not found.")
+
+                'ElseIf (win32Err <> 1) Then
+                '    Throw New Win32Exception([error]:=win32Err)
+
+            Else
+                Return result
+
+            End If
 
         End Function
 
@@ -1536,22 +1656,40 @@ Public Module IpcUtil
         ''' <see langword="True"/> if operation succeeds, <see langword="True"/> otherwise.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        Public Function AppendText(ByVal hwnd As IntPtr,
-                                   ByVal text As String) As Boolean
+        ''' <exception cref="Exception">
+        ''' Invalid handle, window not found.
+        ''' </exception>
+        ''' 
+        ''' <exception cref="Win32Exception">
+        ''' </exception>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Shared Function AppendText(ByVal hwnd As IntPtr,
+                                          ByVal text As String) As Boolean
 
-            ' Get text length.
+            Dim win32Err As Integer
             Dim textLength As Integer =
                 NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.WmGetTextLength,
                                           New IntPtr(NativeMethods.WParams.None),
                                           New IntPtr(NativeMethods.LParams.None)).ToInt32
 
-            ' Set text selection.
-            NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.EmcSetSel,
-                                      New IntPtr(textLength), New IntPtr(-1))
+            win32Err = Marshal.GetLastWin32Error
+            If (win32Err = 1400) Then
+                Throw New Exception(message:="Invalid handle, window not found.")
 
-            ' Replace selected text.
-            Return CBool(NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.EmReplaceSel,
-                                                   New IntPtr(1), text))
+                'ElseIf (win32Err <> 1) Then
+                '    Throw New Win32Exception([error]:=win32Err)
+
+            Else
+                ' Set text selection.
+                NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.EmcSetSel,
+                                          New IntPtr(textLength), New IntPtr(-1))
+
+                ' Replace selected text.
+                Return CBool(NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.EmReplaceSel,
+                                                       New IntPtr(1), text))
+
+            End If
 
         End Function
 
@@ -1576,17 +1714,37 @@ Public Module IpcUtil
         ''' <see langword="True"/> if operation succeeds, <see langword="True"/> otherwise.
         ''' </returns>
         ''' ----------------------------------------------------------------------------------------------------
-        Public Function InsertText(ByVal hwnd As IntPtr,
-                                   ByVal position As Integer,
-                                   ByVal text As String) As Boolean
+        ''' <exception cref="Exception">
+        ''' Invalid handle, window not found.
+        ''' </exception>
+        ''' 
+        ''' <exception cref="Win32Exception">
+        ''' </exception>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Shared Function InsertText(ByVal hwnd As IntPtr,
+                                          ByVal position As Integer,
+                                          ByVal text As String) As Boolean
+
+            Dim win32Err As Integer
 
             ' Set text selection.
             NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.EmcSetSel,
                                       New IntPtr(position), New IntPtr(position))
 
-            ' Replace selected text.
-            Return CBool(NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.EmReplaceSel,
-                                                   New IntPtr(1), Text))
+            win32Err = Marshal.GetLastWin32Error
+            If (win32Err = 1400) Then
+                Throw New Exception(message:="Invalid handle, window not found.")
+
+                'ElseIf (win32Err <> 1) Then
+                '    Throw New Win32Exception([error]:=win32Err)
+
+            Else
+                ' Replace selected text.
+                Return CBool(NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.EmReplaceSel,
+                                                       New IntPtr(1), text))
+
+            End If
 
         End Function
 
