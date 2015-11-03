@@ -1,6 +1,6 @@
 ' ***********************************************************************
 ' Author   : Elektro
-' Modified : 27-October-2015
+' Modified : 03-November-2015
 ' ***********************************************************************
 ' <copyright file="IPC Util.vb" company="Elektro Studios">
 '     Copyright (c) Elektro Studios. All rights reserved.
@@ -41,6 +41,10 @@
 ' IpcUtil.SharedMemory.ReadToEnd(String) As Byte()
 
 ' IpcUtil.UIAutomation.GetTitlebarText(IntPtr) As String
+' IpcUtil.UIAutomation.SendText(IntPtr) As String
+' IpcUtil.SetText(IntPtr, String) As Boolean
+' IpcUtil.AppendText(IntPtr, String) As Boolean
+' IpcUtil.InsertText(IntPtr, Integer, String) As Boolean
 
 #End Region
 
@@ -97,25 +101,204 @@ Public Module IpcUtil
 
 #Region " P/Invoking "
 
-    '    ''' ----------------------------------------------------------------------------------------------------
-    '    ''' <summary>
-    '    ''' Platform Invocation methods (P/Invoke), access unmanaged code.
-    '    ''' This class does not suppress stack walks for unmanaged code permission.
-    '    ''' <see cref="System.Security.SuppressUnmanagedCodeSecurityAttribute"/>  must not be applied to this class.
-    '    ''' This class is for methods that can be used anywhere because a stack walk will be performed.
-    '    ''' </summary>
-    '    ''' ----------------------------------------------------------------------------------------------------
-    '    ''' <remarks>
-    '    ''' <see href="http://msdn.microsoft.com/en-us/library/ms182161.aspx"/>
-    '    ''' </remarks>
-    '    ''' ----------------------------------------------------------------------------------------------------
-    '    Private NotInheritable Class NativeMethods
-    '
-    '#Region " Functions "
-    '
-    '#End Region
-    '
-    '    End Class
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Platform Invocation methods (P/Invoke), access unmanaged code.
+    ''' This class does not suppress stack walks for unmanaged code permission.
+    ''' <see cref="System.Security.SuppressUnmanagedCodeSecurityAttribute"/> must not be applied to this class.
+    ''' This class is for methods that can be used anywhere because a stack walk will be performed.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <remarks>
+    ''' <see href="http://msdn.microsoft.com/en-us/library/ms182161.aspx"/>
+    ''' </remarks>
+    ''' ----------------------------------------------------------------------------------------------------
+    Private NotInheritable Class NativeMethods
+
+#Region " Functions "
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Sends the specified message to a window or windows.
+        ''' The SendMessage function calls the window procedure for the specified window
+        ''' and does not return until the window procedure has processed the message.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="hWnd">
+        ''' A handle to the window whose window procedure will receive the message.
+        ''' </param>
+        ''' 
+        ''' <param name="msg">
+        ''' The message to be sent.
+        ''' </param>
+        ''' 
+        ''' <param name="wParam">
+        ''' Additional message-specific information.
+        ''' </param>
+        ''' 
+        ''' <param name="lParam">
+        ''' Additional message-specific information.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <returns>
+        ''' The return value specifies the result of the message processing; it depends on the message sent.
+        ''' </returns>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644950%28v=vs.85%29.aspx"/>
+        ''' </remarks>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
+        Friend Shared Function SendMessage(ByVal hWnd As IntPtr,
+                                           ByVal msg As WindowsMessages,
+                                           ByVal wParam As IntPtr,
+                                           ByVal lParam As String
+        ) As IntPtr
+        End Function
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Sends the specified message to a window or windows.
+        ''' The SendMessage function calls the window procedure for the specified window
+        ''' and does not return until the window procedure has processed the message.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="hWnd">
+        ''' A handle to the window whose window procedure will receive the message.
+        ''' </param>
+        ''' 
+        ''' <param name="msg">
+        ''' The message to be sent.
+        ''' </param>
+        ''' 
+        ''' <param name="wParam">
+        ''' Additional message-specific information.
+        ''' </param>
+        ''' 
+        ''' <param name="lParam">
+        ''' Additional message-specific information.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <returns>
+        ''' The return value specifies the result of the message processing; it depends on the message sent.
+        ''' </returns>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644950%28v=vs.85%29.aspx"/>
+        ''' </remarks>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto, BestFitMapping:=False, ThrowOnUnmappableChar:=True)>
+        Friend Shared Function SendMessage(ByVal hWnd As IntPtr,
+                                           ByVal msg As WindowsMessages,
+                                           ByVal wParam As IntPtr,
+                                           ByVal lParam As IntPtr
+        ) As IntPtr
+        End Function
+
+#End Region
+
+#Region " Enumerations "
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' The system sends or posts a system-defined message when it communicates with an application. 
+        ''' It uses these messages to control the operations of applications and to provide input and other information for applications to process. 
+        ''' An application can also send or post system-defined messages.
+        ''' Applications generally use these messages to control the operation of control windows created by using preregistered window classes.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644927%28v=vs.85%29.aspx"/>
+        ''' </remarks>
+        ''' ----------------------------------------------------------------------------------------------------
+        Friend Enum WindowsMessages As Integer
+
+            ''' ----------------------------------------------------------------------------------------------------
+            ''' <summary>
+            ''' Determines the length, in characters, of the text associated with a window.
+            ''' </summary>
+            ''' ----------------------------------------------------------------------------------------------------
+            ''' <remarks>
+            ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms632628%28v=vs.85%29.aspx"/>
+            ''' </remarks>
+            ''' ----------------------------------------------------------------------------------------------------
+            WmGetTextLength = &HE
+
+            ''' ----------------------------------------------------------------------------------------------------
+            ''' <summary>
+            ''' Sets the text of a window.
+            ''' </summary>
+            ''' ----------------------------------------------------------------------------------------------------
+            ''' <remarks>
+            ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms632644%28v=vs.85%29.aspx"/>
+            ''' </remarks>
+            ''' ----------------------------------------------------------------------------------------------------
+            WmSetText = &HC
+
+            ''' ----------------------------------------------------------------------------------------------------
+            ''' <summary>
+            ''' Selects a range of characters in an edit control. 
+            ''' You can send this message to either an edit control or a rich edit control.
+            ''' </summary>
+            ''' ----------------------------------------------------------------------------------------------------
+            ''' <remarks>
+            ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb761661%28v=vs.85%29.aspx"/>
+            ''' </remarks>
+            ''' ----------------------------------------------------------------------------------------------------
+            EmcSetSel = &HB1
+
+            ''' ----------------------------------------------------------------------------------------------------
+            ''' <summary>
+            ''' Replaces the selected text in an edit control or a rich edit control with the specified text.
+            ''' </summary>
+            ''' ----------------------------------------------------------------------------------------------------
+            ''' <remarks>
+            ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/bb761633%28v=vs.85%29.aspx"/>
+            ''' </remarks>
+            ''' ----------------------------------------------------------------------------------------------------
+            EmReplaceSel = &HC2
+
+        End Enum
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Specifies additional message-specific information for a System-Defined Message.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644927%28v=vs.85%29.aspx#system_defined"/>
+        ''' </remarks>
+        ''' ----------------------------------------------------------------------------------------------------
+        Friend Enum WParams As UInteger
+
+            ''' <summary>
+            ''' A Null WParam.
+            ''' </summary>
+            None = 0UI
+
+        End Enum
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Specifies additional message-specific information for a System-Defined Message.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms644927%28v=vs.85%29.aspx#system_defined"/>
+        ''' </remarks>
+        ''' ----------------------------------------------------------------------------------------------------
+        Friend Enum LParams As UInteger
+
+            ''' <summary>
+            ''' A Null LParam.
+            ''' </summary>
+            None = 0UI
+
+        End Enum
+
+#End Region
+
+    End Class
 
 #End Region
 
@@ -1308,6 +1491,102 @@ Public Module IpcUtil
             Dim titleBar As AutomationElement = window.FindFirst(TreeScope.Children, condition)
 
             Return titleBar.Current.Name
+
+        End Function
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Sets the text of an Edit control.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="hwnd">
+        ''' A <see cref="IntPtr"/> handle to the Edit window.
+        ''' </param>
+        ''' 
+        ''' <param name="text">
+        ''' The text.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <returns>
+        ''' <see langword="True"/> if operation succeeds, <see langword="True"/> otherwise.
+        ''' </returns>
+        ''' ----------------------------------------------------------------------------------------------------
+        Public Function SetText(ByVal hwnd As IntPtr,
+                                ByVal text As String) As Boolean
+
+            Return CBool(NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.WmSetText,
+                                                   New IntPtr(NativeMethods.WParams.None), text))
+
+        End Function
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Appends text at the end of an Edit control.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="hwnd">
+        ''' A <see cref="IntPtr"/> handle to the Edit window.
+        ''' </param>
+        ''' 
+        ''' <param name="text">
+        ''' The text to append.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <returns>
+        ''' <see langword="True"/> if operation succeeds, <see langword="True"/> otherwise.
+        ''' </returns>
+        ''' ----------------------------------------------------------------------------------------------------
+        Public Function AppendText(ByVal hwnd As IntPtr,
+                                   ByVal text As String) As Boolean
+
+            ' Get text length.
+            Dim textLength As Integer =
+                NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.WmGetTextLength,
+                                          New IntPtr(NativeMethods.WParams.None),
+                                          New IntPtr(NativeMethods.LParams.None)).ToInt32
+
+            ' Set text selection.
+            NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.EmcSetSel,
+                                      New IntPtr(textLength), New IntPtr(-1))
+
+            ' Replace selected text.
+            Return CBool(NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.EmReplaceSel,
+                                                   New IntPtr(1), text))
+
+        End Function
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Inserts text at the specified position of an Edit control.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="hwnd">
+        ''' A <see cref="IntPtr"/> handle to the Edit window.
+        ''' </param>
+        ''' 
+        ''' <param name="position">
+        ''' The character position where to insert the text.
+        ''' </param>
+        ''' 
+        ''' <param name="text">
+        ''' The text to insert.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <returns>
+        ''' <see langword="True"/> if operation succeeds, <see langword="True"/> otherwise.
+        ''' </returns>
+        ''' ----------------------------------------------------------------------------------------------------
+        Public Function InsertText(ByVal hwnd As IntPtr,
+                                   ByVal position As Integer,
+                                   ByVal text As String) As Boolean
+
+            ' Set text selection.
+            NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.EmcSetSel,
+                                      New IntPtr(position), New IntPtr(position))
+
+            ' Replace selected text.
+            Return CBool(NativeMethods.SendMessage(hwnd, NativeMethods.WindowsMessages.EmReplaceSel,
+                                                   New IntPtr(1), Text))
 
         End Function
 
