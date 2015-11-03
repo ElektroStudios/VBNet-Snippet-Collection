@@ -34,6 +34,7 @@ Public Members Summary
    - IpcUtil.SharedMemory.ReadToEnd(MemoryMappedFile) As Byte()
    - IpcUtil.SharedMemory.ReadToEnd(String) As Byte()
    - IpcUtil.UIAutomation.GetTitlebarText(IntPtr) As String
+   - IpcUtil.GetText(IntPtr) As String
    - IpcUtil.UIAutomation.SetText(IntPtr, String) As Boolean
    - IpcUtil.UIAutomation.AppendText(IntPtr, String) As Boolean
    - IpcUtil.UIAutomation.InsertText(IntPtr, Integer, String) As Boolean
