@@ -61,4 +61,4 @@ Public Members Summary
 Example for beginners that demonstrates how to read StdOut-StdErr outputs of a pocess, asynchronouslly.
 
 # Read Process StdOut-StdErr Synchronouslly example
-Example that demonstrates how to read StdOut-StdErr outputs of a pocess, synchronouslly.
+Example for beginners that demonstrates how to read StdOut-StdErr outputs of a pocess, synchronouslly.
