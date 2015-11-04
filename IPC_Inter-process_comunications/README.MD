@@ -20,6 +20,7 @@ Public Members Summary
    - IpcUtil.UIAutomation
 
  - Functions
+   - IpcUtil.GetText(IntPtr) As String
    - IpcUtil.SharedMemory.Create(String, Integer, Opt: MemoryMappedFileAccess) As MemoryMappedFile
    - IpcUtil.SharedMemory.Read(MemoryMappedFile, Long, Long) As Byte()
    - IpcUtil.SharedMemory.Read(String, Long, Long) As Byte()
@@ -33,12 +34,21 @@ Public Members Summary
    - IpcUtil.SharedMemory.ReadStringToEnd(String, Opt: Encoding) As String
    - IpcUtil.SharedMemory.ReadToEnd(MemoryMappedFile) As Byte()
    - IpcUtil.SharedMemory.ReadToEnd(String) As Byte()
-   - IpcUtil.UIAutomation.GetTitlebarText(IntPtr) As String
-   - IpcUtil.GetText(IntPtr) As String
-   - IpcUtil.UIAutomation.SetText(IntPtr, String) As Boolean
    - IpcUtil.UIAutomation.AppendText(IntPtr, String) As Boolean
+   - IpcUtil.UIAutomation.GetText(IntPtr) As String
+   - IpcUtil.UIAutomation.GetTitlebarText(IntPtr) As String
    - IpcUtil.UIAutomation.InsertText(IntPtr, Integer, String) As Boolean
-
+   - IpcUtil.UIAutomation.MoveWindow(Process, Point, Opt: Boolean) As Boolean
+   - IpcUtil.UIAutomation.MoveWindow(String, Point, Opt: Boolean) As Boolean
+   - IpcUtil.UIAutomation.ResizeWindow(Process, Size, Opt: Boolean) As Boolean
+   - IpcUtil.UIAutomation.ResizeWindow(String, Size, Opt: Boolean) As Boolean
+   - IpcUtil.UIAutomation.SetText(IntPtr, String) As Boolean
+   - IpcUtil.UIAutomation.SetWindowState(IntPtr, ProcessUtil.WindowState) As Boolean
+   - IpcUtil.UIAutomation.SliceWindowPosition(Process, Point, Opt: Boolean) As Boolean
+   - IpcUtil.UIAutomation.SliceWindowPosition(String, Point, Opt: Boolean) As Boolean
+   - IpcUtil.UIAutomation.SliceWindowSize(Process, Size, Opt: Boolean) As Boolean
+   - IpcUtil.UIAutomation.SliceWindowSize(String, Size, Opt: Boolean) As Boolean
+   
  - Methods
    - IpcUtil.SharedMemory.Clear(MemoryMappedFile)
    - IpcUtil.SharedMemory.Clear(String)
