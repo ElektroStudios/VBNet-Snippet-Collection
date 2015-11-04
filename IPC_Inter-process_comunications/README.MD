@@ -19,6 +19,9 @@ Public Members Summary
    - IpcUtil.SharedMemory
    - IpcUtil.UIAutomation
 
+ - Enumerations
+   - IpcUtil.UIAutomation.Windowstate
+
  - Functions
    - IpcUtil.GetText(IntPtr) As String
    - IpcUtil.SharedMemory.Create(String, Integer, Opt: MemoryMappedFileAccess) As MemoryMappedFile
