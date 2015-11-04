@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<CodeSnippet Format="1.0.0">
+
+<Header>
+  <Title>Event Custom Creation</Title>
+  <Description>Example that demonstrates how to create and raise a custom event.</Description>
+  <Author>Elektro</Author>
+</Header>
+
+<Snippet>
+
+<Declarations>
+  <Literal Editable="false">
+    <ID>CDATAEnd</ID>
+    <ToolTip>CDATA end tag to scape Xml illegal characters if needed.</ToolTip>
+    <Default>&gt;</Default>
+  </Literal>
+</Declarations>
+
+<Code Language="vb"><![CDATA[
+
+' -------------------
+' Info of interest...
+' -------------------
+'
+' Events:
+' http://msdn.microsoft.com/en-us/library/ms172877.aspx
+' 
+' Event Handlers:
+' http://msdn.microsoft.com/en-us/library/aa984105%28v=vs.71%29.aspx
+'
+' Handling and Raising Events:
+' http://msdn.microsoft.com/en-us/library/edzehd2t%28v=vs.110%29.aspx
+'
+' AddHandler Statement:
+' http://msdn.microsoft.com/en-us/library/7taxzxka.aspx
+'
+' RemoveHandler Statement:
+' http://msdn.microsoft.com/en-us/library/3xz97kac.aspx
+'
+' EventHandler(Of TEventArgs) Delegate:
+' http://msdn.microsoft.com/en-us/library/db0etb8x%28v=vs.110%29.aspx
+' 
+' Walkthrough: Declaring and Raising Events:
+' http://msdn.microsoft.com/en-us/library/sc31b696.aspx
+'
+' How to: Create an Event and Handler:
+' http://msdn.microsoft.com/en-us/library/1c6bkaht%28v=vs.90%29.aspx
+' 
+' How to: Raise and Consume Events:
+' http://msdn.microsoft.com/en-us/library/9aackb16%28v=vs.110%29.aspx
+' 
+' How to: Declare Custom Events To Conserve Memory:
+' http://msdn.microsoft.com/en-us/library/yt1k2w4e.aspx
+' 
+' How to: Declare Custom Events To Avoid Blocking (Visual Basic):
+' http://msdn.microsoft.com/en-us/library/wf33s4w7.aspx
+
+
+''' <summary>
+''' Class Description.
+''' </summary>
+Public Class MyType : Implements IDisposable
+
+#Region " Events "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' A list of event delegates.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    Private ReadOnly events As EventHandlerList
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Occurs when the value changes.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    Public Custom Event ValueChanged As EventHandler(Of ValueChangedEventArgs)
+
+        <DebuggerNonUserCode>
+        <DebuggerStepThrough>
+        AddHandler(ByVal value As EventHandler(Of ValueChangedEventArgs))
+            Me.events.AddHandler("ValueChangedEvent", value)
+        End AddHandler
+
+        <DebuggerNonUserCode>
+        <DebuggerStepThrough>
+        RemoveHandler(ByVal value As EventHandler(Of ValueChangedEventArgs))
+            Me.events.RemoveHandler("ValueChangedEvent", value)
+        End RemoveHandler
+
+        <DebuggerNonUserCode>
+        <DebuggerStepThrough>
+        RaiseEvent(ByVal sender As Object, ByVal e As ValueChangedEventArgs)
+            Dim handler As EventHandler(Of ValueChangedEventArgs) =
+                DirectCast(Me.events("ValueChangedEvent"), EventHandler(Of ValueChangedEventArgs))
+
+            If (handler IsNot Nothing) Then
+                handler.Invoke(sender, e)
+            End If
+        End RaiseEvent
+
+    End Event
+
+#End Region
+
+#Region " Events Data "
+
+#Region " ValueChangedEventArgs "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Contains the event-data of a <see cref="ValueChanged"/> event.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    Public NotInheritable Class ValueChangedEventArgs : Inherits EventArgs
+
+#Region " Properties "
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Gets my property.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <value>
+        ''' My property.
+        ''' </value>
+        ''' ----------------------------------------------------------------------------------------------------
+        Public ReadOnly Property MyProperty() As Integer
+            Get
+                Return Me.myPropertyB
+            End Get
+        End Property
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' ( Backing field )
+        ''' My property.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        Private ReadOnly myPropertyB As Integer
+
+#End Region
+
+#Region " Constructors "
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Prevents a default instance of the <see cref="ValueChangedEventArgs"/> class from being created.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerNonUserCode>
+        Private Sub New()
+        End Sub
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="ValueChangedEventArgs"/> class.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="value">
+        ''' The value.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DebuggerStepThrough>
+        Public Sub New(ByVal value As Integer)
+
+            Me.myPropertyB = value
+
+        End Sub
+
+#End Region
+
+    End Class
+
+#End Region
+
+#End Region
+
+#Region " Event Invocators "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Raises <see cref="ValueChanged"/> event.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="e">
+    ''' The <see cref="ValueChangedEventArgs"/> instance containing the event data.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Protected Overridable Sub OnValueChanged(ByVal e As ValueChangedEventArgs)
+
+        RaiseEvent ValueChanged(Me, e)
+
+    End Sub
+
+#End Region
+
+#Region " Constructors "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Initializes a new instance of the <see cref="MyType"/> class.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Sub New()
+
+        Me.events = New EventHandlerList
+
+    End Sub
+
+#End Region
+
+#Region " Public Methods "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' A test method that fires the <see cref="ValueChanged"/> event.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    Public Sub Test()
+
+        For x As Integer = 0 To 10
+            Me.OnValueChanged(New ValueChangedEventArgs(x))
+        Next x
+
+    End Sub
+
+#End Region
+
+#Region " IDisposable Implementation "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' To detect redundant calls when disposing.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    Private isDisposed As Boolean
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Releases all the resources used by this instance.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Sub Dispose() Implements IDisposable.Dispose
+
+        Me.Dispose(isDisposing:=True)
+        GC.SuppressFinalize(obj:=Me)
+
+    End Sub
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    ''' Releases unmanaged and - optionally - managed resources.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <param name="isDisposing">
+    ''' <see langword="True"/>  to release both managed and unmanaged resources; 
+    ''' <see langword="False"/> to release only unmanaged resources.
+    ''' </param>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Protected Overridable Sub Dispose(ByVal isDisposing As Boolean)
+
+        If (Not Me.isDisposed) AndAlso (isDisposing) Then
+
+            Me.events.Dispose()
+
+        End If
+
+        Me.isDisposed = True
+
+    End Sub
+
+#End Region
+
+End Class
+
+]]></Code>
+  </Snippet>
+ </CodeSnippet>
+</CodeSnippets>
