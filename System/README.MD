@@ -88,7 +88,7 @@ Contains related FileSystem utilities, such as filepath validation or invoke an 
 
 Public Members Summary
 
- - Function
+ - Functions
    - FileSystemUtil.GetItemVerbs(String) As IEnumerable(Of FolderItemVerb)
    - FileSystemUtil.ItemNameIsInvalid(String) As Boolean
    - FileSystemUtil.ItemNameOrPathIsInvalid(String) As Boolean
@@ -96,6 +96,15 @@ Public Members Summary
 
  - Methods
    - FileSystemUtil.InvokeItemVerb(String, String)
+
+#Power Util
+Contains related system powering utilities.
+
+Public Members Summary
+
+ - Functions
+   - PowerUtil.SendAwakeSignal As Boolean
+   - PowerUtil.RemoveAwakeSignal As Boolean
 
 # RecycleBin Util
 This class manages the system recycle bins.
