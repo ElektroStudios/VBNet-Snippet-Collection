@@ -1,0 +1,278 @@
+
+' ***********************************************************************
+' Author   : Elektro
+' Modified : 05-November-2015
+' ***********************************************************************
+' <copyright file="Power Util.vb" company="Elektro Studios">
+'     Copyright (c) Elektro Studios. All rights reserved.
+' </copyright>
+' ***********************************************************************
+
+#Region " Public Members Summary "
+
+#Region " Functions "
+
+' PowerUtil.SendAwakeSignal As Boolean
+' PowerUtil.RemoveAwakeSignal As Boolean
+
+#End Region
+
+#End Region
+
+#Region " Option Statements "
+
+Option Strict On
+Option Explicit On
+Option Infer Off
+
+#End Region
+
+#Region " Imports "
+
+Imports System
+Imports System.Diagnostics
+Imports System.Linq
+
+#End Region
+
+#Region " Power Util "
+
+''' ----------------------------------------------------------------------------------------------------
+''' <summary>
+''' Contains related system powering utilities.
+''' </summary>
+''' ----------------------------------------------------------------------------------------------------
+Public Module PowerUtil
+
+#Region " P/Invoking "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Platform Invocation methods (P/Invoke), access unmanaged code.
+    ''' This class does not suppress stack walks for unmanaged code permission.
+    ''' <see cref="System.Security.SuppressUnmanagedCodeSecurityAttribute"/> must not be applied to this class.
+    ''' This class is for methods that can be used anywhere because a stack walk will be performed.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <remarks>
+    ''' <see href="http://msdn.microsoft.com/en-us/library/ms182161.aspx"/>
+    ''' </remarks>
+    ''' ----------------------------------------------------------------------------------------------------
+    Private NotInheritable Class NativeMethods
+
+#Region " Functions "
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Enables an application to inform the system that it is in use, 
+        ''' thereby preventing the system from entering sleep or turning off the display while the application is running.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <param name="esFlags">
+        ''' The thread's execution requirements.
+        ''' <para></para>
+        ''' This parameter can be one or more of the <see cref="NativeMethods.ExecutionState"/> values.
+        ''' </param>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <returns>
+        ''' If the function succeeds, the return value is the previous thread's <see cref="NativeMethods.ExecutionState"/> value.
+        ''' <para></para>
+        ''' If the function fails, the return value is <see langword="Nothing"/>.
+        ''' </returns>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/es-es/library/windows/desktop/aa373208%28v=vs.85%29.aspx"/>
+        ''' </remarks>
+        ''' ----------------------------------------------------------------------------------------------------
+        <DllImport("kernel32.dll", CharSet:=CharSet.Auto, SetLastError:=True)>
+        Friend Shared Function SetThreadExecutionState(ByVal esFlags As NativeMethods.ExecutionState
+        ) As NativeMethods.ExecutionState
+        End Function
+
+#End Region
+
+#Region " Enumerations "
+
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <summary>
+        ''' Enables an application to inform the system that it is in use, 
+        ''' thereby preventing the system from entering sleep or turning off the display while the application is running.
+        ''' </summary>
+        ''' ----------------------------------------------------------------------------------------------------
+        ''' <remarks>
+        ''' <see href="http://msdn.microsoft.com/es-es/library/windows/desktop/aa373208%28v=vs.85%29.aspx"/>
+        ''' </remarks>
+        ''' ----------------------------------------------------------------------------------------------------
+        <Flags>
+        Friend Enum ExecutionState As UInteger
+
+            ''' <summary>
+            ''' Any state.
+            ''' <para></para>
+            ''' Don't use this value.
+            ''' <para></para>
+            ''' This value is used to detect a <see cref="NativeMethods.ExecutionState"/> function fail.
+            ''' </summary>
+            None = &H0UI
+
+            ''' <summary>
+            ''' Enables away mode. 
+            ''' This value must be specified with <see cref="ExecutionState.Continuous"/>.
+            ''' <para></para>
+            ''' Away mode should be used only by media-recording and media-distribution applications that must 
+            ''' perform critical background processing on desktop computers while the computer appears to be sleeping.
+            ''' <para></para>
+            ''' Windows Server 2003: <see cref="ExecutionState.AwaymodeRequired"/> is not supported.
+            ''' </summary>
+            AwaymodeRequired = &H40UI
+
+            ''' <summary>
+            ''' Informs the system that the state being set should remain in effect until the 
+            ''' next call that uses <see cref="ExecutionState.Continuous"/> and one of the other <see cref="ExecutionState"/> flags is cleared.
+            ''' </summary>
+            Continuous = &H80000000UI
+
+            ''' <summary>
+            ''' Forces the display to be on by resetting the display idle timer.
+            ''' <para></para>
+            ''' Windows 8: This flag can only keep a display turned on, it can't turn on a display that's currently off.
+            ''' </summary>
+            DisplayRequired = &H2UI
+
+            ''' <summary>
+            ''' Forces the system to be in the working state by resetting the system idle timer.
+            ''' </summary>
+            SystemRequired = &H1UI
+
+            ''' <summary>
+            ''' This value is not supported. 
+            ''' If <see cref="ExecutionState.UserPresent"/> is combined with other <see cref="ExecutionState"/> values, 
+            ''' the call will fail and none of the specified states will be set. 
+            ''' </summary>
+            UserPresent = &H4UI
+
+        End Enum
+
+#End Region
+
+    End Class
+
+#End Region
+
+#Region " Public Methods "
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Sends an Awake signal to prevent the system from turning off the display and entering into Sleep or Hibernation modes.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <remarks>
+    ''' The Awake signal should be sent periodically.
+    ''' </remarks>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <example> This is a code example.
+    ''' <code>
+    ''' Public Class Form1 : Inherits Form
+    ''' 
+    '''     Private WithEvents awakeTimer As Threading.Timer
+    '''     Private ReadOnly awakeInterval As Integer = 30000 'ms
+    ''' 
+    '''     Public Sub New()
+    ''' 
+    '''         Me.InitializeComponent()
+    '''         Me.awakeTimer = New Threading.Timer(AddressOf Me.AwakeTimer_Callback, Nothing, Me.awakeInterval, 0)
+    ''' 
+    '''     End Sub
+    ''' 
+    '''     Private Sub AwakeTimer_Callback(ByVal stateInfo As Object)
+    ''' 
+    '''         ' Send periodically an Awake signal to avoid the system entering into Sleep or Hibernation mode.
+    '''         PowerUtil.SendAwakeSignal()
+    ''' 
+    '''         If (Me.awakeTimer IsNot Nothing) Then
+    '''             Me.awakeTimer.Change(Me.awakeInterval, 0)
+    '''         End If
+    ''' 
+    '''     End Sub
+    ''' 
+    '''     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) _
+    '''     Handles MyBase.FormClosing
+    ''' 
+    '''         Me.awakeTimer.Dispose()
+    '''         Me.awakeTimer = Nothing
+    '''         PowerUtil.RemovedAwakeSignal()
+    ''' 
+    '''     End Sub
+    ''' 
+    ''' End Class
+    ''' </code>
+    ''' </example>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see langword="True"/> if operation succeeds, <see langword="False"/>  otherwise.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <exception cref="Win32Exception">
+    ''' </exception>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Function SendAwakeSignal() As Boolean
+
+        Dim result As NativeMethods.ExecutionState = NativeMethods.ExecutionState.None
+        Dim win32Err As Integer
+
+        result = NativeMethods.SetThreadExecutionState(NativeMethods.ExecutionState.Continuous Or
+                                                       NativeMethods.ExecutionState.SystemRequired Or
+                                                       NativeMethods.ExecutionState.DisplayRequired Or
+                                                       NativeMethods.ExecutionState.AwaymodeRequired)
+
+        win32Err = Marshal.GetLastWin32Error
+
+        If (result = NativeMethods.ExecutionState.None) Then
+            Throw New Win32Exception([error]:=win32Err)
+
+        Else
+            Return True
+
+        End If
+
+    End Function
+
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <summary>
+    ''' Removes any previouslly sent Awake signal.
+    ''' <para></para>
+    ''' Call this function to return to previous state when the caller thread has finished.
+    ''' </summary>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <returns>
+    ''' <see langword="True"/> if operation succeeds, <see langword="False"/>  otherwise.
+    ''' </returns>
+    ''' ----------------------------------------------------------------------------------------------------
+    ''' <exception cref="Win32Exception">
+    ''' </exception>
+    ''' ----------------------------------------------------------------------------------------------------
+    <DebuggerStepThrough>
+    Public Function RemovedAwakeSignal() As Boolean
+
+        Dim result As NativeMethods.ExecutionState = NativeMethods.ExecutionState.None
+        Dim win32Err As Integer
+
+        result = NativeMethods.SetThreadExecutionState(NativeMethods.ExecutionState.Continuous)
+        win32Err = Marshal.GetLastWin32Error
+
+        If (result = NativeMethods.ExecutionState.None) Then
+            Throw New Win32Exception([error]:=win32Err)
+
+        Else
+            Return True
+
+        End If
+
+    End Function
+
+#End Region
+
+End Module
+
+#End Region
