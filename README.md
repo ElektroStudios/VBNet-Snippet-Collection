@@ -22,7 +22,7 @@ winforms
 
 # VisualBasic.NET Snippet collection
 
-### Visual Basic.Net Snippet collection where I will provide samples for beginner and advanced .Net developers.
+### Visual Basic.Net Snippet collection where I will provide samples for beginner and advanced .NET developers.
 
 ------------------
 
