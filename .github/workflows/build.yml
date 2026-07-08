@@ -53,23 +53,8 @@ jobs:
         shell: powershell
         run: |
           dotnet tool update dotnet-sonarscanner --tool-path ${{ runner.temp }}\scanner
-          $projectContent = @"
-          <Project Sdk=`"Microsoft.NET.Sdk`">
-            <PropertyGroup>
-              <TargetFramework>net8.0</TargetFramework>
-              <OutputType>Library</OutputType>
-              <OptionStrict>On</OptionStrict>
-              <OptionExplicit>On</OptionExplicit>
-              <OptionInfer>Off</OptionInfer>
-              <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-              <LangVersion>latest</LangVersion>
-            </PropertyGroup>
-            <ItemGroup>
-              <Compile Include=`"**\*.vb`" />
-            </ItemGroup>
-          </Project>
-          "@
-          Set-Content -Path "DummyProject.vbproj" -Value $projectContent
+          $lines = "<Project Sdk=`"Microsoft.NET.Sdk`">", "<PropertyGroup>", "<TargetFramework>net8.0</TargetFramework>", "<OutputType>Library</OutputType>", "<OptionStrict>On</OptionStrict>", "<OptionExplicit>On</OptionExplicit>", "<OptionInfer>Off</OptionInfer>", "<GenerateAssemblyInfo>false</GenerateAssemblyInfo>", "<EnableDefaultCompileItems>false</EnableDefaultCompileItems>", "</PropertyGroup>", "<ItemGroup>", "<Compile Include=`"**\*.vb`" />", "</ItemGroup>", "</Project>"
+          Set-Content -Path DummyProject.vbproj -Value $lines
           & "${{ runner.temp }}\scanner\dotnet-sonarscanner" begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION }}" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.sourceEncoding=UTF-8
           cmd.exe /c "dotnet build DummyProject.vbproj -c Release || exit 0"
           & "${{ runner.temp }}\scanner\dotnet-sonarscanner" end /d:sonar.token="$env:SONAR_TOKEN"
