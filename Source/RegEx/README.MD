@@ -1,4 +1,4 @@
-# RegEx snippets category
+﻿# RegEx snippets category
 These snippets are intended to help manaing Regex aspects.
 
 # General Information about this repository

@@ -1,4 +1,4 @@
-        Dim str As String =
+﻿        Dim str As String =
 <a>
       ___              _ _           _   _               _____ _ _   _      
      / _ \            | (_)         | | (_)             |_   _(_) | | |    

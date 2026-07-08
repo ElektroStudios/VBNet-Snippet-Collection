@@ -1,4 +1,4 @@
-# System snippets category
+﻿# System snippets category
 These snippets are intended to help managing the (operating)system in some aspects.
 
 # General Information about this repository

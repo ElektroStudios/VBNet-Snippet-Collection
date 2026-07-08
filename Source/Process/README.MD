@@ -1,4 +1,4 @@
-# Process snippets category
+﻿# Process snippets category
 These snippets are intended to help with process management.
 
 # General Information about this repository

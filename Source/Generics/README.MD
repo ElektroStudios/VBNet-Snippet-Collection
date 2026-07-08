@@ -1,4 +1,4 @@
-# Generics snippets category
+﻿# Generics snippets category
 These snippets are intended to help managing .Net generics.
 
 # General Information about this repository

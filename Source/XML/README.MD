@@ -1,4 +1,4 @@
-# Xml snippets category
+﻿# Xml snippets category
 These snippets are intended to help managing Xml files or Xml operations.
 
 # General Information about this repository

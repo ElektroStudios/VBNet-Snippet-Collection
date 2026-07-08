@@ -1,4 +1,4 @@
-Public NotInheritable Class MyType
+﻿Public NotInheritable Class MyType
 
     Public ReadOnly Property MyProperty As String
         Get

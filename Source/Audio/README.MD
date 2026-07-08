@@ -1,4 +1,4 @@
-# Audio snippets category
+﻿# Audio snippets category
 These snippets are intended to help managing Audio files capabilities.
 
 # General Information about this repository

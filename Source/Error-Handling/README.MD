@@ -1,4 +1,4 @@
-# Error-Handling snippets category
+﻿# Error-Handling snippets category
 These snippets are intended to help managing error-handling and logging scenarios.
 
 # General Information about this repository

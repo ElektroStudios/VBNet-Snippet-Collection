@@ -1,4 +1,4 @@
-# Arithmetic snippets category
+﻿# Arithmetic snippets category
 These snippets are intended to help managing Xml files or Xml operations.
 
 # General Information about this repository

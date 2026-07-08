@@ -1,4 +1,4 @@
-# String snippets category
+﻿# String snippets category
 These snippets are intended to help managing Strings.
 
 # General Information about this repository

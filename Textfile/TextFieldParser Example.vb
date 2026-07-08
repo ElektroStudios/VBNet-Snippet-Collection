@@ -1,4 +1,4 @@
-' The CSV content to read.
+﻿' The CSV content to read.
 Dim csvReader As New StringReader("@Username, Password, Privileges" &
                                   Environment.NewLine &
                                   "Elektro; ""My Password""; Administrator" &

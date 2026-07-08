@@ -1,4 +1,4 @@
-# Resources snippets category
+﻿# Resources snippets category
 These snippets are intended to help with managed .Net resources.
 
 # General Information about this repository

@@ -1,4 +1,4 @@
-# Templates and Design Patterns snippets category
+﻿# Templates and Design Patterns snippets category
 These snippets are just syntax examples, templates for common purposes, and design patterns for good programming conveniences.
 
 # General Information about this repository

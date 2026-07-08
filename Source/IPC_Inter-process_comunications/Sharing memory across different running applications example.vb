@@ -1,4 +1,4 @@
-' INSTRUCTIONS:
+﻿' INSTRUCTIONS:
 ' 1. Create a new project, copy&paste the 'MemoryMappedFile_Form1' Form and compile it.
 ' 2. Create a new project, copy&paste the 'MemoryMappedFile_Form2' Form and compile it.
 ' 3. Run both applications separately to test their memory messages.

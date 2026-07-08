@@ -1,4 +1,4 @@
-# Textfile snippets category
+﻿# Textfile snippets category
 These snippets are intended to help managing plain text files.
 
 # General Information about this repository

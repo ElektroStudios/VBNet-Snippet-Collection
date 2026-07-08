@@ -1,4 +1,4 @@
-# IPC (Inter-process communications) snippets category
+﻿# IPC (Inter-process communications) snippets category
 These snippets are intended to help in IPC scenarios or also software automation.
 
 # General Information about this repository

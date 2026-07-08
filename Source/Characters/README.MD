@@ -1,4 +1,4 @@
-# Characters snippets category
+﻿# Characters snippets category
 These snippets are intended to help managing char operations.
 
 # General Information about this repository
