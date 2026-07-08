@@ -41,10 +41,10 @@ winforms
   <br>
   <br>
     <a href="https://sonarcloud.io/summary/new_code?id=ElektroStudios_VBNet-Snippet-Collection"><img src="https://sonarcloud.io/api/project_badges/measure?project=ElektroStudios_VBNet-Snippet-Collection&metric=alert_status" alt="SonarCloud Quality Gate"></a>
+    <a href="https://api.github.com/repos/ElektroStudios/VBNet-Snippet-Collection/zipball"><img src="https://img.shields.io/github/repo-size/ElektroStudios/VBNet-Snippet-Collection" alt="Repo size"></a>
     <a href="https://learn.microsoft.com/en-us/dotnet/visual-basic/"><img src="https://img.shields.io/badge/language-VB.NET-purple.svg?logo=visualbasic" alt="Language"></a>
     <a href="LICENSE"><img src="https://img.shields.io/github/license/ElektroStudios/VBNet-Snippet-Collection" alt="License"></a>
   <br>
-    <a href="https://api.github.com/repos/ElektroStudios/VBNet-Snippet-Collection/zipball"><img src="https://img.shields.io/github/repo-size/ElektroStudios/VBNet-Snippet-Collection" alt="Repo size"></a>
     <a href="https://github.com/ElektroStudios/VBNet-Snippet-Collection/commits"><img src="https://img.shields.io/github/last-commit/ElektroStudios/VBNet-Snippet-Collection" alt="Last commit"></a>
     <a href="https://github.com/ElektroStudios/VBNet-Snippet-Collection/pulls"><img src="https://img.shields.io/github/issues-pr/ElektroStudios/VBNet-Snippet-Collection" alt="Pull Requests"></a>
     <a href="https://github.com/ElektroStudios/VBNet-Snippet-Collection/issues?q=is%3Aissue+is%3Aopen"><img src="https://img.shields.io/github/issues/ElektroStudios/VBNet-Snippet-Collection?color=blue" alt="Open Issues"></a><a href="https://github.com/ElektroStudios/VBNet-Snippet-Collection/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed/ElektroStudios/VBNet-Snippet-Collection?label=&color=28a745" alt="Closed Issues"></a>
