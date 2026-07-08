@@ -71,5 +71,5 @@ jobs:
           "@
           Set-Content -Path "DummyProject.vbproj" -Value $projectContent
           & "${{ runner.temp }}\scanner\dotnet-sonarscanner" begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION }}" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.sourceEncoding=UTF-8
-          dotnet build "DummyProject.vbproj" -c Release || $true
+          cmd.exe /c "dotnet build DummyProject.vbproj -c Release || exit 0"
           & "${{ runner.temp }}\scanner\dotnet-sonarscanner" end /d:sonar.token="$env:SONAR_TOKEN"
