@@ -21,7 +21,7 @@ winforms
  -->
 
 <div align="center">
-  <img src="/Images/VB.png" width="100" alt="Logo">
+  <img src="/Images/VB.png" width="500" alt="Logo">
   
   <h1>Visual Basic.NET Snippets Collection</h1>
 
