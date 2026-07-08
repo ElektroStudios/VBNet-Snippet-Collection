@@ -52,6 +52,13 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          dotnet tool update dotnet-sonarscanner --tool-path ${{ runner.temp }}\scanner
-          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION }}" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.language=vbnet /d:sonar.sourceEncoding=UTF-8
-          & "${{ runner.temp }}\scanner\dotnet-sonarscanner" end /d:sonar.token="$env:SONAR_TOKEN"
+          Invoke-WebRequest -Uri "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-6.2.1.4610-windows-x64.zip" -OutFile "sonar-scanner.zip"
+          Expand-Archive -Path "sonar-scanner.zip" -DestinationPath "${{ runner.temp }}"
+          & "${{ runner.temp }}\sonar-scanner-6.2.1.4610-windows-x64\bin\sonar-scanner.bat" `
+            -Dsonar.token="$env:SONAR_TOKEN" `
+            -Dsonar.projectKey="${{ env.SONAR_PROJECT_KEY }}" `
+            -Dsonar.organization="${{ env.SONAR_ORGANIZATION }}" `
+            -Dsonar.sources="." `
+            -Dsonar.lang.max.files=10000 `
+            -Dsonar.sourceEncoding=UTF-8 `
+            -Dsonar.exclusions="**/*.png,**/*.ico,**/*.jpg,**/*.jpeg,**/*.gif,**/*.webp,**/*.bmp,**/*.tif,**/*.tiff,**/*.rtf,**/*.html,**/*.htm,**/*.resx,**/*.yml,**/*.myapp,**/*.sample,**/*.settings,**/*.conf,**/*.md,**/*.bin,**/*.sln,**/*.slnx,**/*.zip,**/*.rar,**/*.rev,**/*.idx,**/*.nfo,**/*.gitattributes,**/*.gitignore,**/.github/**/*"
