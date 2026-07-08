@@ -40,7 +40,6 @@ winforms
     <a href="https://github.com/ElektroStudios/VBNet-Snippet-Collection/stargazers"><img src="https://img.shields.io/github/stars/ElektroStudios/VBNet-Snippet-Collection.svg?style=social&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg%3D%3D&label=%E2%AD%90%20Stars" alt="Stars"></a>
   <br>
   <br>
-    <a href="https://sonarcloud.io/summary/new_code?id=ElektroStudios_VBNet-Snippet-Collection"><img src="https://sonarcloud.io/api/project_badges/measure?project=ElektroStudios_VBNet-Snippet-Collection&metric=alert_status" alt="SonarCloud Quality Gate"></a>
     <a href="https://api.github.com/repos/ElektroStudios/VBNet-Snippet-Collection/zipball"><img src="https://img.shields.io/github/repo-size/ElektroStudios/VBNet-Snippet-Collection" alt="Repo size"></a>
     <a href="https://learn.microsoft.com/en-us/dotnet/visual-basic/"><img src="https://img.shields.io/badge/language-VB.NET-purple.svg?logo=visualbasic" alt="Language"></a>
     <a href="LICENSE"><img src="https://img.shields.io/github/license/ElektroStudios/VBNet-Snippet-Collection" alt="License"></a>
