@@ -27,6 +27,10 @@ winforms
 
 ### A comprehensive collection of verified VB.NET snippets, covering from fundamental syntax to advanced .NET system implementations, and directly applicable to real-world development tasks.
 
+> [!CAUTION]
+> **This repository is archived and is no longer actively maintained.**
+> The content remains available for educational purposes and reference, but no further updates or support will be provided.
+
 </div>
 
 ------------------
